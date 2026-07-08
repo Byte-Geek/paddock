@@ -5,6 +5,7 @@ import { CreateUserDto } from './dto/create-user.dto'
 import { LogInDto } from './dto/login.dto'
 
 import { UserService } from '../user/user.service'
+import { Public } from './decorators/public.decorator'
 
 @Controller('auth')
 export class AuthController {
@@ -13,6 +14,7 @@ export class AuthController {
         private readonly UserService: UserService
     ) {}
 
+    @Public()
     @Post('register')
     async register(
         @Body() createUserDto: CreateUserDto
@@ -20,6 +22,7 @@ export class AuthController {
         return await this.authService.register(createUserDto)
     }
 
+    @Public()
     @HttpCode(HttpStatus.OK)
     @Post('login')
     async signIn(@Body() logInDto: LogInDto) {

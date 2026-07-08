@@ -40,6 +40,5 @@ export class AuthService {
             access_token: await this.jwtService.signAsync(payload),
         }
 
-        return result
     }
 }

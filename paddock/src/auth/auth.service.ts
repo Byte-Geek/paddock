@@ -1,22 +1,31 @@
-import { Injectable } from '@nestjs/common'
-import { CreateUserDto } from './dto/create-user.dto'
-import * as bcrypt from 'bcrypt'
+import { Injectable, UnauthorizedException } from '@nestjs/common'
+
 import { UserService } from 'src/user/user.service'
+import * as bcrypt from 'bcrypt'
+import { JwtService } from '@nestjs/jwt'
+
 
 @Injectable()
 export class AuthService {
-    constructor(private readonly userService: UserService) {}
-    async register(
-        createUserDto: CreateUserDto
-    ): Promise<{ message: string; user: CreateUserDto }> {
-        const hashedPassword = await bcrypt.hash(createUserDto.password, 10)
-        createUserDto.password = hashedPassword
+    constructor(
+        private readonly userService: UserService,
+        private readonly jwtService: JwtService,
+    ) {}
 
-        await this.userService.createUser(createUserDto)
 
+    async signIn(email: string, password: string): Promise<{ access_token: string; role: string }> {
+        const user = await this.userService.user({ email })
+        if (!user) {
+            throw new UnauthorizedException('User not found')
+        }
+        const isMatch = await bcrypt.compare(password, user.password)
+        if (!isMatch) {
+            throw new UnauthorizedException('Invalid password')
+        }
+        const payload = { email: user.email, sub: user.id, role: user.role }
         return {
-            message: 'You are registered',
-            user: createUserDto,
+            access_token: await this.jwtService.signAsync(payload),
+            role: user.role,
         }
     }
 }

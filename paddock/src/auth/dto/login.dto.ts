@@ -9,3 +9,4 @@ export class LogInDto {
     @IsNotEmpty()
     password: string
 }
+

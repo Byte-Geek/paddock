@@ -3,6 +3,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { UserService } from 'src/user/user.service'
 import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt'
+import { User } from '../generated/prisma/client.js'
 
 
 @Injectable()
@@ -13,7 +14,7 @@ export class AuthService {
     ) {}
 
 
-    async signIn(email: string, password: string): Promise<{ access_token: string; role: string }> {
+    async signIn(email: string, password: string): Promise<{ access_token: string; user: Omit<User, 'password'> }> {
         const user = await this.userService.user({ email })
         if (!user) {
             throw new UnauthorizedException('User not found')
@@ -23,9 +24,10 @@ export class AuthService {
             throw new UnauthorizedException('Invalid password')
         }
         const payload = { email: user.email, sub: user.id, role: user.role }
+        const { password: _, ...userWithoutPassword } = user;
         return {
             access_token: await this.jwtService.signAsync(payload),
-            role: user.role,
+            user: userWithoutPassword,
         }
     }
 }

@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { AuthGuard } from './auth.guard'
+import { User } from '../generated/prisma/client.js'
 
 import { LogInDto } from './dto/login.dto'
 
@@ -28,7 +29,7 @@ export class AuthController {
     @Public()
     @HttpCode(HttpStatus.OK)
     @Post('login')
-    async signIn(@Body() logInDto: LogInDto): Promise<{ access_token: string; role: string }> {
+    async signIn(@Body() logInDto: LogInDto): Promise<{ access_token: string; user: Omit<User, 'password'> }> {
         return await this.authService.signIn(logInDto.email, logInDto.password)
     }
 

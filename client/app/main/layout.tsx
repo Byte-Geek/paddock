@@ -1,18 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth.store";
-import Sidebar from "@/components/layout/sidebar";
-import Navbar from "@/components/layout/navbar";
+import Navbar from "@/components/layout/Navbar";
+import Sidebar from "@/components/layout/Sidebar";
 
-export default function DashboardLayout({
+export default function MainLayout({
 	children,
 }: {
 	children: React.ReactNode;
 }) {
-	const router = useRouter();
-	const { token, user, initialize, logout } = useAuthStore();
+	const { initialize } = useAuthStore();
 	const [mounted, setMounted] = useState(false);
 	const [collapsed, setCollapsed] = useState(false);
 
@@ -20,12 +18,6 @@ export default function DashboardLayout({
 		initialize();
 		setMounted(true);
 	}, [initialize]);
-
-	useEffect(() => {
-		if (mounted && !token) {
-			router.push("/login");
-		}
-	}, [mounted, token, router]);
 
 	if (!mounted) return null;
 

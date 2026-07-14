@@ -1,11 +1,12 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const api = axios.create({
 	baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api",
 });
 
 api.interceptors.request.use((config) => {
-	const token = localStorage.getItem("access_token");
+	const token = Cookies.get("access_token");
 	if (token) {
 		config.headers.Authorization = `Bearer ${token}`;
 	}
@@ -16,7 +17,7 @@ api.interceptors.response.use(
 	(response) => response,
 	(error) => {
 		if (error.response?.status === 401) {
-			localStorage.removeItem("access_token");
+			Cookies.remove("access_token", { path: "/" });
 			localStorage.removeItem("user");
 			window.location.href = "/login";
 		}

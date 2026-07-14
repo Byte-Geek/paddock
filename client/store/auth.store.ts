@@ -15,7 +15,11 @@ export const useAuthStore = create<AuthState>((set) => ({
 	user: null,
 	setAuth: (token, user) => {
 		localStorage.setItem("user", JSON.stringify(user));
-		Cookies.set("access_token", token, { expires: 7, path: "/" });
+		Cookies.set("access_token", token, {
+			expires: 7,
+			path: "/",
+			sameSite: "lax",
+		});
 		set({ token, user });
 	},
 	logout: () => {
@@ -26,22 +30,21 @@ export const useAuthStore = create<AuthState>((set) => ({
 	initialize: () => {
 		const token = Cookies.get("access_token");
 		const userStr = localStorage.getItem("user");
-		
-		if (localStorage.getItem("access_token")) {
-			localStorage.removeItem("access_token");
-		}
 
-		if (token && userStr) {
-			try {
-				const user = JSON.parse(userStr);
-				set({ token, user });
-			} catch {
-				localStorage.removeItem("user");
-				Cookies.remove("access_token", { path: "/" });
-			}
-		} else {
+		if (!token || !userStr) {
 			localStorage.removeItem("user");
 			Cookies.remove("access_token", { path: "/" });
+			set({ token: null, user: null });
+			return;
+		}
+
+		try {
+			const user = JSON.parse(userStr);
+			set({ token, user });
+		} catch {
+			localStorage.removeItem("user");
+			Cookies.remove("access_token", { path: "/" });
+			set({ token: null, user: null });
 		}
 	},
 }));

@@ -13,9 +13,6 @@ export function proxy(request: NextRequest) {
   const isAuthRoute = authRoutes.some((route) => path === route || path.startsWith(`${route}/`))
   const isPublicRoute = publicRoutes.some((route) => path === route || path.startsWith(`${route}/`))
 
-  if (path === '/') {
-    return NextResponse.redirect(new URL('/main', request.url))
-  }
 
   if (isPublicRoute) {
     return NextResponse.next()
@@ -29,7 +26,6 @@ export function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL('/dashboard', request.url))
   }
 
-  // return NextResponse.next()
 }
 
 export const config = {

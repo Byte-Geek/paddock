@@ -2,6 +2,8 @@
 
 import { useAuthStore } from "@/store/auth.store";
 import StatCard from "@/components/ui/StatCard";
+import api from "@/lib/axios";
+import { useEffect, useState } from "react";
 
 const MONTHS = [
 	"IAN",
@@ -18,7 +20,7 @@ const MONTHS = [
 	"DEC",
 ];
 
-const stats = [
+const defaultStats = [
 	{ label: "Sportivi activi", value: 46, delta: "+4 luna asta", icon: "🏃" },
 	{ label: "Antrenori", value: 5, delta: "+1", icon: "👤" },
 	{
@@ -73,9 +75,37 @@ const events = [
 	},
 ];
 
+interface DashboardSummary {
+	athletes: number;
+	coaches: number;
+	totalUsers: number;
+}
+
 export default function MainPage() {
 	const user = useAuthStore((s) => s.user);
 	const firstName = user?.name?.split(" ")[0];
+	const [stats, setStats] = useState(defaultStats);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		const loadSummary = async () => {
+			try {
+				const { data } = await api.get<DashboardSummary>("/dashboard/summary");
+				setStats([
+					{ label: "Sportivi activi", value: data.athletes, delta: "+4 luna asta", icon: "🏃" },
+					{ label: "Antrenori", value: data.coaches, delta: "+1", icon: "👤" },
+					{ label: "Grupe", value: 7, delta: "stabil", deltaPositive: false, icon: "👥" },
+					{ label: "Competiții 2026", value: 12, delta: "3 viitoare", icon: "🏆" },
+				]);
+			} catch (error) {
+				console.error("Failed to load dashboard summary", error);
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		loadSummary();
+	}, []);
 
 	return (
 		<div className="flex flex-col gap-6">

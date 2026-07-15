@@ -9,11 +9,67 @@
 * 🟢 You can import this file directly.
 */
 
-export const UserRoles = {
-  GUEST: 'GUEST',
-  USER: 'USER',
-  ADMIN: 'ADMIN',
-  MODERATOR: 'MODERATOR'
+export const Role = {
+  ATHLETE: 'ATHLETE',
+  COACH: 'COACH',
+  MODERATOR: 'MODERATOR',
+  ADMIN: 'ADMIN'
 } as const
 
-export type UserRoles = (typeof UserRoles)[keyof typeof UserRoles]
+export type Role = (typeof Role)[keyof typeof Role]
+
+
+export const EventStatus = {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED',
+  ONGOING: 'ONGOING',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type EventStatus = (typeof EventStatus)[keyof typeof EventStatus]
+
+
+export const ParticipationStatus = {
+  REGISTERED: 'REGISTERED',
+  COMPETED: 'COMPETED',
+  DISQUALIFIED: 'DISQUALIFIED',
+  WITHDRAWN: 'WITHDRAWN'
+} as const
+
+export type ParticipationStatus = (typeof ParticipationStatus)[keyof typeof ParticipationStatus]
+
+
+export const ScoringAlgorithm = {
+  SUM: 'SUM',
+  AVERAGE: 'AVERAGE',
+  AVERAGE_DROP_HIGH_LOW: 'AVERAGE_DROP_HIGH_LOW',
+  WEIGHTED_SUM: 'WEIGHTED_SUM'
+} as const
+
+export type ScoringAlgorithm = (typeof ScoringAlgorithm)[keyof typeof ScoringAlgorithm]
+
+
+export const ScoringMethod = {
+  NUMERIC_0_10: 'NUMERIC_0_10',
+  NUMERIC_0_6: 'NUMERIC_0_6',
+  PASS_FAIL: 'PASS_FAIL'
+} as const
+
+export type ScoringMethod = (typeof ScoringMethod)[keyof typeof ScoringMethod]
+
+
+export const ElementType = {
+  MOVEMENT: 'MOVEMENT',
+  COLLECTIVE: 'COLLECTIVE'
+} as const
+
+export type ElementType = (typeof ElementType)[keyof typeof ElementType]
+
+
+export const ErrorType = {
+  COURSE_ERROR: 'COURSE_ERROR',
+  TECHNICAL_ERROR: 'TECHNICAL_ERROR'
+} as const
+
+export type ErrorType = (typeof ErrorType)[keyof typeof ErrorType]

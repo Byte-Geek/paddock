@@ -269,12 +269,13 @@ export default function Navbar({ onToggleSidebar }: NavbarProps) {
 				</div>
 			) : (
 				/* Login button for guest users */
-				<button
-					onClick={handleLogin}
-					className="bg-[#4a7adb] hover:bg-[#3a6acb] text-white font-semibold rounded-lg px-6 py-2 text-sm transition"
-				>
-					Autentificare
-				</button>
+				// <button
+				// 	onClick={handleLogin}
+				// 	className="bg-[#4a7adb] hover:bg-[#3a6acb] text-white font-semibold rounded-lg px-6 py-2 text-sm transition"
+				// >
+				// 	Autentificare
+				// </button>
+				<></>
 			)}
 		</header>
 	);

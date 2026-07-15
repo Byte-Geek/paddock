@@ -22,19 +22,22 @@ async function main() {
     {
       email: 'admin@paddock.md',
       password: 'Admin123',
-      name: 'Administrator',
+      firstName: 'Administrator',
+      lastName: 'Administrator',
       role: 'ADMIN' as const,
     },
     {
       email: 'moderator@paddock.md',
       password: 'Moderator123',
-      name: 'Moderator',
+      firstName: 'Moderator',
+      lastName: 'Moderator',
       role: 'MODERATOR' as const,
     },
     {
       email: 'user@paddock.md',
       password: 'User123',
-      name: 'User',
+      firstName: 'User',
+      lastName: 'User',
       role: 'USER' as const,
     },
   ]
@@ -45,14 +48,16 @@ async function main() {
     const createdUser = await prisma.user.upsert({
       where: { email: user.email },
       update: {
-        name: user.name,
+        firstName: user.firstName,
+        lastName: user.lastName,
         password: hashedPassword,
         role: user.role as any,
       },
       create: {
         email: user.email,
         password: hashedPassword,
-        name: user.name,
+        firstName: user.firstName,
+        lastName: user.lastName,
         role: user.role as any,
       },
     })

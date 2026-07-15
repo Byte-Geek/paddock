@@ -42,7 +42,7 @@ export class AuthController {
         if (!user) {
             throw new Error('User not found')
         }
-        return { email: user.email, name: user.name, role: user.role }
+        return { email: user.email, name: user.firstName + ' ' + user.lastName, role: user.role }
     }
 }
 

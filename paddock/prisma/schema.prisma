@@ -1,32 +1,341 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
 
-  generator client {
-    provider = "prisma-client"
-    output   = "../src/generated/prisma"
-    moduleFormat = "cjs"
-  }
+datasource db {
+  provider = "postgresql"
+}
 
-  datasource db {
-    provider = "postgresql"
-  }
+enum Role {
+  ATHLETE
+  COACH
+  MODERATOR
+  ADMIN
+}
 
-  enum UserRoles {
-    GUEST
-    USER
-    ADMIN
-    MODERATOR
-  }
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  ONGOING
+  COMPLETED
+  CANCELLED
+}
 
-  model User {
-    id         String      @id @default(uuid())
-    email      String   @unique
-    password   String
-    name       String?
-    role       UserRoles @default(GUEST)
+enum ParticipationStatus {
+  REGISTERED
+  COMPETED
+  DISQUALIFIED
+  WITHDRAWN
+}
 
-    createdAt  DateTime @default(now())
-    updatedAt  DateTime @updatedAt
-    @@map("users")
-  }
+enum ScoringAlgorithm {
+  SUM
+  AVERAGE
+  AVERAGE_DROP_HIGH_LOW
+  WEIGHTED_SUM
+}
 
+enum ScoringMethod {
+  NUMERIC_0_10
+  NUMERIC_0_6
+  PASS_FAIL
+}
 
-    
+enum ElementType {
+  MOVEMENT
+  COLLECTIVE
+}
+
+enum ErrorType {
+  COURSE_ERROR
+  TECHNICAL_ERROR
+}
+
+model User {
+  id        String  @id @default(uuid())
+  email     String  @unique
+  password  String
+  firstName String?
+  lastName  String?
+  role      Role    @default(ATHLETE)
+
+  athlete            Athlete?
+  coach              Coach?
+  eventSecretaries   EventSecretary[]
+  evaluationsEntered Evaluation[]     @relation("EvaluationEnteredBy")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Athlete {
+  id     String @id @default(uuid())
+  userId String @unique
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  groups         GroupAthlete[]
+  participations Participation[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("athletes")
+}
+
+model Coach {
+  id     String @id @default(uuid())
+  userId String @unique
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  groups Group[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("coaches")
+}
+
+model Group {
+  id      String @id @default(uuid())
+  coachId String
+
+  coach Coach @relation(fields: [coachId], references: [id], onDelete: Cascade)
+
+  name        String
+  description String?
+
+  athletes GroupAthlete[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("groups")
+}
+
+model GroupAthlete {
+  id        String @id @default(uuid())
+  groupId   String
+  athleteId String
+
+  group   Group   @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  athlete Athlete @relation(fields: [athleteId], references: [id], onDelete: Cascade)
+
+  joinedAt DateTime  @default(now())
+  leftAt   DateTime?
+
+  @@unique([groupId, athleteId])
+  @@map("group_athletes")
+}
+
+model Event {
+  id String @id @default(uuid())
+
+  name     String
+  location String?
+
+  startDate DateTime?
+  endDate   DateTime?
+
+  description String?
+  status      EventStatus @default(DRAFT)
+
+  secretaries EventSecretary[]
+  categories  Category[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("events")
+}
+
+model EventSecretary {
+  id      String @id @default(uuid())
+  eventId String
+  userId  String
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  assignedAt DateTime @default(now())
+
+  @@unique([eventId, userId])
+  @@map("event_secretaries")
+}
+
+model ProtocolTemplate {
+  id String @id @default(uuid())
+
+  name        String
+  level       String?
+  description String?
+
+  compositionYear      Int?
+  revisionYear         Int?
+  estimatedTimeSeconds Int?
+
+  scoringAlgorithm ScoringAlgorithm @default(SUM)
+  algorithmConfig  Json?
+
+  active Boolean @default(true)
+
+  elements   ProtocolElement[]
+  categories Category[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("protocol_templates")
+}
+
+model ProtocolElement {
+  id         String @id @default(uuid())
+  templateId String
+
+  template ProtocolTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  order   Int
+  number  Int?
+  letters String?
+
+  name            String
+  judgingCriteria String?
+
+  elementType ElementType @default(MOVEMENT)
+
+  scoringMethod ScoringMethod @default(NUMERIC_0_10)
+  maxScore      Decimal       @default(10) @db.Decimal(4, 2)
+  scoreStep     Decimal       @default(0.5) @db.Decimal(3, 2)
+
+  coefficient Decimal @default(1) @db.Decimal(3, 1)
+
+  scores Score[]
+
+  @@map("protocol_elements")
+}
+
+model Category {
+  id                 String @id @default(uuid())
+  eventId            String
+  protocolTemplateId String
+
+  event            Event            @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  protocolTemplate ProtocolTemplate @relation(fields: [protocolTemplateId], references: [id], onDelete: Restrict)
+
+  name String
+
+  referees       CategoryReferee[]
+  participations Participation[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("categories")
+}
+
+model CategoryReferee {
+  id         String @id @default(uuid())
+  categoryId String
+
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  firstName  String
+  lastName   String
+  letterCode String
+  position   String?
+
+  evaluations Evaluation[]
+
+  @@unique([categoryId, letterCode])
+  @@map("category_referees")
+}
+
+model Participation {
+  id         String @id @default(uuid())
+  athleteId  String
+  categoryId String
+
+  athlete  Athlete  @relation(fields: [athleteId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  horseName String?
+
+  participationNumber Int @default(1)
+
+  finalScore Decimal? @db.Decimal(6, 2)
+  percentage Decimal? @db.Decimal(5, 2)
+  rank       Int?
+
+  status ParticipationStatus @default(REGISTERED)
+
+  evaluations Evaluation[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([athleteId, categoryId, participationNumber])
+  @@map("participations")
+}
+
+model Evaluation {
+  id                String  @id @default(uuid())
+  participationId   String
+  categoryRefereeId String
+  enteredByUserId   String?
+
+  participation   Participation   @relation(fields: [participationId], references: [id], onDelete: Cascade)
+  categoryReferee CategoryReferee @relation(fields: [categoryRefereeId], references: [id], onDelete: Cascade)
+  enteredBy       User?           @relation("EvaluationEnteredBy", fields: [enteredByUserId], references: [id], onDelete: SetNull)
+
+  finalScore Decimal? @db.Decimal(6, 2)
+  percentage Decimal? @db.Decimal(5, 2)
+
+  finalized Boolean @default(false)
+
+  scores Score[]
+  errors EvaluationError[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([participationId, categoryRefereeId])
+  @@map("evaluations")
+}
+
+model Score {
+  id           String @id @default(uuid())
+  evaluationId String
+  elementId    String
+
+  evaluation Evaluation      @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
+  element    ProtocolElement @relation(fields: [elementId], references: [id], onDelete: Restrict)
+
+  value      Decimal? @db.Decimal(4, 2)
+  correction Decimal? @db.Decimal(4, 2)
+  remark     String?
+
+  createdAt DateTime @default(now())
+
+  @@unique([evaluationId, elementId])
+  @@map("scores")
+}
+
+model EvaluationError {
+  id           String @id @default(uuid())
+  evaluationId String
+
+  evaluation Evaluation @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
+
+  errorType        ErrorType
+  occurrence       Int
+  deductionPercent Decimal   @db.Decimal(4, 2)
+
+  createdAt DateTime @default(now())
+
+  @@map("evaluation_errors")
+}

@@ -21,6 +21,7 @@ if (!databaseUrl) {
         'DATABASE_URL is not set. Configure your database connection before running the seed. See .env.example for an example.'
     )
 }
+//asd
 
 const prisma = new PrismaClient({
     adapter: new PrismaPg({

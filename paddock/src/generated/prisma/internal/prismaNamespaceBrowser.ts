@@ -51,7 +51,21 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  User: 'User'
+  User: 'User',
+  Athlete: 'Athlete',
+  Coach: 'Coach',
+  Group: 'Group',
+  GroupAthlete: 'GroupAthlete',
+  Event: 'Event',
+  EventSecretary: 'EventSecretary',
+  ProtocolTemplate: 'ProtocolTemplate',
+  ProtocolElement: 'ProtocolElement',
+  Category: 'Category',
+  CategoryReferee: 'CategoryReferee',
+  Participation: 'Participation',
+  Evaluation: 'Evaluation',
+  Score: 'Score',
+  EvaluationError: 'EvaluationError'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -74,7 +88,8 @@ export const UserScalarFieldEnum = {
   id: 'id',
   email: 'email',
   password: 'password',
-  name: 'name',
+  firstName: 'firstName',
+  lastName: 'lastName',
   role: 'role',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -83,12 +98,205 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const AthleteScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AthleteScalarFieldEnum = (typeof AthleteScalarFieldEnum)[keyof typeof AthleteScalarFieldEnum]
+
+
+export const CoachScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CoachScalarFieldEnum = (typeof CoachScalarFieldEnum)[keyof typeof CoachScalarFieldEnum]
+
+
+export const GroupScalarFieldEnum = {
+  id: 'id',
+  coachId: 'coachId',
+  name: 'name',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GroupScalarFieldEnum = (typeof GroupScalarFieldEnum)[keyof typeof GroupScalarFieldEnum]
+
+
+export const GroupAthleteScalarFieldEnum = {
+  id: 'id',
+  groupId: 'groupId',
+  athleteId: 'athleteId',
+  joinedAt: 'joinedAt',
+  leftAt: 'leftAt'
+} as const
+
+export type GroupAthleteScalarFieldEnum = (typeof GroupAthleteScalarFieldEnum)[keyof typeof GroupAthleteScalarFieldEnum]
+
+
+export const EventScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  location: 'location',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  description: 'description',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
+
+
+export const EventSecretaryScalarFieldEnum = {
+  id: 'id',
+  eventId: 'eventId',
+  userId: 'userId',
+  assignedAt: 'assignedAt'
+} as const
+
+export type EventSecretaryScalarFieldEnum = (typeof EventSecretaryScalarFieldEnum)[keyof typeof EventSecretaryScalarFieldEnum]
+
+
+export const ProtocolTemplateScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  level: 'level',
+  description: 'description',
+  compositionYear: 'compositionYear',
+  revisionYear: 'revisionYear',
+  estimatedTimeSeconds: 'estimatedTimeSeconds',
+  scoringAlgorithm: 'scoringAlgorithm',
+  algorithmConfig: 'algorithmConfig',
+  active: 'active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProtocolTemplateScalarFieldEnum = (typeof ProtocolTemplateScalarFieldEnum)[keyof typeof ProtocolTemplateScalarFieldEnum]
+
+
+export const ProtocolElementScalarFieldEnum = {
+  id: 'id',
+  templateId: 'templateId',
+  order: 'order',
+  number: 'number',
+  letters: 'letters',
+  name: 'name',
+  judgingCriteria: 'judgingCriteria',
+  elementType: 'elementType',
+  scoringMethod: 'scoringMethod',
+  maxScore: 'maxScore',
+  scoreStep: 'scoreStep',
+  coefficient: 'coefficient'
+} as const
+
+export type ProtocolElementScalarFieldEnum = (typeof ProtocolElementScalarFieldEnum)[keyof typeof ProtocolElementScalarFieldEnum]
+
+
+export const CategoryScalarFieldEnum = {
+  id: 'id',
+  eventId: 'eventId',
+  protocolTemplateId: 'protocolTemplateId',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
+
+
+export const CategoryRefereeScalarFieldEnum = {
+  id: 'id',
+  categoryId: 'categoryId',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  letterCode: 'letterCode',
+  position: 'position'
+} as const
+
+export type CategoryRefereeScalarFieldEnum = (typeof CategoryRefereeScalarFieldEnum)[keyof typeof CategoryRefereeScalarFieldEnum]
+
+
+export const ParticipationScalarFieldEnum = {
+  id: 'id',
+  athleteId: 'athleteId',
+  categoryId: 'categoryId',
+  horseName: 'horseName',
+  participationNumber: 'participationNumber',
+  finalScore: 'finalScore',
+  percentage: 'percentage',
+  rank: 'rank',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ParticipationScalarFieldEnum = (typeof ParticipationScalarFieldEnum)[keyof typeof ParticipationScalarFieldEnum]
+
+
+export const EvaluationScalarFieldEnum = {
+  id: 'id',
+  participationId: 'participationId',
+  categoryRefereeId: 'categoryRefereeId',
+  enteredByUserId: 'enteredByUserId',
+  finalScore: 'finalScore',
+  percentage: 'percentage',
+  finalized: 'finalized',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EvaluationScalarFieldEnum = (typeof EvaluationScalarFieldEnum)[keyof typeof EvaluationScalarFieldEnum]
+
+
+export const ScoreScalarFieldEnum = {
+  id: 'id',
+  evaluationId: 'evaluationId',
+  elementId: 'elementId',
+  value: 'value',
+  correction: 'correction',
+  remark: 'remark',
+  createdAt: 'createdAt'
+} as const
+
+export type ScoreScalarFieldEnum = (typeof ScoreScalarFieldEnum)[keyof typeof ScoreScalarFieldEnum]
+
+
+export const EvaluationErrorScalarFieldEnum = {
+  id: 'id',
+  evaluationId: 'evaluationId',
+  errorType: 'errorType',
+  occurrence: 'occurrence',
+  deductionPercent: 'deductionPercent',
+  createdAt: 'createdAt'
+} as const
+
+export type EvaluationErrorScalarFieldEnum = (typeof EvaluationErrorScalarFieldEnum)[keyof typeof EvaluationErrorScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -105,4 +313,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

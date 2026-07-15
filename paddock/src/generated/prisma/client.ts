@@ -44,3 +44,73 @@ export { Prisma }
  * 
  */
 export type User = Prisma.UserModel
+/**
+ * Model Athlete
+ * 
+ */
+export type Athlete = Prisma.AthleteModel
+/**
+ * Model Coach
+ * 
+ */
+export type Coach = Prisma.CoachModel
+/**
+ * Model Group
+ * 
+ */
+export type Group = Prisma.GroupModel
+/**
+ * Model GroupAthlete
+ * 
+ */
+export type GroupAthlete = Prisma.GroupAthleteModel
+/**
+ * Model Event
+ * 
+ */
+export type Event = Prisma.EventModel
+/**
+ * Model EventSecretary
+ * 
+ */
+export type EventSecretary = Prisma.EventSecretaryModel
+/**
+ * Model ProtocolTemplate
+ * 
+ */
+export type ProtocolTemplate = Prisma.ProtocolTemplateModel
+/**
+ * Model ProtocolElement
+ * 
+ */
+export type ProtocolElement = Prisma.ProtocolElementModel
+/**
+ * Model Category
+ * 
+ */
+export type Category = Prisma.CategoryModel
+/**
+ * Model CategoryReferee
+ * 
+ */
+export type CategoryReferee = Prisma.CategoryRefereeModel
+/**
+ * Model Participation
+ * 
+ */
+export type Participation = Prisma.ParticipationModel
+/**
+ * Model Evaluation
+ * 
+ */
+export type Evaluation = Prisma.EvaluationModel
+/**
+ * Model Score
+ * 
+ */
+export type Score = Prisma.ScoreModel
+/**
+ * Model EvaluationError
+ * 
+ */
+export type EvaluationError = Prisma.EvaluationErrorModel

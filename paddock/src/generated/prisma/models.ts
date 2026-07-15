@@ -9,4 +9,18 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User.js'
+export type * from './models/Athlete.js'
+export type * from './models/Coach.js'
+export type * from './models/Group.js'
+export type * from './models/GroupAthlete.js'
+export type * from './models/Event.js'
+export type * from './models/EventSecretary.js'
+export type * from './models/ProtocolTemplate.js'
+export type * from './models/ProtocolElement.js'
+export type * from './models/Category.js'
+export type * from './models/CategoryReferee.js'
+export type * from './models/Participation.js'
+export type * from './models/Evaluation.js'
+export type * from './models/Score.js'
+export type * from './models/EvaluationError.js'
 export type * from './commonInputTypes.js'

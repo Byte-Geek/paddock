@@ -2,9 +2,10 @@
 
 import { useAuthStore } from "@/store/auth.store";
 import StatCard from "@/components/ui/StatCard";
+import { MONTHS } from "@/lib/utils";
 import api from "@/lib/axios";
 import { useEffect, useState } from "react";
-import { HomeSummary } from "@/types";
+import { HomeSummary, UpcomingEvent } from "@/types";
 
 const currentYear = new Date().getFullYear();
 
@@ -20,30 +21,57 @@ const defaultStats = [
 	},
 	{ label: `Campionate / ${currentYear}`, value: 0, icon: "🏆" },
 ];
+
 export default function MainPage() {
 	const user = useAuthStore((s) => s.user);
 	const firstName = user?.firstName;
+
 	const [stats, setStats] = useState(defaultStats);
+	const [events, setEvents] = useState<UpcomingEvent[]>([]);
 	const [loading, setLoading] = useState(true);
 
-	useEffect(() => {	
-		const loadSummary = async () => {
+	useEffect(() => {
+		const loadHome = async () => {
 			try {
-				const { data } = await api.get<HomeSummary>("/home/summary");
-				setStats([
-					{ label: "Sportivi activi", value: data.athletes, delta: "+" + data.modificationsLastMonth.athletes + " luna asta", icon: "🏃" },
-					{ label: "Antrenori", value: data.coaches, delta: "+" + data.modificationsLastMonth.coaches + " luna asta", icon: "👤" },
-					{ label: "Grupe", value: data.groups, delta: "+" + data.modificationsLastMonth.groups + " luna asta", icon: "👥" },
-					{ label: `Campionate / ${currentYear}`, value: data.championshipsThisYear, icon: "🏆" },
+				const [summaryRes, eventsRes] = await Promise.all([
+					api.get<HomeSummary>("/home/summary"),
+					api.get<UpcomingEvent[]>("/home/upcoming-events"),
 				]);
+				const data = summaryRes.data;
+				setStats([
+					{
+						label: "Sportivi activi",
+						value: data.athletes,
+						delta: "+" + data.modificationsLastMonth.athletes + " luna asta",
+						icon: "🏃",
+					},
+					{
+						label: "Antrenori",
+						value: data.coaches,
+						delta: "+" + data.modificationsLastMonth.coaches + " luna asta",
+						icon: "👤",
+					},
+					{
+						label: "Grupe",
+						value: data.groups,
+						delta: "+" + data.modificationsLastMonth.groups + " luna asta",
+						icon: "👥",
+					},
+					{
+						label: `Campionate / ${currentYear}`,
+						value: data.championshipsThisYear,
+						icon: "🏆",
+					},
+				]);
+				setEvents(eventsRes.data);
 			} catch (error) {
-				console.error("Failed to load home summary", error);
+				console.error("Failed to load home data", error);
 			} finally {
 				setLoading(false);
 			}
 		};
 
-		loadSummary();
+		loadHome();
 	}, []);
 
 	return (
@@ -100,8 +128,51 @@ export default function MainPage() {
 				))}
 			</div>
 
-			<div className="rounded-xl border border-[#e8ecf5] bg-white p-6 text-sm text-[#8896b3]">
-				Datele afișate sunt preluate din API-ul de home.
+			{/* Evenimente */}
+			<div className="bg-white rounded-xl border border-[#e8ecf5]">
+				<div className="flex items-center justify-between px-5 py-4 border-b border-[#e8ecf5]">
+					<h3 className="font-semibold text-[#0f1729]">
+						Evenimente apropiate
+					</h3>
+					<button className="text-xs text-[#4a7adb] hover:underline">
+						Calendar
+					</button>
+				</div>
+				{events.length === 0 && !loading && (
+					<div className="px-5 py-6 text-sm text-[#8896b3]">
+						Nu sunt evenimente programate.
+					</div>
+				)}
+				{events.map((e, i) => {
+					const startDate = new Date(e.startDate);
+					const day = startDate.getDate();
+					const month = MONTHS[startDate.getMonth()];
+					return (
+						<div
+							key={e.id}
+							className={`flex gap-4 items-center px-5 py-4 ${i > 0 ? "border-t border-[#e8ecf5]" : ""}`}
+						>
+							<div className="w-12 text-center flex-shrink-0">
+								<div className="text-[10px] font-bold text-[#4a7adb] tracking-widest uppercase">
+									{month}
+								</div>
+								<div className="text-2xl font-bold text-[#0f1729] leading-none">
+									{day}
+								</div>
+							</div>
+							<div>
+								<div className="font-semibold text-sm text-[#0f1729]">
+									{e.title}
+								</div>
+								{e.location && (
+									<div className="text-xs text-[#8896b3] mt-0.5">
+										{e.location}
+									</div>
+								)}
+							</div>
+						</div>
+					);
+				})}
 			</div>
 		</div>
 	);

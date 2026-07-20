@@ -9,4 +9,9 @@ export class HomeController {
     async getSummary() {
         return this.homeService.getSummary()
     }
+
+    @Get('upcoming-events')
+    async getUpcomingEvents() {
+        return this.homeService.getUpcomingEvents()
+    }
 }

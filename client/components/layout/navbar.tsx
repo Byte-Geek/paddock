@@ -9,6 +9,13 @@ interface NavbarProps {
 	onToggleSidebar: () => void;
 }
 
+const roleLabels: Record<string, string> = {
+	ADMIN: "Administrator",
+	MODERATOR: "Moderator",
+	COACH: "Antrenor",
+	ATHLETE: "Sportiv",
+};
+
 export default function Navbar({ onToggleSidebar }: NavbarProps) {
 	const router = useRouter();
 	const { token, user, logout } = useAuthStore();
@@ -59,31 +66,43 @@ export default function Navbar({ onToggleSidebar }: NavbarProps) {
 			</button>
 
 			{/* Brand */}
-			<div className="flex items-center gap-3 font-bold text-[18px] tracking-[-0.01em]">
-				<div className="w-[34px] h-[34px] rounded-[9px] bg-gradient-to-br from-[#6cb0e6] to-white grid place-items-center text-[#143654] shadow-[inset_0_-1px_0_rgba(0,0,0,0.08),0_2px_8px_rgba(0,0,0,0.15)]">
-					<svg
-						width="20"
-						height="20"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						strokeWidth="2"
-						strokeLinecap="round"
-						strokeLinejoin="round"
-					>
-						<path d="M6 4c-2 2-3 5-3 9s2 7 3 7" />
-						<path d="M18 4c2 2 3 5 3 9s-2 7-3 7" />
-						<circle cx="6" cy="20" r="1.4" fill="currentColor" />
-						<circle cx="18" cy="20" r="1.4" fill="currentColor" />
-					</svg>
+			<button onClick={() => router.push("/")}>
+				<div className="flex items-center gap-3 font-bold text-[18px] tracking-[-0.01em]">
+					<div className="w-[34px] h-[34px] rounded-[9px] bg-gradient-to-br from-[#6cb0e6] to-white grid place-items-center text-[#143654] shadow-[inset_0_-1px_0_rgba(0,0,0,0.08),0_2px_8px_rgba(0,0,0,0.15)]">
+						<svg
+							width="20"
+							height="20"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							strokeWidth="2"
+							strokeLinecap="round"
+							strokeLinejoin="round"
+						>
+							<path d="M6 4c-2 2-3 5-3 9s2 7 3 7" />
+							<path d="M18 4c2 2 3 5 3 9s-2 7-3 7" />
+							<circle
+								cx="6"
+								cy="20"
+								r="1.4"
+								fill="currentColor"
+							/>
+							<circle
+								cx="18"
+								cy="20"
+								r="1.4"
+								fill="currentColor"
+							/>
+						</svg>
+					</div>
+					<div>
+						Paddock
+						<small className="block font-normal text-[11px] text-white/55 uppercase tracking-[0.08em] mt-[1px]">
+							Școala Sportivă Republicană
+						</small>
+					</div>
 				</div>
-				<div>
-					Paddock
-					<small className="block font-normal text-[11px] text-white/55 uppercase tracking-[0.08em] mt-[1px]">
-						Școala Sportivă Republicană
-					</small>
-				</div>
-			</div>
+			</button>
 
 			<div className="flex-1" />
 
@@ -147,14 +166,14 @@ export default function Navbar({ onToggleSidebar }: NavbarProps) {
 						className="flex items-center gap-2.5 bg-transparent border-0 text-white px-2.5 py-1 pr-[10px] pl-1 rounded-full hover:bg-white/8 transition"
 					>
 						<div className="w-9 h-9 rounded-full bg-gradient-to-br from-white to-[#b5d7f1] text-[#143654] grid place-items-center font-bold text-[14px]">
-							{initials(user?.name || "EC")}
+							{initials(user?.firstName || "")}
 						</div>
 						<div className="text-left">
 							<div className="text-[13px] font-semibold leading-none">
-								{user?.name || "Eugen Crețu"}
+								{user ? `${user.firstName} ${user.lastName}` : ""}
 							</div>
 							<div className="text-[10px] uppercase tracking-[0.08em] text-white/55 font-semibold mt-[1px]">
-								{user?.role || "moderator"}
+								{user?.role ? roleLabels[user.role] : ""}
 							</div>
 						</div>
 						<svg
@@ -175,17 +194,17 @@ export default function Navbar({ onToggleSidebar }: NavbarProps) {
 							{/* Head */}
 							<div className="p-4 border-b border-[#eef2f7] grid grid-cols-[44px_1fr] gap-3 items-center">
 								<div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#b5d7f1] to-[#e0eef9] text-[#143654] grid place-items-center font-bold text-base">
-									{initials(user?.name || "EC")}
+									{initials(user?.firstName || "")}
 								</div>
 								<div>
 									<div className="font-bold text-[14px] text-[#0e1f33]">
-										{user?.name}
+										{user ? `${user.firstName} ${user.lastName}` : ""}
 									</div>
 									<div className="text-[12px] text-[#6b7d92]">
 										{user?.email}
 									</div>
 									<span className="mt-1 inline-block text-[10px] font-bold tracking-[0.1em] text-[#205280] bg-[#e0eef9] px-[7px] py-[2px] rounded uppercase">
-										{user?.role}
+										{user?.role ? roleLabels[user.role] : ""}
 									</span>
 								</div>
 							</div>

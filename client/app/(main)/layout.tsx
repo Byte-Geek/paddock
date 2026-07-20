@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useAuthStore } from "@/store/auth.store";
-import Navbar from "@/components/layout/Navbar";
+import Navbar from "@/components/layout/navbar";
 import Sidebar from "@/components/layout/Sidebar";
 
 export default function MainLayout({

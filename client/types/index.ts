@@ -1,12 +1,25 @@
 export interface User {
 	id: string;
-	name: string;
+	firstName: string;
+	lastName: string;
 	email: string;
-	role: "moderator" | "antrenor" | "sportiv";
+	role: "ADMIN" | "MODERATOR" | "COACH" | "ATHLETE";
 }
 
 export interface AuthResponse {
 	access_token: string;
+}
+
+export interface HomeSummary {
+	athletes: number;
+	coaches: number;
+	groups: number;
+	championshipsThisYear: number;
+	modificationsLastMonth: {
+		athletes: number;
+		coaches: number;
+		groups: number;
+	};
 }
 
 export interface Coach {

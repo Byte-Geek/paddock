@@ -39,6 +39,15 @@ export class AuthController {
     }
 
     @UseGuards(AuthGuard)
+    @HttpCode(HttpStatus.OK)
+    @Post('refresh')
+    async refresh(
+        @Req() req: AuthenticatedRequest
+    ): Promise<{ access_token: string }> {
+        return this.authService.refresh(req.user.email)
+    }
+
+    @UseGuards(AuthGuard)
     @Get('profile')
     async getProfile(
         @Req() req: AuthenticatedRequest

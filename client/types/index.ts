@@ -132,3 +132,23 @@ export interface CompetitionEventDetail extends CompetitionEvent {
 }
 
 export type Gender = "M" | "F";
+
+export type ScoringAlgorithm =
+	| "SUM"
+	| "AVERAGE"
+	| "AVERAGE_DROP_HIGH_LOW"
+	| "WEIGHTED_SUM";
+
+export interface ProtocolTemplate {
+	id: string;
+	name: string;
+	level: string | null;
+	description: string | null;
+	compositionYear: number | null;
+	revisionYear: number | null;
+	estimatedTimeSeconds: number | null;
+	scoringAlgorithm: ScoringAlgorithm;
+	active: boolean;
+	elementCount: number;
+	categoryCount: number;
+}

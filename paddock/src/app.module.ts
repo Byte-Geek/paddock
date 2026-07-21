@@ -10,6 +10,7 @@ import { GroupModule } from './group/group.module'
 import { AthleteModule } from './athlete/athlete.module'
 import { StatsModule } from './stats/stats.module'
 import { EventModule } from './event/event.module'
+import { ProtocolTemplateModule } from './protocol-template/protocol-template.module'
 
 @Module({
     imports: [
@@ -22,6 +23,7 @@ import { EventModule } from './event/event.module'
         AthleteModule,
         StatsModule,
         EventModule,
+        ProtocolTemplateModule,
     ],
     controllers: [AppController],
     providers: [AppService],

@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 const protectedRoutes = [
-  '/dashboard',
   '/antrenori',
   '/grupe',
   '/sportivi',
@@ -10,7 +9,7 @@ const protectedRoutes = [
   '/competitii',
 ]
 const authRoutes = ['/login', '/register']
-const publicRoutes = ['/', '/main']
+const publicRoutes = ['/', '/main', '/dashboard', '/evenimente', '/protocoale', '/calculator']
 
 function isTokenExpired(token: string): boolean {
   try {

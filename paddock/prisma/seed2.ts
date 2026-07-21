@@ -21,7 +21,6 @@ if (!databaseUrl) {
         'DATABASE_URL is not set. Configure your database connection before running the seed. See .env.example for an example.'
     )
 }
-//asd
 
 const prisma = new PrismaClient({
     adapter: new PrismaPg({
@@ -53,6 +52,15 @@ async function main() {
     await prisma.user.deleteMany()
 
     // --- Users ---
+    const God = await prisma.user.create({
+        data: {
+            email: 'god@test.com',
+            password: await hash('god'),
+            firstName: 'Ion',
+            lastName: 'Moderatorul',
+            role: Role.MODERATOR,
+        },
+    })
     const moderatorUser = await prisma.user.create({
         data: {
             email: 'moderator@example.com',
@@ -62,9 +70,6 @@ async function main() {
             role: Role.MODERATOR,
         },
     })
-
-
-    
 
     const adminUser = await prisma.user.create({
         data: {

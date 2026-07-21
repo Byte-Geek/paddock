@@ -4,11 +4,28 @@ import { AppService } from './app.service'
 import { AuthModule } from './auth/auth.module'
 import { UserModule } from './user/user.module'
 import { PrismaModule } from './prisma.module'
-import { DashboardController } from './dashboard/dashboard.controller'
+import { HomeModule } from './home/home.module'
+import { CoachModule } from './coach/coach.module'
+import { GroupModule } from './group/group.module'
+import { AthleteModule } from './athlete/athlete.module'
+import { StatsModule } from './stats/stats.module'
+import { EventModule } from './event/event.module'
+import { ProtocolTemplateModule } from './protocol-template/protocol-template.module'
 
 @Module({
-    imports: [PrismaModule, AuthModule, UserModule],
-    controllers: [AppController, DashboardController],
+    imports: [
+        PrismaModule,
+        AuthModule,
+        UserModule,
+        HomeModule,
+        CoachModule,
+        GroupModule,
+        AthleteModule,
+        StatsModule,
+        EventModule,
+        ProtocolTemplateModule,
+    ],
+    controllers: [AppController],
     providers: [AppService],
 })
 export class AppModule {}

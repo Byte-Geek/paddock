@@ -1,0 +1,44 @@
+import {
+    IsString,
+    IsNotEmpty,
+    IsOptional,
+    IsInt,
+    IsEnum,
+    IsBoolean,
+} from 'class-validator'
+import { ScoringAlgorithm } from '../../generated/prisma/enums'
+
+export class UpdateProtocolTemplateDto {
+    @IsString()
+    @IsNotEmpty()
+    @IsOptional()
+    name?: string
+
+    @IsString()
+    @IsOptional()
+    level?: string
+
+    @IsString()
+    @IsOptional()
+    description?: string
+
+    @IsInt()
+    @IsOptional()
+    compositionYear?: number
+
+    @IsInt()
+    @IsOptional()
+    revisionYear?: number
+
+    @IsInt()
+    @IsOptional()
+    estimatedTimeSeconds?: number
+
+    @IsEnum(ScoringAlgorithm)
+    @IsOptional()
+    scoringAlgorithm?: ScoringAlgorithm
+
+    @IsBoolean()
+    @IsOptional()
+    active?: boolean
+}

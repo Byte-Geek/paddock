@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { User } from "@/types";
 import Cookies from "js-cookie";
+import api from "@/lib/axios";
 
 interface AuthState {
 	token: string | null;
@@ -8,6 +9,7 @@ interface AuthState {
 	setAuth: (token: string, user: User) => void;
 	logout: () => void;
 	initialize: () => void;
+	refresh: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -45,6 +47,24 @@ export const useAuthStore = create<AuthState>((set) => ({
 			localStorage.removeItem("user");
 			Cookies.remove("access_token", { path: "/" });
 			set({ token: null, user: null });
+		}
+	},
+	refresh: async () => {
+		const token = Cookies.get("access_token");
+		if (!token) return;
+
+		try {
+			const { data } = await api.post<{ access_token: string }>(
+				"/auth/refresh",
+			);
+			Cookies.set("access_token", data.access_token, {
+				expires: 7,
+				path: "/",
+				sameSite: "lax",
+			});
+			set({ token: data.access_token });
+		} catch (error) {
+			console.error("Failed to refresh token", error);
 		}
 	},
 }));

@@ -4,6 +4,7 @@ export interface User {
 	lastName: string;
 	email: string;
 	role: "ADMIN" | "MODERATOR" | "COACH" | "ATHLETE";
+	createdAt?: string;
 }
 
 export interface HomeSummary {

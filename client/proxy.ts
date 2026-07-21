@@ -7,9 +7,11 @@ const protectedRoutes = [
   '/sportivi',
   '/statistici',
   '/competitii',
+  '/cont',
+  '/profil',
 ]
 const authRoutes = ['/login', '/register']
-const publicRoutes = ['/', '/main', '/dashboard', '/evenimente', '/protocoale', '/calculator']
+const publicRoutes = ['/', '/dashboard', '/evenimente', '/protocoale', '/calculator']
 
 function isTokenExpired(token: string): boolean {
   try {

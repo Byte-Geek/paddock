@@ -233,7 +233,9 @@ export default function Sidebar({ collapsed }: SidebarProps) {
 								<div className="h-px bg-white/10 my-2 mx-1.5" />
 							)
 						) : (
-							<div className="text-[10px] tracking-[0.12em] text-white/40 uppercase font-semibold py-[14px] pb-1.5 px-3">
+							<div
+								className={`text-[10px] tracking-[0.12em] text-white/40 uppercase font-semibold pb-1.5 px-3 ${i === 0 ? "pt-0" : "pt-[14px]"}`}
+							>
 								{section.label}
 							</div>
 						)}

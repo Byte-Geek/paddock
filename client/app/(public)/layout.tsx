@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useAuthStore } from "@/store/auth.store";
-import Navbar from "@/components/layout/Navbar";
 import Sidebar from "@/components/layout/Sidebar";
+import Navbar from "@/components/layout/Navbar";
 
-export default function MainLayout({
+export default function PublicLayout({
 	children,
 }: {
 	children: React.ReactNode;

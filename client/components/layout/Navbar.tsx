@@ -213,8 +213,8 @@ export default function Navbar({ onToggleSidebar }: NavbarProps) {
 							<div className="p-1.5">
 								{[
 									{
-										label: "Profil",
-										href: "/profil",
+										label: "Cont",
+										href: "/cont",
 										icon: (
 											<svg
 												width="16"

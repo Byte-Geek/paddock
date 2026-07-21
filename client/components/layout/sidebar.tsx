@@ -51,7 +51,7 @@ const guestNavSections = [
 				),
 			},
 			{
-				href: "/evenimente",
+				href: "/competitii",
 				label: "Evenimente",
 				icon: (
 					<svg
@@ -146,7 +146,7 @@ const authNavSections = [
 				),
 			},
 			{
-				href: "/evenimente",
+				href: "/competitii",
 				label: "Evenimente",
 				icon: (
 					<svg
@@ -222,7 +222,6 @@ const authNavSections = [
 			{
 				href: "/grupe",
 				label: "Grupe",
-				badge: "7",
 				icon: (
 					<svg
 						width="18"

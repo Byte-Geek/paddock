@@ -25,3 +25,17 @@ export function initials(name: string): string {
 export function cn(...classes: (string | undefined | false | null)[]): string {
 	return classes.filter(Boolean).join(" ");
 }
+
+export function formatDate(date: string | Date | null): {
+	day: string;
+	month: string;
+	year: string;
+} {
+	if (!date) return { day: "—", month: "—", year: "—" };
+	const d = new Date(date);
+	return {
+		day: String(d.getDate()),
+		month: MONTHS[d.getMonth()],
+		year: String(d.getFullYear()),
+	};
+}

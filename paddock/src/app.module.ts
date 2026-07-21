@@ -6,9 +6,23 @@ import { UserModule } from './user/user.module'
 import { PrismaModule } from './prisma.module'
 import { HomeModule } from './home/home.module'
 import { CoachModule } from './coach/coach.module'
+import { GroupModule } from './group/group.module'
+import { AthleteModule } from './athlete/athlete.module'
+import { StatsModule } from './stats/stats.module'
+import { EventModule } from './event/event.module'
 
 @Module({
-    imports: [PrismaModule, AuthModule, UserModule, HomeModule, CoachModule],
+    imports: [
+        PrismaModule,
+        AuthModule,
+        UserModule,
+        HomeModule,
+        CoachModule,
+        GroupModule,
+        AthleteModule,
+        StatsModule,
+        EventModule,
+    ],
     controllers: [AppController],
     providers: [AppService],
 })

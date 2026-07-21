@@ -32,3 +32,103 @@ export interface Coach {
 	email: string;
 	groups: { id: string; name: string }[];
 }
+
+export interface GroupCoach {
+	id: string;
+	firstName: string | null;
+	lastName: string | null;
+	email: string;
+}
+
+export interface Group {
+	id: string;
+	name: string;
+	description: string | null;
+	coach: GroupCoach;
+	athleteCount: number;
+}
+
+export interface GroupMember {
+	id: string;
+	firstName: string | null;
+	lastName: string | null;
+	email: string;
+}
+
+export interface GroupDetail extends Group {
+	members: GroupMember[];
+}
+
+export interface Athlete {
+	id: string;
+	firstName: string | null;
+	lastName: string | null;
+	email: string;
+	groups: { id: string; name: string }[];
+}
+
+export interface Medals {
+	gold: number;
+	silver: number;
+	bronze: number;
+	totalParticipations: number;
+}
+
+export interface EventsTimelinePoint {
+	month: string;
+	currentYear: number;
+	previousYear: number;
+}
+
+export interface TopCoach {
+	id: string;
+	firstName: string | null;
+	lastName: string | null;
+	email: string;
+	medals: number;
+}
+
+export interface AthletesPerGroup {
+	name: string;
+	value: number;
+}
+
+export type EventStatus =
+	| "DRAFT"
+	| "PUBLISHED"
+	| "ONGOING"
+	| "COMPLETED"
+	| "CANCELLED";
+
+export interface CompetitionEvent {
+	id: string;
+	name: string;
+	location: string | null;
+	description: string | null;
+	startDate: string | null;
+	endDate: string | null;
+	status: EventStatus;
+	participantCount: number;
+}
+
+export interface ParticipationEntry {
+	id: string;
+	athleteId: string;
+	athleteName: string;
+	horseName: string | null;
+	finalScore: string | null;
+	rank: number | null;
+	status: string;
+}
+
+export interface CategoryEntry {
+	id: string;
+	name: string;
+	participations: ParticipationEntry[];
+}
+
+export interface CompetitionEventDetail extends CompetitionEvent {
+	categories: CategoryEntry[];
+}
+
+export type Gender = "M" | "F";

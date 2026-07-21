@@ -198,7 +198,7 @@ const authNavSections = [
 	},
 	{
 		label: "Moderator",
-		roles: ["moderator"],
+		roles: ["ADMIN", "MODERATOR"],
 		items: [
 			{
 				href: "/antrenori",
@@ -299,7 +299,7 @@ const authNavSections = [
 	},
 	{
 		label: "Antrenor",
-		roles: ["antrenor"],
+		roles: ["COACH"],
 		items: [
 			{
 				href: "/grupe",
@@ -380,7 +380,7 @@ const authNavSections = [
 	},
 	{
 		label: "Sportiv",
-		roles: ["sportiv"],
+		roles: ["ATHLETE"],
 		items: [
 			{
 				href: "/competitii",
@@ -443,7 +443,7 @@ export default function Sidebar({ collapsed }: SidebarProps) {
 
 	const filteredNavSections = navSections.filter((section: any) => {
 		if (!section.roles) return true;
-		return section.roles.includes(user?.role || "moderator");
+		return section.roles.includes(user?.role);
 	});
 
 	return (

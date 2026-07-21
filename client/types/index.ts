@@ -24,3 +24,11 @@ export interface UpcomingEvent {
 	location: string | null;
 	startDate: string;
 }
+
+export interface Coach {
+	id: string;
+	firstName: string | null;
+	lastName: string | null;
+	email: string;
+	groups: { id: string; name: string }[];
+}

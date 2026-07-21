@@ -153,3 +153,51 @@ export interface ProtocolTemplate {
 	elementCount: number;
 	categoryCount: number;
 }
+
+export interface PersonalMedals {
+	gold: number;
+	silver: number;
+	bronze: number;
+	total: number;
+}
+
+export interface ParticipationHistoryEntry {
+	id: string;
+	eventName: string;
+	categoryName: string;
+	eventDate: string | null;
+	horseName: string | null;
+	finalScore: string | null;
+	rank: number | null;
+	status: string;
+}
+
+export interface AthleteProfileStats {
+	medals: PersonalMedals;
+	history: ParticipationHistoryEntry[];
+}
+
+export interface CoachGroupStats {
+	id: string;
+	name: string;
+	athleteCount: number;
+	medals: PersonalMedals;
+}
+
+export interface CoachProfileStats {
+	ownParticipation: AthleteProfileStats | null;
+	groups: CoachGroupStats[];
+	overall: {
+		totalAthletes: number;
+		totalParticipations: number;
+		medals: PersonalMedals;
+	};
+}
+
+export interface ModeratorProfileStats {
+	athletes: number;
+	coaches: number;
+	groups: number;
+	events: number;
+	note: string;
+}

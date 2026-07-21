@@ -76,6 +76,20 @@ const calculatorIcon = (
 	</svg>
 );
 
+const profileIcon = (
+	<svg
+		width="18"
+		height="18"
+		viewBox="0 0 24 24"
+		fill="none"
+		stroke="currentColor"
+		strokeWidth="2"
+	>
+		<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+		<circle cx="12" cy="7" r="4" />
+	</svg>
+);
+
 const groupsIcon = (
 	<svg
 		width="18"
@@ -161,6 +175,7 @@ const navSections = [
 		label: "Moderator",
 		roles: ["ADMIN", "MODERATOR"],
 		items: [
+			{ href: "/profil", label: "Profil", icon: profileIcon },
 			{ href: "/antrenori", label: "Antrenori", icon: groupsIcon },
 			{ href: "/grupe", label: "Grupe", icon: groupsIcon },
 			{ href: "/sportivi", label: "Sportivi", icon: athletesIcon },
@@ -176,6 +191,7 @@ const navSections = [
 		label: "Antrenor",
 		roles: ["COACH"],
 		items: [
+			{ href: "/profil", label: "Profil", icon: profileIcon },
 			{ href: "/grupe", label: "Grupele mele", icon: groupsIcon },
 			{ href: "/sportivi", label: "Sportivi", icon: athletesIcon },
 			{
@@ -190,6 +206,7 @@ const navSections = [
 		label: "Sportiv",
 		roles: ["ATHLETE"],
 		items: [
+			{ href: "/profil", label: "Profil", icon: profileIcon },
 			{
 				href: "/competitii",
 				label: "Competiții",

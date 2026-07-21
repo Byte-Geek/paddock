@@ -11,6 +11,7 @@ import { AthleteModule } from './athlete/athlete.module'
 import { StatsModule } from './stats/stats.module'
 import { EventModule } from './event/event.module'
 import { ProtocolTemplateModule } from './protocol-template/protocol-template.module'
+import { ProfileModule } from './profile/profile.module'
 
 @Module({
     imports: [
@@ -24,6 +25,7 @@ import { ProtocolTemplateModule } from './protocol-template/protocol-template.mo
         StatsModule,
         EventModule,
         ProtocolTemplateModule,
+        ProfileModule,
     ],
     controllers: [AppController],
     providers: [AppService],

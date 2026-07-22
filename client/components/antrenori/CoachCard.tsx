@@ -1,3 +1,6 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import { Coach } from "@/types";
 import { initials, formatFullName } from "@/lib/utils";
 
@@ -8,10 +11,14 @@ interface CoachCardProps {
 }
 
 export default function CoachCard({ coach, onEdit, onDelete }: CoachCardProps) {
+	const router = useRouter();
 	const fullName = formatFullName(coach.firstName, coach.lastName, coach.email);
 
 	return (
-		<div className="bg-white rounded-xl border border-[#e8ecf5] p-5 flex flex-col gap-3">
+		<div
+			onClick={() => router.push(`/antrenori/${coach.id}`)}
+			className="bg-white rounded-xl border border-[#e8ecf5] p-5 flex flex-col gap-3 cursor-pointer hover:shadow-[0_4px_16px_-4px_rgba(14,39,64,0.08)] transition"
+		>
 			<div className="flex items-start gap-3">
 				<div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#b5d7f1] to-[#e0eef9] text-[#143654] grid place-items-center font-bold text-sm flex-shrink-0">
 					{initials(fullName)}
@@ -25,7 +32,10 @@ export default function CoachCard({ coach, onEdit, onDelete }: CoachCardProps) {
 					</div>
 				</div>
 				{(onEdit || onDelete) && (
-					<div className="flex gap-1 flex-shrink-0">
+					<div
+						className="flex gap-1 flex-shrink-0"
+						onClick={(e) => e.stopPropagation()}
+					>
 						{onEdit && (
 							<button
 								onClick={() => onEdit(coach)}

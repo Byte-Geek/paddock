@@ -21,7 +21,10 @@ export default function GroupCard({
 	);
 
 	return (
-		<div className="bg-white rounded-xl border border-[#e8ecf5] p-5 flex flex-col gap-3">
+		<div
+			onClick={onDetails}
+			className="bg-white rounded-xl border border-[#e8ecf5] p-5 flex flex-col gap-3 cursor-pointer hover:shadow-[0_4px_16px_-4px_rgba(14,39,64,0.08)] transition"
+		>
 			<div className="flex items-start gap-3">
 				<div className="flex-1 min-w-0">
 					<div className="font-bold text-[#0f1729] text-sm truncate">
@@ -33,7 +36,10 @@ export default function GroupCard({
 						</div>
 					)}
 				</div>
-				<div className="flex items-center gap-2 flex-shrink-0">
+				<div
+					className="flex items-center gap-2 flex-shrink-0"
+					onClick={(e) => e.stopPropagation()}
+				>
 					<div className="bg-[#4a7adb] text-white text-xs font-bold px-2.5 py-1 rounded-full">
 						{group.athleteCount}
 					</div>
@@ -67,12 +73,9 @@ export default function GroupCard({
 						{coachName}
 					</span>
 				</div>
-				<button
-					onClick={onDetails}
-					className="text-xs text-[#4a7adb] hover:underline flex items-center gap-1"
-				>
+				<span className="text-xs text-[#4a7adb] flex items-center gap-1">
 					👁 Detalii
-				</button>
+				</span>
 			</div>
 		</div>
 	);

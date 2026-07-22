@@ -1,0 +1,208 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import api from "@/lib/axios";
+import { CompetitionEventDetail, CategoryDetail } from "@/types";
+import Badge from "@/components/ui/Badge";
+import LoadingState from "@/components/ui/LoadingState";
+import EmptyState from "@/components/ui/EmptyState";
+import { formatFullName } from "@/lib/utils";
+import {
+	EVENT_STATUS_LABELS,
+	EVENT_STATUS_VARIANTS,
+} from "@/lib/constants/event-status";
+
+export default function CompetitionViewPage() {
+	const params = useParams<{ id: string }>();
+	const router = useRouter();
+
+	const [event, setEvent] = useState<CompetitionEventDetail | null>(null);
+	const [categories, setCategories] = useState<CategoryDetail[]>([]);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState("");
+
+	useEffect(() => {
+		const load = async () => {
+			try {
+				const { data: eventData } = await api.get<CompetitionEventDetail>(
+					`/events/${params.id}`,
+				);
+				setEvent(eventData);
+
+				const categoryDetails = await Promise.all(
+					eventData.categories.map((c) =>
+						api.get<CategoryDetail>(`/categories/${c.id}`),
+					),
+				);
+				setCategories(categoryDetails.map((res) => res.data));
+			} catch (err) {
+				console.error("Failed to load competition view", err);
+				setError("Nu s-a putut încărca competiția.");
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		load();
+	}, [params.id]);
+
+	if (loading) {
+		return <LoadingState />;
+	}
+	if (error || !event) {
+		return (
+			<div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+				{error || "Competiția nu a fost găsită."}
+			</div>
+		);
+	}
+
+	return (
+		<div className="flex flex-col gap-5">
+			<button
+				onClick={() => router.push("/competitii")}
+				className="text-sm text-[#2a6aa6] hover:underline self-start"
+			>
+				← Înapoi la competiții
+			</button>
+
+			<div className="bg-white rounded-[10px] border border-[#e2e8f0] p-4 flex flex-col gap-2">
+				<div className="flex items-center gap-2 mb-1">
+					<Badge variant={EVENT_STATUS_VARIANTS[event.status]}>
+						{EVENT_STATUS_LABELS[event.status]}
+					</Badge>
+				</div>
+				<h1 className="text-2xl font-bold text-[#0e1f33]">
+					{event.name}
+				</h1>
+				{event.location && (
+					<p className="text-sm text-[#6b7d92]">{event.location}</p>
+				)}
+				{event.description && (
+					<p className="text-sm text-[#6b7d92]">
+						{event.description}
+					</p>
+				)}
+
+				<div className="flex flex-wrap gap-x-6 gap-y-1 text-xs text-[#6b7d92] mt-1">
+					{(event.startDate || event.endDate) && (
+						<span>
+							{event.startDate
+								? new Date(event.startDate).toLocaleDateString(
+										"ro-RO",
+									)
+								: "?"}{" "}
+							–{" "}
+							{event.endDate
+								? new Date(event.endDate).toLocaleDateString(
+										"ro-RO",
+									)
+								: "?"}
+						</span>
+					)}
+					<span>
+						Secretari:{" "}
+						{event.secretaries.length > 0
+							? event.secretaries
+									.map((s) =>
+										formatFullName(
+											s.firstName,
+											s.lastName,
+											s.email,
+										),
+									)
+									.join(", ")
+							: "niciunul asignat"}
+					</span>
+				</div>
+			</div>
+
+			<h2 className="font-semibold text-[#0e1f33]">Categorii</h2>
+
+			{categories.length === 0 ? (
+				<EmptyState>
+					Nicio categorie creată încă pentru acest eveniment.
+				</EmptyState>
+			) : (
+				<div className="flex flex-col gap-4">
+					{categories.map((cat) => (
+						<div
+							key={cat.id}
+							className="bg-white rounded-[10px] border border-[#e2e8f0] p-4 flex flex-col gap-3"
+						>
+							<div>
+								<div className="font-semibold text-[#0e1f33]">
+									{cat.name}
+								</div>
+								<div className="text-xs text-[#6b7d92] mt-0.5">
+									Protocol: {cat.protocolTemplateName}
+								</div>
+							</div>
+
+							{cat.referees.length > 0 && (
+								<div>
+									<div className="text-xs font-semibold text-[#6b7d92] mb-1">
+										Arbitri
+									</div>
+									<div className="flex flex-wrap gap-2">
+										{cat.referees.map((r) => (
+											<span
+												key={r.id}
+												className="text-xs bg-[#f1f7fc] text-[#205280] px-2 py-1 rounded-md"
+											>
+												{r.letterCode} — {r.firstName}{" "}
+												{r.lastName}
+											</span>
+										))}
+									</div>
+								</div>
+							)}
+
+							{cat.participations.length > 0 && (
+								<div>
+									<div className="text-xs font-semibold text-[#6b7d92] mb-1">
+										Participanți
+									</div>
+									<div className="overflow-x-auto">
+										<table className="w-full text-sm border-collapse">
+											<thead className="bg-[#f4f6fb]">
+												<tr>
+													{["Sportiv", "Cal"].map(
+														(h) => (
+															<th
+																key={h}
+																className="text-left px-2 py-1.5 text-xs font-semibold text-[#6b7d92] border border-[#e2e8f0]"
+															>
+																{h}
+															</th>
+														),
+													)}
+												</tr>
+											</thead>
+											<tbody>
+												{cat.participations.map(
+													(p) => (
+														<tr key={p.id}>
+															<td className="border border-[#e2e8f0] px-2 py-1.5">
+																{p.athleteName}
+															</td>
+															<td className="border border-[#e2e8f0] px-2 py-1.5">
+																{p.horseName ??
+																	"—"}
+															</td>
+														</tr>
+													),
+												)}
+											</tbody>
+										</table>
+									</div>
+								</div>
+							)}
+						</div>
+					))}
+				</div>
+			)}
+		</div>
+	);
+}

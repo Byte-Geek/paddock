@@ -9,18 +9,15 @@ import {
 
 export default function CompetitionCard({
 	competition: c,
-	onClick,
+	canManage,
 }: {
 	competition: CompetitionEvent;
-	onClick: () => void;
+	canManage: boolean;
 }) {
 	const { day, month, year } = formatDate(c.startDate);
 
 	return (
-		<div
-			onClick={onClick}
-			className="bg-white rounded-[10px] border border-[#e2e8f0] p-5 cursor-pointer hover:shadow-[0_4px_16px_-4px_rgba(14,39,64,0.08)] transition"
-		>
+		<div className="bg-white rounded-[10px] border border-[#e2e8f0] p-5 hover:shadow-[0_4px_16px_-4px_rgba(14,39,64,0.08)] transition">
 			<div className="flex justify-between items-start gap-3">
 				<div className="flex-1">
 					<div className="flex gap-2 items-center mb-2">
@@ -84,13 +81,21 @@ export default function CompetitionCard({
 					</svg>
 					{c.participantCount} participanți
 				</span>
-				<Link
-					href={`/competitii/${c.id}`}
-					onClick={(e) => e.stopPropagation()}
-					className="ml-auto text-xs text-[#2a6aa6] border border-[#b5d7f1] px-2.5 py-1 rounded-[6px] hover:bg-[#f1f7fc] transition"
-				>
-					⚙️ Gestionează
-				</Link>
+				{canManage ? (
+					<Link
+						href={`/competitii/${c.id}`}
+						className="ml-auto text-xs text-[#2a6aa6] border border-[#b5d7f1] px-2.5 py-1 rounded-[6px] hover:bg-[#f1f7fc] transition"
+					>
+						⚙️ Gestionează
+					</Link>
+				) : (
+					<Link
+						href={`/competitii/${c.id}/vizualizare`}
+						className="ml-auto text-xs text-[#2a6aa6] border border-[#b5d7f1] px-2.5 py-1 rounded-[6px] hover:bg-[#f1f7fc] transition"
+					>
+						👁️ Vizualizează
+					</Link>
+				)}
 			</div>
 		</div>
 	);

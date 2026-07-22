@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import PageHeader from "@/components/layout/PageHeader";
 import TabBar from "@/components/ui/TabBar";
 import CompetitionCard from "@/components/competitii/CompetitionCard";
-import CompetitionModal from "@/components/competitii/CompetitionModal";
 import CompetitionFormModal from "@/components/competitii/CompetitionFormModal";
 import api from "@/lib/axios";
 import { CompetitionEvent } from "@/types";
@@ -18,7 +17,6 @@ export default function CompetitiiPage() {
 	const [competitions, setCompetitions] = useState<CompetitionEvent[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [tab, setTab] = useState("upcoming");
-	const [open, setOpen] = useState<CompetitionEvent | null>(null);
 	const [creating, setCreating] = useState(false);
 
 	useEffect(() => {
@@ -84,17 +82,10 @@ export default function CompetitiiPage() {
 						<CompetitionCard
 							key={c.id}
 							competition={c}
-							onClick={() => setOpen(c)}
+							canManage={canManage}
 						/>
 					))}
 				</div>
-			)}
-
-			{open && (
-				<CompetitionModal
-					competition={open}
-					onClose={() => setOpen(null)}
-				/>
 			)}
 
 			{creating && canManage && (

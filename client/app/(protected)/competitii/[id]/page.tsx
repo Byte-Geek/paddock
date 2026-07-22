@@ -55,6 +55,13 @@ export default function EventManagePage() {
 	const [statusSaving, setStatusSaving] = useState(false);
 
 	useEffect(() => {
+		if (!canManage) {
+			router.replace(`/competitii/${params.id}/vizualizare`);
+		}
+	}, [canManage, params.id, router]);
+
+	useEffect(() => {
+		if (!canManage) return;
 		const load = async () => {
 			try {
 				const [eventsRes, categoriesRes, templatesRes] =

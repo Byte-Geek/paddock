@@ -4,10 +4,13 @@ import {
     Controller,
     Get,
     Patch,
+    Query,
     Req,
 } from '@nestjs/common'
 import { UserService } from './user.service'
 import { UpdateProfileDto } from './dto/update-profile.dto'
+import { Roles } from '../auth/decorators/roles.decorator'
+import { Role } from '../generated/prisma/enums'
 
 interface AuthenticatedRequest {
     user: { email: string; sub: string; role: string }
@@ -16,6 +19,16 @@ interface AuthenticatedRequest {
 @Controller('users')
 export class UserController {
     constructor(private readonly userService: UserService) {}
+
+    @Roles('ADMIN')
+    @Get()
+    async list(@Query('role') role?: string) {
+        const users = await this.userService.users({
+            where: role ? { role: role as Role } : undefined,
+            orderBy: { firstName: 'asc' },
+        })
+        return users.map(({ password: _password, ...safeUser }) => safeUser)
+    }
 
     @Get('me')
     async getMe(@Req() req: AuthenticatedRequest) {

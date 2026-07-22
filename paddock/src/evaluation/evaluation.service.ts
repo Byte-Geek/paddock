@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import {
+    BadRequestException,
+    Injectable,
+    NotFoundException,
+} from '@nestjs/common'
 import { PrismaService } from '../prisma.service'
 import { UpsertEvaluationDto } from './dto/upsert-evaluation.dto'
 import { EvaluationDetailDto } from './dto/evaluation-detail.dto'
@@ -47,6 +51,7 @@ export class EvaluationService {
             include: {
                 category: {
                     include: {
+                        event: { select: { status: true } },
                         protocolTemplate: { include: { elements: true } },
                     },
                 },
@@ -54,6 +59,11 @@ export class EvaluationService {
         })
         if (!participation) {
             throw new NotFoundException('Participation not found')
+        }
+        if (participation.category.event.status !== 'ONGOING') {
+            throw new BadRequestException(
+                'Notele pot fi introduse doar cât timp competiția este în desfășurare.'
+            )
         }
 
         const referee = await this.prisma.categoryReferee.findUnique({

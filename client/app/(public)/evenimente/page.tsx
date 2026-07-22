@@ -13,7 +13,6 @@ const statusLabels: Record<string, string> = {
 	PUBLISHED: "Publicat",
 	ONGOING: "În desfășurare",
 	COMPLETED: "Finalizat",
-	CANCELLED: "Anulat",
 };
 
 const statusVariants: Record<
@@ -24,7 +23,6 @@ const statusVariants: Record<
 	PUBLISHED: "blue",
 	ONGOING: "warning",
 	COMPLETED: "success",
-	CANCELLED: "danger",
 };
 
 export default function EvenimentePage() {

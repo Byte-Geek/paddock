@@ -20,7 +20,6 @@ enum EventStatus {
   PUBLISHED
   ONGOING
   COMPLETED
-  CANCELLED
 }
 
 enum ParticipationStatus {

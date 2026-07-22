@@ -8,12 +8,37 @@ import { EventDto, EventDetailDto } from './dto/event.dto'
 export class EventService {
     constructor(private readonly prisma: PrismaService) {}
 
-    async findAll(): Promise<EventDto[]> {
+    private async syncScheduledTransitions(): Promise<void> {
+        await this.prisma.event.updateMany({
+            where: { status: 'PUBLISHED', startDate: { lte: new Date() } },
+            data: { status: 'ONGOING' },
+        })
+    }
+
+    async findAll(requesterRole?: string): Promise<EventDto[]> {
+        await this.syncScheduledTransitions()
+
         const events = await this.prisma.event.findMany({
+            where:
+                requesterRole === 'ADMIN'
+                    ? undefined
+                    : { status: { not: 'DRAFT' } },
             include: {
                 categories: {
                     select: {
                         participations: { select: { athleteId: true } },
+                    },
+                },
+                secretaries: {
+                    select: {
+                        user: {
+                            select: {
+                                id: true,
+                                firstName: true,
+                                lastName: true,
+                                email: true,
+                            },
+                        },
                     },
                 },
             },
@@ -35,14 +60,32 @@ export class EventService {
                 endDate: event.endDate,
                 status: event.status,
                 participantCount: athleteIds.size,
+                secretaries: event.secretaries.map((s) => s.user),
             }
         })
     }
 
-    async findOne(id: string): Promise<EventDetailDto> {
+    async findOne(
+        id: string,
+        requesterRole?: string
+    ): Promise<EventDetailDto> {
+        await this.syncScheduledTransitions()
+
         const event = await this.prisma.event.findUnique({
             where: { id },
             include: {
+                secretaries: {
+                    select: {
+                        user: {
+                            select: {
+                                id: true,
+                                firstName: true,
+                                lastName: true,
+                                email: true,
+                            },
+                        },
+                    },
+                },
                 categories: {
                     select: {
                         id: true,
@@ -73,7 +116,7 @@ export class EventService {
                 },
             },
         })
-        if (!event) {
+        if (!event || (event.status === 'DRAFT' && requesterRole !== 'ADMIN')) {
             throw new NotFoundException('Event not found')
         }
 
@@ -92,6 +135,7 @@ export class EventService {
             endDate: event.endDate,
             status: event.status,
             participantCount: athleteIds.size,
+            secretaries: event.secretaries.map((s) => s.user),
             categories: event.categories.map((category) => ({
                 id: category.id,
                 name: category.name,
@@ -119,6 +163,27 @@ export class EventService {
                 startDate: dto.startDate ? new Date(dto.startDate) : undefined,
                 endDate: dto.endDate ? new Date(dto.endDate) : undefined,
                 status: dto.status,
+                secretaries: dto.secretaryIds?.length
+                    ? {
+                          create: dto.secretaryIds.map((userId) => ({
+                              userId,
+                          })),
+                      }
+                    : undefined,
+            },
+            include: {
+                secretaries: {
+                    select: {
+                        user: {
+                            select: {
+                                id: true,
+                                firstName: true,
+                                lastName: true,
+                                email: true,
+                            },
+                        },
+                    },
+                },
             },
         })
 
@@ -131,6 +196,7 @@ export class EventService {
             endDate: event.endDate,
             status: event.status,
             participantCount: 0,
+            secretaries: event.secretaries.map((s) => s.user),
         }
     }
 
@@ -138,6 +204,19 @@ export class EventService {
         const event = await this.prisma.event.findUnique({ where: { id } })
         if (!event) {
             throw new NotFoundException('Event not found')
+        }
+
+        const editsData =
+            dto.name !== undefined ||
+            dto.location !== undefined ||
+            dto.description !== undefined ||
+            dto.startDate !== undefined ||
+            dto.endDate !== undefined ||
+            dto.secretaryIds !== undefined
+        if (event.status !== 'DRAFT' && editsData) {
+            throw new BadRequestException(
+                'Datele competiției nu mai pot fi modificate. Trece competiția înapoi în ciornă pentru a face modificări.'
+            )
         }
 
         const updated = await this.prisma.event.update({
@@ -149,11 +228,31 @@ export class EventService {
                 startDate: dto.startDate ? new Date(dto.startDate) : undefined,
                 endDate: dto.endDate ? new Date(dto.endDate) : undefined,
                 status: dto.status,
+                secretaries: dto.secretaryIds
+                    ? {
+                          deleteMany: {},
+                          create: dto.secretaryIds.map((userId) => ({
+                              userId,
+                          })),
+                      }
+                    : undefined,
             },
             include: {
                 categories: {
                     select: {
                         participations: { select: { athleteId: true } },
+                    },
+                },
+                secretaries: {
+                    select: {
+                        user: {
+                            select: {
+                                id: true,
+                                firstName: true,
+                                lastName: true,
+                                email: true,
+                            },
+                        },
                     },
                 },
             },
@@ -174,6 +273,7 @@ export class EventService {
             endDate: updated.endDate,
             status: updated.status,
             participantCount: athleteIds.size,
+            secretaries: updated.secretaries.map((s) => s.user),
         }
     }
 

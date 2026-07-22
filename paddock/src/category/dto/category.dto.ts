@@ -33,6 +33,7 @@ export class CategoryDto {
     name: string
     eventId: string
     eventName: string
+    eventStatus: string
     protocolTemplateId: string
     protocolTemplateName: string
     refereeCount: number

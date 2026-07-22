@@ -1,17 +1,36 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common'
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    HttpCode,
+    HttpStatus,
+    Param,
+    Patch,
+    Post,
+    Req,
+} from '@nestjs/common'
 import { CategoryService } from './category.service'
 import { CreateCategoryDto } from './dto/create-category.dto'
+import { UpdateCategoryDto } from './dto/update-category.dto'
 import { CreateRefereeDto } from './dto/create-referee.dto'
 import { CreateParticipationDto } from './dto/create-participation.dto'
 import { Roles } from '../auth/decorators/roles.decorator'
+
+interface AuthenticatedRequest {
+    user: { email: string; sub: string; role: string }
+}
 
 @Controller()
 export class CategoryController {
     constructor(private readonly categoryService: CategoryService) {}
 
     @Get('events/:eventId/categories')
-    async findAllForEvent(@Param('eventId') eventId: string) {
-        return this.categoryService.findAllForEvent(eventId)
+    async findAllForEvent(
+        @Param('eventId') eventId: string,
+        @Req() req: AuthenticatedRequest
+    ) {
+        return this.categoryService.findAllForEvent(eventId, req.user.role)
     }
 
     @Roles('ADMIN')
@@ -24,8 +43,17 @@ export class CategoryController {
     }
 
     @Get('categories/:id')
-    async findOne(@Param('id') id: string) {
-        return this.categoryService.findOne(id)
+    async findOne(
+        @Param('id') id: string,
+        @Req() req: AuthenticatedRequest
+    ) {
+        return this.categoryService.findOne(id, req.user.role)
+    }
+
+    @Roles('ADMIN')
+    @Patch('categories/:id')
+    async update(@Param('id') id: string, @Body() dto: UpdateCategoryDto) {
+        return this.categoryService.update(id, dto)
     }
 
     @Roles('ADMIN')
@@ -35,6 +63,16 @@ export class CategoryController {
         @Body() dto: CreateRefereeDto
     ) {
         return this.categoryService.addReferee(id, dto)
+    }
+
+    @Roles('ADMIN')
+    @Delete('categories/:id/referees/:refereeId')
+    @HttpCode(HttpStatus.NO_CONTENT)
+    async removeReferee(
+        @Param('id') id: string,
+        @Param('refereeId') refereeId: string
+    ) {
+        await this.categoryService.removeReferee(id, refereeId)
     }
 
     @Roles('ADMIN')

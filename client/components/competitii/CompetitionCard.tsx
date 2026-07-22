@@ -8,7 +8,6 @@ const statusLabels: Record<string, string> = {
 	PUBLISHED: "Publicată",
 	ONGOING: "În desfășurare",
 	COMPLETED: "Finalizată",
-	CANCELLED: "Anulată",
 };
 
 const statusVariants: Record<
@@ -19,7 +18,6 @@ const statusVariants: Record<
 	PUBLISHED: "blue",
 	ONGOING: "warning",
 	COMPLETED: "success",
-	CANCELLED: "danger",
 };
 
 export default function CompetitionCard({
@@ -30,7 +28,6 @@ export default function CompetitionCard({
 	onClick: () => void;
 }) {
 	const { day, month, year } = formatDate(c.startDate);
-	const isPast = c.startDate ? new Date(c.startDate) < new Date() : false;
 
 	return (
 		<div
@@ -103,23 +100,10 @@ export default function CompetitionCard({
 				<Link
 					href={`/competitii/${c.id}`}
 					onClick={(e) => e.stopPropagation()}
-					className="text-xs text-[#2a6aa6] border border-[#b5d7f1] px-2.5 py-1 rounded-[6px] hover:bg-[#f1f7fc] transition"
+					className="ml-auto text-xs text-[#2a6aa6] border border-[#b5d7f1] px-2.5 py-1 rounded-[6px] hover:bg-[#f1f7fc] transition"
 				>
 					⚙️ Gestionează
 				</Link>
-				<span className="text-[#205280] font-semibold flex items-center gap-1">
-					{isPast ? "Vezi rezultate" : "Vezi detalii"}
-					<svg
-						width="11"
-						height="11"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						strokeWidth="2"
-					>
-						<polyline points="9 18 15 12 9 6" />
-					</svg>
-				</span>
 			</div>
 		</div>
 	);

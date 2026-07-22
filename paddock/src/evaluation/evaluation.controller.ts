@@ -19,7 +19,7 @@ export class EvaluationController {
         return this.evaluationService.find(participationId, categoryRefereeId)
     }
 
-    @Roles('ADMIN')
+    @Roles('ADMIN', 'MODERATOR')
     @Put()
     async upsert(
         @Body() dto: UpsertEvaluationDto,

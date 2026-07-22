@@ -4,7 +4,12 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import api from "@/lib/axios";
 import { useAuthStore } from "@/store/auth.store";
-import { Athlete, CategoryDetail, EvaluationDetail } from "@/types";
+import {
+	Athlete,
+	CategoryDetail,
+	EvaluationDetail,
+	ProtocolTemplate,
+} from "@/types";
 
 interface ScoreRowState {
 	value: string;
@@ -20,17 +25,28 @@ export default function CategoryScoringPage() {
 
 	const [category, setCategory] = useState<CategoryDetail | null>(null);
 	const [athletes, setAthletes] = useState<Athlete[]>([]);
+	const [templates, setTemplates] = useState<ProtocolTemplate[]>([]);
 	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState("");
 
+	// Draft stage: edit category
+	const [editingCategory, setEditingCategory] = useState(false);
+	const [name, setName] = useState("");
+	const [templateId, setTemplateId] = useState("");
+	const [savingCategory, setSavingCategory] = useState(false);
+
+	// Draft stage: referees
 	const [addingReferee, setAddingReferee] = useState(false);
 	const [refFirstName, setRefFirstName] = useState("");
 	const [refLastName, setRefLastName] = useState("");
 	const [refLetterCode, setRefLetterCode] = useState("");
 
+	// Published stage: participants
 	const [addingParticipation, setAddingParticipation] = useState(false);
 	const [selectedAthleteId, setSelectedAthleteId] = useState("");
 	const [horseName, setHorseName] = useState("");
 
+	// Ongoing stage: scoring
 	const [participationId, setParticipationId] = useState("");
 	const [refereeId, setRefereeId] = useState("");
 	const [rows, setRows] = useState<Record<string, ScoreRowState>>({});
@@ -39,7 +55,6 @@ export default function CategoryScoringPage() {
 	);
 	const [loadingEvaluation, setLoadingEvaluation] = useState(false);
 	const [saving, setSaving] = useState(false);
-	const [error, setError] = useState("");
 
 	const loadCategory = async () => {
 		try {
@@ -47,6 +62,8 @@ export default function CategoryScoringPage() {
 				`/categories/${params.categoryId}`,
 			);
 			setCategory(data);
+			setName(data.name);
+			setTemplateId(data.protocolTemplateId);
 		} catch (err) {
 			console.error("Failed to load category", err);
 			setError("Nu s-a putut încărca categoria.");
@@ -56,11 +73,13 @@ export default function CategoryScoringPage() {
 	useEffect(() => {
 		const load = async () => {
 			try {
-				const [, athletesRes] = await Promise.all([
+				const [, athletesRes, templatesRes] = await Promise.all([
 					loadCategory(),
 					api.get<Athlete[]>("/athletes"),
+					api.get<ProtocolTemplate[]>("/protocol-templates"),
 				]);
 				setAthletes(athletesRes.data);
+				setTemplates(templatesRes.data);
 			} finally {
 				setLoading(false);
 			}
@@ -125,6 +144,30 @@ export default function CategoryScoringPage() {
 		}));
 	};
 
+	const handleSaveCategory = async (
+		e: React.FormEvent<HTMLFormElement>,
+	) => {
+		e.preventDefault();
+		setError("");
+		setSavingCategory(true);
+		try {
+			await api.patch(`/categories/${params.categoryId}`, {
+				name,
+				protocolTemplateId: templateId,
+			});
+			setEditingCategory(false);
+			await loadCategory();
+		} catch (err: unknown) {
+			const message =
+				(err as { response?: { data?: { message?: string } } })
+					?.response?.data?.message ??
+				"Nu s-a putut salva categoria.";
+			setError(Array.isArray(message) ? message.join(", ") : message);
+		} finally {
+			setSavingCategory(false);
+		}
+	};
+
 	const handleAddReferee = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		setError("");
@@ -144,6 +187,22 @@ export default function CategoryScoringPage() {
 				(err as { response?: { data?: { message?: string } } })
 					?.response?.data?.message ??
 				"Nu s-a putut adăuga arbitrul.";
+			setError(Array.isArray(message) ? message.join(", ") : message);
+		}
+	};
+
+	const handleRemoveReferee = async (refereeId: string) => {
+		setError("");
+		try {
+			await api.delete(
+				`/categories/${params.categoryId}/referees/${refereeId}`,
+			);
+			await loadCategory();
+		} catch (err: unknown) {
+			const message =
+				(err as { response?: { data?: { message?: string } } })
+					?.response?.data?.message ??
+				"Nu s-a putut elimina arbitrul.";
 			setError(Array.isArray(message) ? message.join(", ") : message);
 		}
 	};
@@ -214,6 +273,9 @@ export default function CategoryScoringPage() {
 		);
 	}
 
+	const stage = category.eventStatus;
+	const canScore = user?.role === "ADMIN" || user?.role === "MODERATOR";
+
 	return (
 		<div className="flex flex-col gap-5">
 			<button
@@ -238,202 +300,457 @@ export default function CategoryScoringPage() {
 				</div>
 			)}
 
-			{/* Referees */}
-			<div className="bg-white rounded-[10px] border border-[#e2e8f0] p-4">
-				<div className="flex items-center justify-between mb-2">
-					<h3 className="font-semibold text-[#0e1f33] text-sm">
-						Arbitri
-					</h3>
-					{canManage && (
-						<button
-							onClick={() => setAddingReferee((v) => !v)}
-							className="text-xs text-[#2a6aa6] hover:underline"
-						>
-							+ Adaugă arbitru
-						</button>
-					)}
-				</div>
-				{addingReferee && canManage && (
-					<form
-						onSubmit={handleAddReferee}
-						className="flex flex-wrap gap-2 items-end mb-3"
-					>
-						<input
-							value={refFirstName}
-							onChange={(e) => setRefFirstName(e.target.value)}
-							placeholder="Prenume"
-							required
-							className="border border-[#e2e8f0] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[#2a6aa6]"
-						/>
-						<input
-							value={refLastName}
-							onChange={(e) => setRefLastName(e.target.value)}
-							placeholder="Nume"
-							required
-							className="border border-[#e2e8f0] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[#2a6aa6]"
-						/>
-						<input
-							value={refLetterCode}
-							onChange={(e) =>
-								setRefLetterCode(e.target.value.toUpperCase())
-							}
-							placeholder="Literă (C, H...)"
-							required
-							maxLength={2}
-							className="border border-[#e2e8f0] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[#2a6aa6] w-32"
-						/>
-						<button
-							type="submit"
-							className="bg-[#2a6aa6] hover:bg-[#205280] text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition"
-						>
-							Salvează
-						</button>
-					</form>
-				)}
-				{category.referees.length === 0 ? (
-					<p className="text-xs text-[#8896b3]">
-						Niciun arbitru adăugat încă.
-					</p>
-				) : (
-					<div className="flex flex-wrap gap-2">
-						{category.referees.map((r) => (
-							<span
-								key={r.id}
-								className="text-xs bg-[#f1f7fc] text-[#205280] px-2 py-1 rounded-md"
+			{stage === "DRAFT" && canManage && (
+				<>
+					{/* Category data */}
+					<div className="bg-white rounded-[10px] border border-[#e2e8f0] p-4">
+						<div className="flex items-center justify-between mb-2">
+							<h3 className="font-semibold text-[#0e1f33] text-sm">
+								Date categorie
+							</h3>
+							{!editingCategory && (
+								<button
+									onClick={() => setEditingCategory(true)}
+									className="text-xs text-[#2a6aa6] hover:underline"
+								>
+									Editează
+								</button>
+							)}
+						</div>
+						{editingCategory ? (
+							<form
+								onSubmit={handleSaveCategory}
+								className="flex flex-wrap gap-2 items-end"
 							>
-								{r.letterCode} — {r.firstName} {r.lastName}
-							</span>
-						))}
+								<div className="flex flex-col gap-1">
+									<label className="text-xs font-medium text-[#6b7d92]">
+										Nume categorie
+									</label>
+									<input
+										value={name}
+										onChange={(e) =>
+											setName(e.target.value)
+										}
+										required
+										className="border border-[#e2e8f0] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[#2a6aa6]"
+									/>
+								</div>
+								<div className="flex flex-col gap-1">
+									<label className="text-xs font-medium text-[#6b7d92]">
+										Protocol
+									</label>
+									<select
+										value={templateId}
+										onChange={(e) =>
+											setTemplateId(e.target.value)
+										}
+										required
+										className="border border-[#e2e8f0] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[#2a6aa6]"
+									>
+										{templates.map((t) => (
+											<option key={t.id} value={t.id}>
+												{t.name}
+												{t.level ? ` — ${t.level}` : ""}
+											</option>
+										))}
+									</select>
+								</div>
+								<button
+									type="button"
+									onClick={() => {
+										setEditingCategory(false);
+										setName(category.name);
+										setTemplateId(
+											category.protocolTemplateId,
+										);
+									}}
+									className="px-3 py-1.5 text-xs text-[#6b7d92] hover:text-[#0e1f33] transition"
+								>
+									Anulează
+								</button>
+								<button
+									type="submit"
+									disabled={savingCategory}
+									className="bg-[#2a6aa6] hover:bg-[#205280] disabled:opacity-50 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition"
+								>
+									{savingCategory
+										? "Se salvează..."
+										: "Salvează"}
+								</button>
+							</form>
+						) : (
+							<p className="text-sm text-[#0e1f33]">
+								{category.name} —{" "}
+								{category.protocolTemplateName}
+							</p>
+						)}
 					</div>
-				)}
-			</div>
 
-			{/* Participations */}
-			<div className="bg-white rounded-[10px] border border-[#e2e8f0] p-4">
-				<div className="flex items-center justify-between mb-2">
-					<h3 className="font-semibold text-[#0e1f33] text-sm">
-						Participanți
-					</h3>
-					{canManage && (
-						<button
-							onClick={() => setAddingParticipation((v) => !v)}
-							className="text-xs text-[#2a6aa6] hover:underline"
+					{/* Referees */}
+					<div className="bg-white rounded-[10px] border border-[#e2e8f0] p-4">
+						<div className="flex items-center justify-between mb-2">
+							<h3 className="font-semibold text-[#0e1f33] text-sm">
+								Arbitri
+							</h3>
+							<button
+								onClick={() => setAddingReferee((v) => !v)}
+								className="text-xs text-[#2a6aa6] hover:underline"
+							>
+								+ Adaugă arbitru
+							</button>
+						</div>
+						{addingReferee && (
+							<form
+								onSubmit={handleAddReferee}
+								className="flex flex-wrap gap-2 items-end mb-3"
+							>
+								<input
+									value={refFirstName}
+									onChange={(e) =>
+										setRefFirstName(e.target.value)
+									}
+									placeholder="Prenume"
+									required
+									className="border border-[#e2e8f0] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[#2a6aa6]"
+								/>
+								<input
+									value={refLastName}
+									onChange={(e) =>
+										setRefLastName(e.target.value)
+									}
+									placeholder="Nume"
+									required
+									className="border border-[#e2e8f0] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[#2a6aa6]"
+								/>
+								<input
+									value={refLetterCode}
+									onChange={(e) =>
+										setRefLetterCode(
+											e.target.value.toUpperCase(),
+										)
+									}
+									placeholder="Literă (C, H...)"
+									required
+									maxLength={2}
+									className="border border-[#e2e8f0] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[#2a6aa6] w-32"
+								/>
+								<button
+									type="submit"
+									className="bg-[#2a6aa6] hover:bg-[#205280] text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition"
+								>
+									Salvează
+								</button>
+							</form>
+						)}
+						{category.referees.length === 0 ? (
+							<p className="text-xs text-[#8896b3]">
+								Niciun arbitru adăugat încă.
+							</p>
+						) : (
+							<div className="flex flex-wrap gap-2">
+								{category.referees.map((r) => (
+									<span
+										key={r.id}
+										className="flex items-center gap-1.5 text-xs bg-[#f1f7fc] text-[#205280] px-2 py-1 rounded-md"
+									>
+										{r.letterCode} — {r.firstName}{" "}
+										{r.lastName}
+										<button
+											onClick={() =>
+												handleRemoveReferee(r.id)
+											}
+											className="text-[#205280] hover:text-red-600"
+											title="Elimină arbitrul"
+										>
+											×
+										</button>
+									</span>
+								))}
+							</div>
+						)}
+					</div>
+				</>
+			)}
+
+			{stage === "PUBLISHED" && (
+				<div className="bg-white rounded-[10px] border border-[#e2e8f0] p-4">
+					<div className="flex items-center justify-between mb-2">
+						<h3 className="font-semibold text-[#0e1f33] text-sm">
+							Participanți
+						</h3>
+						{canManage && (
+							<button
+								onClick={() =>
+									setAddingParticipation((v) => !v)
+								}
+								className="text-xs text-[#2a6aa6] hover:underline"
+							>
+								+ Înscrie sportiv
+							</button>
+						)}
+					</div>
+					{addingParticipation && canManage && (
+						<form
+							onSubmit={handleAddParticipation}
+							className="flex flex-wrap gap-2 items-end mb-3"
 						>
-							+ Înscrie sportiv
-						</button>
+							<select
+								value={selectedAthleteId}
+								onChange={(e) =>
+									setSelectedAthleteId(e.target.value)
+								}
+								required
+								className="border border-[#e2e8f0] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[#2a6aa6]"
+							>
+								<option value="">Alege sportiv</option>
+								{athletes.map((a) => (
+									<option key={a.id} value={a.id}>
+										{`${a.firstName ?? ""} ${a.lastName ?? ""}`.trim() ||
+											a.email}
+									</option>
+								))}
+							</select>
+							<input
+								value={horseName}
+								onChange={(e) => setHorseName(e.target.value)}
+								placeholder="Nume cal (opțional)"
+								className="border border-[#e2e8f0] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[#2a6aa6]"
+							/>
+							<button
+								type="submit"
+								className="bg-[#2a6aa6] hover:bg-[#205280] text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition"
+							>
+								Salvează
+							</button>
+						</form>
+					)}
+					{category.participations.length === 0 ? (
+						<p className="text-xs text-[#8896b3]">
+							Niciun sportiv înscris încă.
+						</p>
+					) : (
+						<div className="flex flex-wrap gap-2">
+							{category.participations.map((p) => (
+								<span
+									key={p.id}
+									className="text-xs bg-[#f1f7fc] text-[#205280] px-2 py-1 rounded-md"
+								>
+									{p.athleteName}
+									{p.horseName ? ` · ${p.horseName}` : ""}
+								</span>
+							))}
+						</div>
 					)}
 				</div>
-				{addingParticipation && canManage && (
-					<form
-						onSubmit={handleAddParticipation}
-						className="flex flex-wrap gap-2 items-end mb-3"
-					>
+			)}
+
+			{stage === "ONGOING" && (
+				<div className="bg-white rounded-[10px] border border-[#e2e8f0] p-4 flex flex-col gap-4">
+					<h3 className="font-semibold text-[#0e1f33] text-sm">
+						Notare
+					</h3>
+
+					<div className="flex flex-wrap gap-3">
 						<select
-							value={selectedAthleteId}
+							value={participationId}
 							onChange={(e) =>
-								setSelectedAthleteId(e.target.value)
+								setParticipationId(e.target.value)
 							}
-							required
 							className="border border-[#e2e8f0] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[#2a6aa6]"
 						>
-							<option value="">Alege sportiv</option>
-							{athletes.map((a) => (
-								<option key={a.id} value={a.id}>
-									{`${a.firstName ?? ""} ${a.lastName ?? ""}`.trim() ||
-										a.email}
+							<option value="">Alege participant</option>
+							{category.participations.map((p) => (
+								<option key={p.id} value={p.id}>
+									{p.athleteName}
+									{p.horseName ? ` · ${p.horseName}` : ""}
 								</option>
 							))}
 						</select>
-						<input
-							value={horseName}
-							onChange={(e) => setHorseName(e.target.value)}
-							placeholder="Nume cal (opțional)"
+						<select
+							value={refereeId}
+							onChange={(e) => setRefereeId(e.target.value)}
 							className="border border-[#e2e8f0] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[#2a6aa6]"
-						/>
-						<button
-							type="submit"
-							className="bg-[#2a6aa6] hover:bg-[#205280] text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition"
 						>
-							Salvează
-						</button>
-					</form>
-				)}
-				{category.participations.length === 0 ? (
-					<p className="text-xs text-[#8896b3]">
-						Niciun sportiv înscris încă.
-					</p>
-				) : (
-					<div className="flex flex-wrap gap-2">
-						{category.participations.map((p) => (
-							<span
-								key={p.id}
-								className="text-xs bg-[#f1f7fc] text-[#205280] px-2 py-1 rounded-md"
-							>
-								{p.athleteName}
-								{p.horseName ? ` · ${p.horseName}` : ""}
-							</span>
-						))}
+							<option value="">Alege arbitru</option>
+							{category.referees.map((r) => (
+								<option key={r.id} value={r.id}>
+									{r.letterCode} — {r.firstName} {r.lastName}
+								</option>
+							))}
+						</select>
 					</div>
-				)}
-			</div>
 
-			{/* Scoring */}
-			<div className="bg-white rounded-[10px] border border-[#e2e8f0] p-4 flex flex-col gap-4">
-				<h3 className="font-semibold text-[#0e1f33] text-sm">
-					Notare
-				</h3>
+					{!participationId || !refereeId ? (
+						<p className="text-xs text-[#8896b3]">
+							Alege un participant și un arbitru pentru a începe
+							notarea.
+						</p>
+					) : loadingEvaluation ? (
+						<div className="text-sm text-[#6b7d92]">
+							Se încarcă evaluarea...
+						</div>
+					) : (
+						<>
+							<div className="overflow-x-auto">
+								<table className="w-full text-sm border-collapse">
+									<thead className="bg-[#f4f6fb]">
+										<tr>
+											{[
+												"№",
+												"Element",
+												"Scor max",
+												"Notă",
+												"Corecție",
+												"Coef.",
+												"Observații",
+											].map((h) => (
+												<th
+													key={h}
+													className="text-left px-2 py-1.5 text-xs font-semibold text-[#6b7d92] border border-[#e2e8f0]"
+												>
+													{h}
+												</th>
+											))}
+										</tr>
+									</thead>
+									<tbody>
+										{category.elements.map((el) => (
+											<tr key={el.id}>
+												<td className="border border-[#e2e8f0] px-2 py-1.5 text-center font-semibold">
+													{el.order}
+												</td>
+												<td className="border border-[#e2e8f0] px-2 py-1.5">
+													{el.letters
+														? `${el.letters} — `
+														: ""}
+													{el.name}
+												</td>
+												<td className="border border-[#e2e8f0] px-2 py-1.5 text-center">
+													{el.maxScore}
+												</td>
+												<td className="border border-[#e2e8f0] p-0 w-20">
+													<input
+														type="number"
+														step="0.5"
+														disabled={!canScore}
+														value={
+															rows[el.id]?.value ??
+															""
+														}
+														onChange={(e) =>
+															updateRow(
+																el.id,
+																"value",
+																e.target.value,
+															)
+														}
+														className="w-full px-2 py-1.5 text-sm outline-none focus:bg-[#f1f7fc] disabled:bg-[#f8f9fb] disabled:text-[#6b7d92]"
+													/>
+												</td>
+												<td className="border border-[#e2e8f0] p-0 w-20">
+													<input
+														type="number"
+														step="0.5"
+														disabled={!canScore}
+														value={
+															rows[el.id]
+																?.correction ?? ""
+														}
+														onChange={(e) =>
+															updateRow(
+																el.id,
+																"correction",
+																e.target.value,
+															)
+														}
+														className="w-full px-2 py-1.5 text-sm outline-none focus:bg-[#f1f7fc] disabled:bg-[#f8f9fb] disabled:text-[#6b7d92]"
+													/>
+												</td>
+												<td className="border border-[#e2e8f0] px-2 py-1.5 text-center">
+													{Number(el.coefficient) === 2
+														? "2"
+														: ""}
+												</td>
+												<td className="border border-[#e2e8f0] p-0">
+													<input
+														disabled={!canScore}
+														value={
+															rows[el.id]?.remark ??
+															""
+														}
+														onChange={(e) =>
+															updateRow(
+																el.id,
+																"remark",
+																e.target.value,
+															)
+														}
+														className="w-full px-2 py-1.5 text-sm outline-none focus:bg-[#f1f7fc] disabled:bg-[#f8f9fb] disabled:text-[#6b7d92]"
+													/>
+												</td>
+											</tr>
+										))}
+									</tbody>
+								</table>
+							</div>
 
-				<div className="flex flex-wrap gap-3">
-					<select
-						value={participationId}
-						onChange={(e) => setParticipationId(e.target.value)}
-						className="border border-[#e2e8f0] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[#2a6aa6]"
-					>
-						<option value="">Alege participant</option>
-						{category.participations.map((p) => (
-							<option key={p.id} value={p.id}>
-								{p.athleteName}
-								{p.horseName ? ` · ${p.horseName}` : ""}
-							</option>
-						))}
-					</select>
-					<select
-						value={refereeId}
-						onChange={(e) => setRefereeId(e.target.value)}
-						className="border border-[#e2e8f0] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[#2a6aa6]"
-					>
-						<option value="">Alege arbitru</option>
-						{category.referees.map((r) => (
-							<option key={r.id} value={r.id}>
-								{r.letterCode} — {r.firstName} {r.lastName}
-							</option>
-						))}
-					</select>
+							{evaluation && (
+								<div className="text-sm text-[#0e1f33]">
+									Scor total:{" "}
+									<b>{evaluation.finalScore ?? "—"}</b>
+									{evaluation.percentage && (
+										<span className="text-[#6b7d92]">
+											{" "}
+											({Number(evaluation.percentage).toFixed(2)}
+											%)
+										</span>
+									)}
+								</div>
+							)}
+
+							{canScore && (
+								<div className="flex justify-end gap-2">
+									<button
+										onClick={() => handleSave(false)}
+										disabled={saving}
+										className="border border-[#b5d7f1] text-[#2a6aa6] disabled:opacity-50 text-sm font-semibold px-4 py-2 rounded-lg hover:bg-[#f1f7fc] transition"
+									>
+										{saving ? "Se salvează..." : "Salvează"}
+									</button>
+									<button
+										onClick={() => handleSave(true)}
+										disabled={saving}
+										className="bg-[#2a6aa6] hover:bg-[#205280] disabled:opacity-50 text-white text-sm font-semibold px-4 py-2 rounded-lg transition"
+									>
+										Finalizează
+									</button>
+								</div>
+							)}
+						</>
+					)}
 				</div>
+			)}
 
-				{!participationId || !refereeId ? (
-					<p className="text-xs text-[#8896b3]">
-						Alege un participant și un arbitru pentru a începe
-						notarea.
-					</p>
-				) : loadingEvaluation ? (
-					<div className="text-sm text-[#6b7d92]">
-						Se încarcă evaluarea...
-					</div>
-				) : (
-					<>
+			{stage === "COMPLETED" && (
+				<div className="bg-white rounded-[10px] border border-[#e2e8f0] p-4">
+					<h3 className="font-semibold text-[#0e1f33] text-sm mb-3">
+						Rezultate
+					</h3>
+					{category.participations.length === 0 ? (
+						<p className="text-xs text-[#8896b3]">
+							Niciun rezultat disponibil.
+						</p>
+					) : (
 						<div className="overflow-x-auto">
 							<table className="w-full text-sm border-collapse">
 								<thead className="bg-[#f4f6fb]">
 									<tr>
 										{[
-											"№",
-											"Element",
-											"Scor max",
-											"Notă",
-											"Corecție",
-											"Coef.",
-											"Observații",
+											"Loc",
+											"Sportiv",
+											"Cal",
+											"Scor final",
+											"Stare",
 										].map((h) => (
 											<th
 												key={h}
@@ -445,121 +762,37 @@ export default function CategoryScoringPage() {
 									</tr>
 								</thead>
 								<tbody>
-									{category.elements.map((el) => (
-										<tr key={el.id}>
-											<td className="border border-[#e2e8f0] px-2 py-1.5 text-center font-semibold">
-												{el.order}
-											</td>
-											<td className="border border-[#e2e8f0] px-2 py-1.5">
-												{el.letters
-													? `${el.letters} — `
-													: ""}
-												{el.name}
-											</td>
-											<td className="border border-[#e2e8f0] px-2 py-1.5 text-center">
-												{el.maxScore}
-											</td>
-											<td className="border border-[#e2e8f0] p-0 w-20">
-												<input
-													type="number"
-													step="0.5"
-													disabled={!canManage}
-													value={
-														rows[el.id]?.value ??
-														""
-													}
-													onChange={(e) =>
-														updateRow(
-															el.id,
-															"value",
-															e.target.value,
-														)
-													}
-													className="w-full px-2 py-1.5 text-sm outline-none focus:bg-[#f1f7fc] disabled:bg-[#f8f9fb] disabled:text-[#6b7d92]"
-												/>
-											</td>
-											<td className="border border-[#e2e8f0] p-0 w-20">
-												<input
-													type="number"
-													step="0.5"
-													disabled={!canManage}
-													value={
-														rows[el.id]
-															?.correction ?? ""
-													}
-													onChange={(e) =>
-														updateRow(
-															el.id,
-															"correction",
-															e.target.value,
-														)
-													}
-													className="w-full px-2 py-1.5 text-sm outline-none focus:bg-[#f1f7fc] disabled:bg-[#f8f9fb] disabled:text-[#6b7d92]"
-												/>
-											</td>
-											<td className="border border-[#e2e8f0] px-2 py-1.5 text-center">
-												{Number(el.coefficient) === 2
-													? "2"
-													: ""}
-											</td>
-											<td className="border border-[#e2e8f0] p-0">
-												<input
-													disabled={!canManage}
-													value={
-														rows[el.id]?.remark ??
-														""
-													}
-													onChange={(e) =>
-														updateRow(
-															el.id,
-															"remark",
-															e.target.value,
-														)
-													}
-													className="w-full px-2 py-1.5 text-sm outline-none focus:bg-[#f1f7fc] disabled:bg-[#f8f9fb] disabled:text-[#6b7d92]"
-												/>
-											</td>
-										</tr>
-									))}
+									{[...category.participations]
+										.sort((a, b) => {
+											if (a.rank == null) return 1;
+											if (b.rank == null) return -1;
+											return a.rank - b.rank;
+										})
+										.map((p) => (
+											<tr key={p.id}>
+												<td className="border border-[#e2e8f0] px-2 py-1.5 text-center font-semibold">
+													{p.rank ?? "—"}
+												</td>
+												<td className="border border-[#e2e8f0] px-2 py-1.5">
+													{p.athleteName}
+												</td>
+												<td className="border border-[#e2e8f0] px-2 py-1.5">
+													{p.horseName ?? "—"}
+												</td>
+												<td className="border border-[#e2e8f0] px-2 py-1.5 text-center">
+													{p.finalScore ?? "—"}
+												</td>
+												<td className="border border-[#e2e8f0] px-2 py-1.5 text-center">
+													{p.status}
+												</td>
+											</tr>
+										))}
 								</tbody>
 							</table>
 						</div>
-
-						{evaluation && (
-							<div className="text-sm text-[#0e1f33]">
-								Scor total:{" "}
-								<b>{evaluation.finalScore ?? "—"}</b>
-								{evaluation.percentage && (
-									<span className="text-[#6b7d92]">
-										{" "}
-										({Number(evaluation.percentage).toFixed(2)}
-										%)
-									</span>
-								)}
-							</div>
-						)}
-
-						{canManage && (
-							<div className="flex justify-end gap-2">
-								<button
-									onClick={() => handleSave(false)}
-									disabled={saving}
-									className="border border-[#b5d7f1] text-[#2a6aa6] disabled:opacity-50 text-sm font-semibold px-4 py-2 rounded-lg hover:bg-[#f1f7fc] transition"
-								>
-									{saving ? "Se salvează..." : "Salvează"}
-								</button>
-								<button
-									onClick={() => handleSave(true)}
-									disabled={saving}
-									className="bg-[#2a6aa6] hover:bg-[#205280] disabled:opacity-50 text-white text-sm font-semibold px-4 py-2 rounded-lg transition"
-								>
-									Finalizează
-								</button>
-							</div>
-						)}
-					</>
-				)}
-			</div>
+					)}
+				</div>
+			)}
 		</div>
 	);
 }

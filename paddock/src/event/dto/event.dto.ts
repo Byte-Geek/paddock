@@ -1,3 +1,10 @@
+export class EventSecretaryDto {
+    id: string
+    firstName: string | null
+    lastName: string | null
+    email: string
+}
+
 export class EventDto {
     id: string
     name: string
@@ -7,6 +14,7 @@ export class EventDto {
     endDate: Date | null
     status: string
     participantCount: number
+    secretaries: EventSecretaryDto[]
 }
 
 export class ParticipationEntryDto {

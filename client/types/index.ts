@@ -94,12 +94,14 @@ export interface AthletesPerGroup {
 	value: number;
 }
 
-export type EventStatus =
-	| "DRAFT"
-	| "PUBLISHED"
-	| "ONGOING"
-	| "COMPLETED"
-	| "CANCELLED";
+export type EventStatus = "DRAFT" | "PUBLISHED" | "ONGOING" | "COMPLETED";
+
+export interface EventSecretary {
+	id: string;
+	firstName: string | null;
+	lastName: string | null;
+	email: string;
+}
 
 export interface CompetitionEvent {
 	id: string;
@@ -110,6 +112,7 @@ export interface CompetitionEvent {
 	endDate: string | null;
 	status: EventStatus;
 	participantCount: number;
+	secretaries: EventSecretary[];
 }
 
 export interface ParticipationEntry {
@@ -254,6 +257,7 @@ export interface Category {
 	name: string;
 	eventId: string;
 	eventName: string;
+	eventStatus: EventStatus;
 	protocolTemplateId: string;
 	protocolTemplateName: string;
 	refereeCount: number;

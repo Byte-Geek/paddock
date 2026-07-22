@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal, { ModalHeader, ModalBody, ModalFooter } from "@/components/ui/Modal";
 import api from "@/lib/axios";
-import { CompetitionEvent, EventStatus } from "@/types";
+import { CompetitionEvent, EventStatus, EventSecretary } from "@/types";
+import SecretaryMultiSelect from "./SecretaryMultiSelect";
 
 interface CompetitionFormModalProps {
 	competition: CompetitionEvent | null;
@@ -16,7 +17,6 @@ const statusOptions: { value: EventStatus; label: string }[] = [
 	{ value: "PUBLISHED", label: "Publicată" },
 	{ value: "ONGOING", label: "În desfășurare" },
 	{ value: "COMPLETED", label: "Finalizată" },
-	{ value: "CANCELLED", label: "Anulată" },
 ];
 
 function toDateInput(value: string | null): string {
@@ -43,8 +43,27 @@ export default function CompetitionFormModal({
 	const [status, setStatus] = useState<EventStatus>(
 		competition?.status ?? "DRAFT",
 	);
+	const [secretaries, setSecretaries] = useState<EventSecretary[]>([]);
+	const [secretaryIds, setSecretaryIds] = useState<string[]>(
+		competition?.secretaries?.map((s) => s.id) ?? [],
+	);
 	const [error, setError] = useState("");
 	const [saving, setSaving] = useState(false);
+
+	useEffect(() => {
+		const loadSecretaries = async () => {
+			try {
+				const { data } = await api.get<EventSecretary[]>("/users", {
+					params: { role: "MODERATOR" },
+				});
+				setSecretaries(data);
+			} catch (error) {
+				console.error("Failed to load secretaries", error);
+			}
+		};
+
+		loadSecretaries();
+	}, []);
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -58,6 +77,7 @@ export default function CompetitionFormModal({
 				startDate: startDate || undefined,
 				endDate: endDate || undefined,
 				status,
+				secretaryIds,
 			};
 			const { data } = competition
 				? await api.patch<CompetitionEvent>(
@@ -170,6 +190,17 @@ export default function CompetitionFormModal({
 									</option>
 								))}
 							</select>
+						</div>
+
+						<div className="flex flex-col gap-1">
+							<label className="text-xs font-medium text-[#6b7d92]">
+								Secretari
+							</label>
+							<SecretaryMultiSelect
+								options={secretaries}
+								selectedIds={secretaryIds}
+								onChange={setSecretaryIds}
+							/>
 						</div>
 
 						{error && (

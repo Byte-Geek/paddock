@@ -8,6 +8,7 @@ import Modal, {
 } from "@/components/ui/Modal";
 import api from "@/lib/axios";
 import { ProtocolTemplate } from "@/types";
+import { getErrorMessage } from "@/lib/error";
 
 interface ProtocolFormModalProps {
 	onClose: () => void;
@@ -47,11 +48,7 @@ export default function ProtocolFormModal({
 			onSaved(data);
 			onClose();
 		} catch (err: unknown) {
-			const message =
-				(err as { response?: { data?: { message?: string } } })
-					?.response?.data?.message ??
-				"Nu s-a putut salva protocolul.";
-			setError(Array.isArray(message) ? message.join(", ") : message);
+			setError(getErrorMessage(err, "Nu s-a putut salva protocolul."));
 		} finally {
 			setSaving(false);
 		}

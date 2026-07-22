@@ -1,11 +1,8 @@
-import { Body, Controller, Get, Put, Query, Req } from '@nestjs/common'
+import { Body, Controller, Get, Put, Query } from '@nestjs/common'
 import { EvaluationService } from './evaluation.service'
 import { UpsertEvaluationDto } from './dto/upsert-evaluation.dto'
 import { Roles } from '../auth/decorators/roles.decorator'
-
-interface AuthenticatedRequest {
-    user: { email: string; sub: string; role: string }
-}
+import { CurrentUser } from '../auth/decorators/current-user.decorator'
 
 @Controller('evaluations')
 export class EvaluationController {
@@ -23,8 +20,8 @@ export class EvaluationController {
     @Put()
     async upsert(
         @Body() dto: UpsertEvaluationDto,
-        @Req() req: AuthenticatedRequest
+        @CurrentUser('sub') userId: string
     ) {
-        return this.evaluationService.upsert(dto, req.user.sub)
+        return this.evaluationService.upsert(dto, userId)
     }
 }

@@ -7,6 +7,8 @@ import LineChart from "@/components/charts/LineChart";
 import BarChart from "@/components/charts/BarChart";
 import DonutChart from "@/components/charts/DonutChart";
 import api from "@/lib/axios";
+import { formatFullName } from "@/lib/utils";
+import LoadingState from "@/components/ui/LoadingState";
 import {
 	AthletesPerGroup,
 	EventsTimelinePoint,
@@ -61,7 +63,7 @@ export default function StatisticiPage() {
 			/>
 
 			{loading ? (
-				<div className="text-sm text-[#8896b3]">Se încarcă...</div>
+				<LoadingState className="text-[#8896b3]" />
 			) : (
 				<>
 					{/* Medal stats */}
@@ -172,9 +174,7 @@ export default function StatisticiPage() {
 									</div>
 								)}
 								{topCoaches.map((c) => {
-									const name =
-										`${c.firstName ?? ""} ${c.lastName ?? ""}`.trim() ||
-										c.email;
+									const name = formatFullName(c.firstName, c.lastName, c.email);
 									const w =
 										(c.medals /
 											Math.max(

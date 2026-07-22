@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma.service'
 import { MedalsDto } from './dto/medals.dto'
 import { EventsTimelinePointDto } from './dto/events-timeline.dto'
 import { TopCoachDto } from './dto/top-coach.dto'
+import { userNameSelect } from '../common/prisma-selects/user-name.select'
 
 const MONTHS_RO = [
     'ian',
@@ -80,11 +81,7 @@ export class StatsService {
                                             select: {
                                                 id: true,
                                                 user: {
-                                                    select: {
-                                                        firstName: true,
-                                                        lastName: true,
-                                                        email: true,
-                                                    },
+                                                    select: userNameSelect,
                                                 },
                                             },
                                         },

@@ -1,22 +1,19 @@
-import { Controller, Get, Req } from '@nestjs/common'
+import { Controller, Get } from '@nestjs/common'
 import { ProfileService } from './profile.service'
-
-interface AuthenticatedRequest {
-    user: { email: string; sub: string; role: string }
-}
+import { CurrentUser } from '../auth/decorators/current-user.decorator'
 
 @Controller('profile')
 export class ProfileController {
     constructor(private readonly profileService: ProfileService) {}
 
     @Get('athlete')
-    async getAthleteStats(@Req() req: AuthenticatedRequest) {
-        return this.profileService.getAthleteStats(req.user.sub)
+    async getAthleteStats(@CurrentUser('sub') userId: string) {
+        return this.profileService.getAthleteStats(userId)
     }
 
     @Get('coach')
-    async getCoachStats(@Req() req: AuthenticatedRequest) {
-        return this.profileService.getCoachStats(req.user.sub)
+    async getCoachStats(@CurrentUser('sub') userId: string) {
+        return this.profileService.getCoachStats(userId)
     }
 
     @Get('moderator')

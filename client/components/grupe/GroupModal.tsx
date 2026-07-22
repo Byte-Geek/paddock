@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import api from "@/lib/axios";
 import { Group, GroupDetail } from "@/types";
+import { formatFullName } from "@/lib/utils";
 
 interface GroupModalProps {
 	group: Group;
@@ -30,9 +31,11 @@ export default function GroupModal({ group, onClose }: GroupModalProps) {
 		loadDetail();
 	}, [group.id]);
 
-	const coachName =
-		`${group.coach.firstName ?? ""} ${group.coach.lastName ?? ""}`.trim() ||
-		group.coach.email;
+	const coachName = formatFullName(
+		group.coach.firstName,
+		group.coach.lastName,
+		group.coach.email,
+	);
 
 	return (
 		<div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
@@ -88,8 +91,7 @@ export default function GroupModal({ group, onClose }: GroupModalProps) {
 										}
 									>
 										<td className="px-5 py-3 font-semibold text-[#0f1729]">
-											{`${m.firstName ?? ""} ${m.lastName ?? ""}`.trim() ||
-												m.email}
+											{formatFullName(m.firstName, m.lastName, m.email)}
 										</td>
 										<td className="px-5 py-3 text-[#8896b3]">
 											{m.email}

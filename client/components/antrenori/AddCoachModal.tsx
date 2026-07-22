@@ -3,6 +3,7 @@
 import { useState } from "react";
 import api from "@/lib/axios";
 import { Coach } from "@/types";
+import { getErrorMessage } from "@/lib/error";
 
 interface AddCoachModalProps {
 	onClose: () => void;
@@ -34,11 +35,7 @@ export default function AddCoachModal({
 			onCreated(data);
 			onClose();
 		} catch (err: unknown) {
-			const message =
-				(err as { response?: { data?: { message?: string } } })
-					?.response?.data?.message ??
-				"Nu s-a putut adăuga antrenorul.";
-			setError(Array.isArray(message) ? message.join(", ") : message);
+			setError(getErrorMessage(err, "Nu s-a putut adăuga antrenorul."));
 		} finally {
 			setSaving(false);
 		}

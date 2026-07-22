@@ -1,5 +1,5 @@
 import { Coach } from "@/types";
-import { initials } from "@/lib/utils";
+import { initials, formatFullName } from "@/lib/utils";
 
 interface CoachCardProps {
 	coach: Coach;
@@ -8,9 +8,7 @@ interface CoachCardProps {
 }
 
 export default function CoachCard({ coach, onEdit, onDelete }: CoachCardProps) {
-	const fullName =
-		`${coach.firstName ?? ""} ${coach.lastName ?? ""}`.trim() ||
-		coach.email;
+	const fullName = formatFullName(coach.firstName, coach.lastName, coach.email);
 
 	return (
 		<div className="bg-white rounded-xl border border-[#e8ecf5] p-5 flex flex-col gap-3">

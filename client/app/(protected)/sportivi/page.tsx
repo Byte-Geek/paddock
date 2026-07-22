@@ -8,8 +8,11 @@ import AthleteTable from "@/components/sportivi/AthleteTable";
 import AthleteGrid from "@/components/sportivi/AthleteGrid";
 import AthleteFormModal from "@/components/sportivi/AthleteFormModal";
 import api from "@/lib/axios";
-import { useAuthStore } from "@/store/auth.store";
 import { Athlete } from "@/types";
+import { getErrorMessage } from "@/lib/error";
+import { useCanManage } from "@/lib/hooks/useCanManage";
+import { formatFullName } from "@/lib/utils";
+import LoadingState from "@/components/ui/LoadingState";
 
 const viewOptions = [
 	{ key: "table", label: "Tabel" },
@@ -17,8 +20,7 @@ const viewOptions = [
 ];
 
 export default function SportiviPage() {
-	const user = useAuthStore((s) => s.user);
-	const canManage = user?.role === "ADMIN";
+	const canManage = useCanManage();
 
 	const [athletes, setAthletes] = useState<Athlete[]>([]);
 	const [loading, setLoading] = useState(true);
@@ -44,9 +46,11 @@ export default function SportiviPage() {
 	}, []);
 
 	const handleDelete = async (athlete: Athlete) => {
-		const name =
-			`${athlete.firstName ?? ""} ${athlete.lastName ?? ""}`.trim() ||
-			athlete.email;
+		const name = formatFullName(
+			athlete.firstName,
+			athlete.lastName,
+			athlete.email,
+		);
 		if (!window.confirm(`Ștergi sportivul ${name}?`)) return;
 
 		setActionError("");
@@ -54,11 +58,7 @@ export default function SportiviPage() {
 			await api.delete(`/athletes/${athlete.id}`);
 			setAthletes((prev) => prev.filter((a) => a.id !== athlete.id));
 		} catch (err: unknown) {
-			const message =
-				(err as { response?: { data?: { message?: string } } })
-					?.response?.data?.message ??
-				"Nu s-a putut șterge sportivul.";
-			setActionError(Array.isArray(message) ? message.join(", ") : message);
+			setActionError(getErrorMessage(err, "Nu s-a putut șterge sportivul."));
 		}
 	};
 
@@ -107,7 +107,7 @@ export default function SportiviPage() {
 			)}
 
 			{loading ? (
-				<div className="text-sm text-[#8896b3]">Se încarcă...</div>
+				<LoadingState className="text-[#8896b3]" />
 			) : view === "table" ? (
 				<AthleteTable
 					athletes={list}

@@ -4,17 +4,11 @@ import { useRef, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth.store";
 import { initials } from "@/lib/utils";
+import { ROLE_LABELS as roleLabels } from "@/lib/constants/roles";
 
 interface NavbarProps {
 	onToggleSidebar: () => void;
 }
-
-const roleLabels: Record<string, string> = {
-	ADMIN: "Administrator",
-	MODERATOR: "Moderator",
-	COACH: "Antrenor",
-	ATHLETE: "Sportiv",
-};
 
 export default function Navbar({ onToggleSidebar }: NavbarProps) {
 	const router = useRouter();

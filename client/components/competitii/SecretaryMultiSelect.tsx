@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { EventSecretary } from "@/types";
+import { formatFullName } from "@/lib/utils";
 
 interface SecretaryMultiSelectProps {
 	options: EventSecretary[];
@@ -10,7 +11,7 @@ interface SecretaryMultiSelectProps {
 }
 
 function label(s: EventSecretary): string {
-	return `${s.firstName ?? ""} ${s.lastName ?? ""}`.trim() || s.email;
+	return formatFullName(s.firstName, s.lastName, s.email);
 }
 
 export default function SecretaryMultiSelect({

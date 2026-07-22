@@ -5,6 +5,11 @@ import Modal, { ModalHeader, ModalBody, ModalFooter } from "@/components/ui/Moda
 import api from "@/lib/axios";
 import { CompetitionEvent, EventStatus, EventSecretary } from "@/types";
 import SecretaryMultiSelect from "./SecretaryMultiSelect";
+import { EVENT_STATUS_OPTIONS } from "@/lib/constants/event-status";
+import { getErrorMessage } from "@/lib/error";
+import Input from "@/components/ui/Input";
+import Select from "@/components/ui/Select";
+import Label from "@/components/ui/Label";
 
 interface CompetitionFormModalProps {
 	competition: CompetitionEvent | null;
@@ -12,12 +17,7 @@ interface CompetitionFormModalProps {
 	onSaved: (competition: CompetitionEvent) => void;
 }
 
-const statusOptions: { value: EventStatus; label: string }[] = [
-	{ value: "DRAFT", label: "Ciornă" },
-	{ value: "PUBLISHED", label: "Publicată" },
-	{ value: "ONGOING", label: "În desfășurare" },
-	{ value: "COMPLETED", label: "Finalizată" },
-];
+const statusOptions = EVENT_STATUS_OPTIONS;
 
 function toDateInput(value: string | null): string {
 	if (!value) return "";
@@ -88,11 +88,7 @@ export default function CompetitionFormModal({
 			onSaved(data);
 			onClose();
 		} catch (err: unknown) {
-			const message =
-				(err as { response?: { data?: { message?: string } } })
-					?.response?.data?.message ??
-				"Nu s-a putut salva competiția.";
-			setError(Array.isArray(message) ? message.join(", ") : message);
+			setError(getErrorMessage(err, "Nu s-a putut salva competiția."));
 		} finally {
 			setSaving(false);
 		}
@@ -108,25 +104,19 @@ export default function CompetitionFormModal({
 				<ModalBody>
 					<div className="flex flex-col gap-3">
 						<div className="flex flex-col gap-1">
-							<label className="text-xs font-medium text-[#6b7d92]">
-								Nume
-							</label>
-							<input
+							<Label>Nume</Label>
+							<Input
 								value={name}
 								onChange={(e) => setName(e.target.value)}
 								required
-								className="border border-[#e2e8f0] rounded-lg px-3 py-2 text-sm outline-none focus:border-[#2a6aa6]"
 							/>
 						</div>
 
 						<div className="flex flex-col gap-1">
-							<label className="text-xs font-medium text-[#6b7d92]">
-								Locație
-							</label>
-							<input
+							<Label>Locație</Label>
+							<Input
 								value={location}
 								onChange={(e) => setLocation(e.target.value)}
-								className="border border-[#e2e8f0] rounded-lg px-3 py-2 text-sm outline-none focus:border-[#2a6aa6]"
 							/>
 						</div>
 
@@ -146,56 +136,45 @@ export default function CompetitionFormModal({
 
 						<div className="grid grid-cols-2 gap-3">
 							<div className="flex flex-col gap-1">
-								<label className="text-xs font-medium text-[#6b7d92]">
-									Data început
-								</label>
-								<input
+								<Label>Data început</Label>
+								<Input
 									type="date"
 									value={startDate}
 									onChange={(e) =>
 										setStartDate(e.target.value)
 									}
-									className="border border-[#e2e8f0] rounded-lg px-3 py-2 text-sm outline-none focus:border-[#2a6aa6]"
 								/>
 							</div>
 							<div className="flex flex-col gap-1">
-								<label className="text-xs font-medium text-[#6b7d92]">
-									Data sfârșit
-								</label>
-								<input
+								<Label>Data sfârșit</Label>
+								<Input
 									type="date"
 									value={endDate}
 									onChange={(e) =>
 										setEndDate(e.target.value)
 									}
-									className="border border-[#e2e8f0] rounded-lg px-3 py-2 text-sm outline-none focus:border-[#2a6aa6]"
 								/>
 							</div>
 						</div>
 
 						<div className="flex flex-col gap-1">
-							<label className="text-xs font-medium text-[#6b7d92]">
-								Status
-							</label>
-							<select
+							<Label>Status</Label>
+							<Select
 								value={status}
 								onChange={(e) =>
 									setStatus(e.target.value as EventStatus)
 								}
-								className="border border-[#e2e8f0] rounded-lg px-3 py-2 text-sm outline-none focus:border-[#2a6aa6]"
 							>
 								{statusOptions.map((opt) => (
 									<option key={opt.value} value={opt.value}>
 										{opt.label}
 									</option>
 								))}
-							</select>
+							</Select>
 						</div>
 
 						<div className="flex flex-col gap-1">
-							<label className="text-xs font-medium text-[#6b7d92]">
-								Secretari
-							</label>
+							<Label>Secretari</Label>
 							<SecretaryMultiSelect
 								options={secretaries}
 								selectedIds={secretaryIds}

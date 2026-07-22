@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma.service'
 import { CreateGroupDto } from './dto/create-group.dto'
 import { UpdateGroupDto } from './dto/update-group.dto'
 import { GroupDto, GroupDetailDto } from './dto/group.dto'
+import { userNameSelect } from '../common/prisma-selects/user-name.select'
 
 @Injectable()
 export class GroupService {
@@ -15,11 +16,7 @@ export class GroupService {
                     select: {
                         id: true,
                         user: {
-                            select: {
-                                firstName: true,
-                                lastName: true,
-                                email: true,
-                            },
+                            select: userNameSelect,
                         },
                     },
                 },
@@ -50,11 +47,7 @@ export class GroupService {
                     select: {
                         id: true,
                         user: {
-                            select: {
-                                firstName: true,
-                                lastName: true,
-                                email: true,
-                            },
+                            select: userNameSelect,
                         },
                     },
                 },
@@ -65,11 +58,7 @@ export class GroupService {
                             select: {
                                 id: true,
                                 user: {
-                                    select: {
-                                        firstName: true,
-                                        lastName: true,
-                                        email: true,
-                                    },
+                                    select: userNameSelect,
                                 },
                             },
                         },
@@ -120,11 +109,7 @@ export class GroupService {
                     select: {
                         id: true,
                         user: {
-                            select: {
-                                firstName: true,
-                                lastName: true,
-                                email: true,
-                            },
+                            select: userNameSelect,
                         },
                     },
                 },
@@ -171,11 +156,7 @@ export class GroupService {
                     select: {
                         id: true,
                         user: {
-                            select: {
-                                firstName: true,
-                                lastName: true,
-                                email: true,
-                            },
+                            select: userNameSelect,
                         },
                     },
                 },

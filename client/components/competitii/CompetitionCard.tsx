@@ -2,23 +2,10 @@ import Link from "next/link";
 import Badge from "@/components/ui/Badge";
 import { formatDate } from "@/lib/utils";
 import { CompetitionEvent } from "@/types";
-
-const statusLabels: Record<string, string> = {
-	DRAFT: "Ciornă",
-	PUBLISHED: "Publicată",
-	ONGOING: "În desfășurare",
-	COMPLETED: "Finalizată",
-};
-
-const statusVariants: Record<
-	string,
-	"gray" | "warning" | "success" | "danger" | "blue"
-> = {
-	DRAFT: "gray",
-	PUBLISHED: "blue",
-	ONGOING: "warning",
-	COMPLETED: "success",
-};
+import {
+	EVENT_STATUS_LABELS,
+	EVENT_STATUS_VARIANTS,
+} from "@/lib/constants/event-status";
 
 export default function CompetitionCard({
 	competition: c,
@@ -37,8 +24,8 @@ export default function CompetitionCard({
 			<div className="flex justify-between items-start gap-3">
 				<div className="flex-1">
 					<div className="flex gap-2 items-center mb-2">
-						<Badge variant={statusVariants[c.status] ?? "gray"}>
-							{statusLabels[c.status] ?? c.status}
+						<Badge variant={EVENT_STATUS_VARIANTS[c.status] ?? "gray"}>
+							{EVENT_STATUS_LABELS[c.status] ?? c.status}
 						</Badge>
 					</div>
 					<div className="font-bold text-[16px] text-[#0e1f33]">

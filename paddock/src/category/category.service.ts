@@ -10,6 +10,8 @@ import { UpdateCategoryDto } from './dto/update-category.dto'
 import { CreateRefereeDto } from './dto/create-referee.dto'
 import { CreateParticipationDto } from './dto/create-participation.dto'
 import { CategoryDto, CategoryDetailDto } from './dto/category.dto'
+import { formatFullName } from '../common/utils/name.util'
+import { assertStatus } from '../common/utils/assert-status.util'
 
 @Injectable()
 export class CategoryService {
@@ -110,9 +112,11 @@ export class CategoryService {
             participations: category.participations.map((p) => ({
                 id: p.id,
                 athleteId: p.athleteId,
-                athleteName:
-                    `${p.athlete.user.firstName ?? ''} ${p.athlete.user.lastName ?? ''}`.trim() ||
-                    p.athlete.user.email,
+                athleteName: formatFullName(
+                    p.athlete.user.firstName,
+                    p.athlete.user.lastName,
+                    p.athlete.user.email
+                ),
                 horseName: p.horseName,
                 participationNumber: p.participationNumber,
                 finalScore: p.finalScore?.toString() ?? null,
@@ -130,11 +134,11 @@ export class CategoryService {
         if (!event) {
             throw new NotFoundException('Event not found')
         }
-        if (event.status !== 'DRAFT') {
-            throw new BadRequestException(
-                'Categoriile pot fi create doar cât timp competiția este în ciornă.'
-            )
-        }
+        assertStatus(
+            event.status,
+            'DRAFT',
+            'Categoriile pot fi create doar cât timp competiția este în ciornă.'
+        )
 
         const template = await this.prisma.protocolTemplate.findUnique({
             where: { id: dto.protocolTemplateId },
@@ -179,11 +183,11 @@ export class CategoryService {
         if (!category) {
             throw new NotFoundException('Category not found')
         }
-        if (category.event.status !== 'DRAFT') {
-            throw new BadRequestException(
-                'Categoria poate fi editată doar cât timp competiția este în ciornă.'
-            )
-        }
+        assertStatus(
+            category.event.status,
+            'DRAFT',
+            'Categoria poate fi editată doar cât timp competiția este în ciornă.'
+        )
 
         if (dto.protocolTemplateId) {
             const template = await this.prisma.protocolTemplate.findUnique({
@@ -230,11 +234,11 @@ export class CategoryService {
         if (!category) {
             throw new NotFoundException('Category not found')
         }
-        if (category.event.status !== 'DRAFT') {
-            throw new BadRequestException(
-                'Arbitrii pot fi asociați doar cât timp competiția este în ciornă.'
-            )
-        }
+        assertStatus(
+            category.event.status,
+            'DRAFT',
+            'Arbitrii pot fi asociați doar cât timp competiția este în ciornă.'
+        )
 
         const existing = await this.prisma.categoryReferee.findUnique({
             where: {
@@ -263,11 +267,11 @@ export class CategoryService {
         if (!referee || referee.categoryId !== categoryId) {
             throw new NotFoundException('Referee not found')
         }
-        if (referee.category.event.status !== 'DRAFT') {
-            throw new BadRequestException(
-                'Arbitrii pot fi eliminați doar cât timp competiția este în ciornă.'
-            )
-        }
+        assertStatus(
+            referee.category.event.status,
+            'DRAFT',
+            'Arbitrii pot fi eliminați doar cât timp competiția este în ciornă.'
+        )
 
         await this.prisma.categoryReferee.delete({ where: { id: refereeId } })
     }

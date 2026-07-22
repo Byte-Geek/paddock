@@ -3,9 +3,11 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import api from "@/lib/axios";
-import { useAuthStore } from "@/store/auth.store";
 import { ProtocolTemplateDetail } from "@/types";
 import AutoGrowTextarea from "@/components/ui/AutoGrowTextarea";
+import { getErrorMessage } from "@/lib/error";
+import { useCanManage } from "@/lib/hooks/useCanManage";
+import LoadingState from "@/components/ui/LoadingState";
 
 interface RowState {
 	id?: string;
@@ -29,8 +31,7 @@ const MIN_ROWS = 10;
 export default function ProtocolEditPage() {
 	const params = useParams<{ id: string }>();
 	const router = useRouter();
-	const user = useAuthStore((s) => s.user);
-	const canManage = user?.role === "ADMIN";
+	const canManage = useCanManage();
 
 	const [loading, setLoading] = useState(true);
 	const [saving, setSaving] = useState(false);
@@ -140,18 +141,14 @@ export default function ProtocolEditPage() {
 			});
 			router.push(`/protocoale/${params.id}`);
 		} catch (err: unknown) {
-			const message =
-				(err as { response?: { data?: { message?: string } } })
-					?.response?.data?.message ??
-				"Nu s-a putut salva protocolul.";
-			setError(Array.isArray(message) ? message.join(", ") : message);
+			setError(getErrorMessage(err, "Nu s-a putut salva protocolul."));
 		} finally {
 			setSaving(false);
 		}
 	};
 
 	if (loading) {
-		return <div className="text-sm text-[#6b7d92]">Se încarcă...</div>;
+		return <LoadingState />;
 	}
 
 	if (locked) {

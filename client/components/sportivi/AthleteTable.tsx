@@ -1,5 +1,5 @@
 import { Athlete } from "@/types";
-import { initials } from "@/lib/utils";
+import { initials, formatFullName } from "@/lib/utils";
 
 interface AthleteTableProps {
 	athletes: Athlete[];
@@ -29,9 +29,7 @@ export default function AthleteTable({
 				</thead>
 				<tbody>
 					{athletes.map((a, i) => {
-						const name =
-							`${a.firstName ?? ""} ${a.lastName ?? ""}`.trim() ||
-							a.email;
+						const name = formatFullName(a.firstName, a.lastName, a.email);
 						return (
 							<tr
 								key={a.id}

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import api from "@/lib/axios";
 import { Athlete, Group } from "@/types";
+import { getErrorMessage } from "@/lib/error";
 
 interface AthleteFormModalProps {
 	athlete: Athlete | null;
@@ -59,11 +60,7 @@ export default function AthleteFormModal({
 			onSaved(data);
 			onClose();
 		} catch (err: unknown) {
-			const message =
-				(err as { response?: { data?: { message?: string } } })
-					?.response?.data?.message ??
-				"Nu s-a putut salva sportivul.";
-			setError(Array.isArray(message) ? message.join(", ") : message);
+			setError(getErrorMessage(err, "Nu s-a putut salva sportivul."));
 		} finally {
 			setSaving(false);
 		}

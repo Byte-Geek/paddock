@@ -9,6 +9,7 @@ import { PrismaService } from '../prisma.service'
 import { CreateCoachDto } from './dto/create-coach.dto'
 import { UpdateCoachDto } from './dto/update-coach.dto'
 import { CoachDto } from './dto/coach.dto'
+import { userNameSelect } from '../common/prisma-selects/user-name.select'
 
 @Injectable()
 export class CoachService {
@@ -18,7 +19,7 @@ export class CoachService {
         const coaches = await this.prisma.coach.findMany({
             include: {
                 user: {
-                    select: { firstName: true, lastName: true, email: true },
+                    select: userNameSelect,
                 },
                 groups: { select: { id: true, name: true } },
             },
@@ -59,9 +60,7 @@ export class CoachService {
                         groups: { select: { id: true, name: true } },
                     },
                 },
-                firstName: true,
-                lastName: true,
-                email: true,
+                ...userNameSelect,
             },
         })
 
@@ -99,9 +98,7 @@ export class CoachService {
                 lastName: dto.lastName,
             },
             select: {
-                firstName: true,
-                lastName: true,
-                email: true,
+                ...userNameSelect,
                 coach: {
                     select: {
                         id: true,

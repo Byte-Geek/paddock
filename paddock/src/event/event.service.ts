@@ -3,6 +3,11 @@ import { PrismaService } from '../prisma.service'
 import { CreateEventDto } from './dto/create-event.dto'
 import { UpdateEventDto } from './dto/update-event.dto'
 import { EventDto, EventDetailDto } from './dto/event.dto'
+import { formatFullName } from '../common/utils/name.util'
+import {
+    userNameSelect,
+    userNameWithIdSelect,
+} from '../common/prisma-selects/user-name.select'
 
 @Injectable()
 export class EventService {
@@ -32,12 +37,7 @@ export class EventService {
                 secretaries: {
                     select: {
                         user: {
-                            select: {
-                                id: true,
-                                firstName: true,
-                                lastName: true,
-                                email: true,
-                            },
+                            select: userNameWithIdSelect,
                         },
                     },
                 },
@@ -77,12 +77,7 @@ export class EventService {
                 secretaries: {
                     select: {
                         user: {
-                            select: {
-                                id: true,
-                                firstName: true,
-                                lastName: true,
-                                email: true,
-                            },
+                            select: userNameWithIdSelect,
                         },
                     },
                 },
@@ -101,11 +96,7 @@ export class EventService {
                                 athlete: {
                                     select: {
                                         user: {
-                                            select: {
-                                                firstName: true,
-                                                lastName: true,
-                                                email: true,
-                                            },
+                                            select: userNameSelect,
                                         },
                                     },
                                 },
@@ -142,9 +133,11 @@ export class EventService {
                 participations: category.participations.map((p) => ({
                     id: p.id,
                     athleteId: p.athleteId,
-                    athleteName:
-                        `${p.athlete.user.firstName ?? ''} ${p.athlete.user.lastName ?? ''}`.trim() ||
-                        p.athlete.user.email,
+                    athleteName: formatFullName(
+                        p.athlete.user.firstName,
+                        p.athlete.user.lastName,
+                        p.athlete.user.email
+                    ),
                     horseName: p.horseName,
                     finalScore: p.finalScore?.toString() ?? null,
                     rank: p.rank,
@@ -175,12 +168,7 @@ export class EventService {
                 secretaries: {
                     select: {
                         user: {
-                            select: {
-                                id: true,
-                                firstName: true,
-                                lastName: true,
-                                email: true,
-                            },
+                            select: userNameWithIdSelect,
                         },
                     },
                 },
@@ -246,12 +234,7 @@ export class EventService {
                 secretaries: {
                     select: {
                         user: {
-                            select: {
-                                id: true,
-                                firstName: true,
-                                lastName: true,
-                                email: true,
-                            },
+                            select: userNameWithIdSelect,
                         },
                     },
                 },

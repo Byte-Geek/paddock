@@ -7,12 +7,13 @@ import CompetitionCard from "@/components/competitii/CompetitionCard";
 import CompetitionModal from "@/components/competitii/CompetitionModal";
 import CompetitionFormModal from "@/components/competitii/CompetitionFormModal";
 import api from "@/lib/axios";
-import { useAuthStore } from "@/store/auth.store";
 import { CompetitionEvent } from "@/types";
+import { useCanManage } from "@/lib/hooks/useCanManage";
+import LoadingState from "@/components/ui/LoadingState";
+import EmptyState from "@/components/ui/EmptyState";
 
 export default function CompetitiiPage() {
-	const user = useAuthStore((s) => s.user);
-	const canManage = user?.role === "ADMIN";
+	const canManage = useCanManage();
 
 	const [competitions, setCompetitions] = useState<CompetitionEvent[]>([]);
 	const [loading, setLoading] = useState(true);
@@ -74,11 +75,9 @@ export default function CompetitiiPage() {
 			/>
 
 			{loading ? (
-				<div className="text-sm text-[#6b7d92]">Se încarcă...</div>
+				<LoadingState />
 			) : list.length === 0 ? (
-				<div className="rounded-[10px] border border-[#e2e8f0] bg-white p-6 text-sm text-[#6b7d92]">
-					Nicio competiție găsită.
-				</div>
+				<EmptyState>Nicio competiție găsită.</EmptyState>
 			) : (
 				<div className="grid grid-cols-2 gap-4">
 					{list.map((c) => (

@@ -4,8 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import api, { fileUrl } from "@/lib/axios";
-import { useAuthStore } from "@/store/auth.store";
 import { ProtocolTemplate, ProtocolTemplateDetail } from "@/types";
+import { getErrorMessage } from "@/lib/error";
+import { useCanManage } from "@/lib/hooks/useCanManage";
+import LoadingState from "@/components/ui/LoadingState";
 
 function BlankLine({ label, width }: { label: string; width?: string }) {
 	return (
@@ -35,8 +37,7 @@ const COLUMN_WIDTHS = [
 export default function ProtocolViewPage() {
 	const params = useParams<{ id: string }>();
 	const router = useRouter();
-	const user = useAuthStore((s) => s.user);
-	const canManage = user?.role === "ADMIN";
+	const canManage = useCanManage();
 
 	const [template, setTemplate] = useState<ProtocolTemplateDetail | null>(
 		null,
@@ -84,11 +85,7 @@ export default function ProtocolViewPage() {
 					: prev,
 			);
 		} catch (err: unknown) {
-			const message =
-				(err as { response?: { data?: { message?: string } } })
-					?.response?.data?.message ??
-				"Nu s-a putut încărca fișierul PDF.";
-			setError(Array.isArray(message) ? message.join(", ") : message);
+			setError(getErrorMessage(err, "Nu s-a putut încărca fișierul PDF."));
 		} finally {
 			setUploading(false);
 			if (fileInputRef.current) fileInputRef.current.value = "";
@@ -103,16 +100,12 @@ export default function ProtocolViewPage() {
 			await api.delete(`/protocol-templates/${template.id}`);
 			router.push("/protocoale");
 		} catch (err: unknown) {
-			const message =
-				(err as { response?: { data?: { message?: string } } })
-					?.response?.data?.message ??
-				"Nu s-a putut șterge protocolul.";
-			setError(Array.isArray(message) ? message.join(", ") : message);
+			setError(getErrorMessage(err, "Nu s-a putut șterge protocolul."));
 		}
 	};
 
 	if (loading) {
-		return <div className="text-sm text-[#6b7d92]">Se încarcă...</div>;
+		return <LoadingState />;
 	}
 	if (error || !template) {
 		return (

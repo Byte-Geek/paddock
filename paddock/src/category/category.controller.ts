@@ -8,7 +8,6 @@ import {
     Param,
     Patch,
     Post,
-    Req,
 } from '@nestjs/common'
 import { CategoryService } from './category.service'
 import { CreateCategoryDto } from './dto/create-category.dto'
@@ -16,10 +15,7 @@ import { UpdateCategoryDto } from './dto/update-category.dto'
 import { CreateRefereeDto } from './dto/create-referee.dto'
 import { CreateParticipationDto } from './dto/create-participation.dto'
 import { Roles } from '../auth/decorators/roles.decorator'
-
-interface AuthenticatedRequest {
-    user: { email: string; sub: string; role: string }
-}
+import { CurrentUser } from '../auth/decorators/current-user.decorator'
 
 @Controller()
 export class CategoryController {
@@ -28,9 +24,9 @@ export class CategoryController {
     @Get('events/:eventId/categories')
     async findAllForEvent(
         @Param('eventId') eventId: string,
-        @Req() req: AuthenticatedRequest
+        @CurrentUser('role') role: string
     ) {
-        return this.categoryService.findAllForEvent(eventId, req.user.role)
+        return this.categoryService.findAllForEvent(eventId, role)
     }
 
     @Roles('ADMIN')
@@ -45,9 +41,9 @@ export class CategoryController {
     @Get('categories/:id')
     async findOne(
         @Param('id') id: string,
-        @Req() req: AuthenticatedRequest
+        @CurrentUser('role') role: string
     ) {
-        return this.categoryService.findOne(id, req.user.role)
+        return this.categoryService.findOne(id, role)
     }
 
     @Roles('ADMIN')

@@ -7,12 +7,14 @@ import CoachCard from "@/components/antrenori/CoachCard";
 import AddCoachModal from "@/components/antrenori/AddCoachModal";
 import EditCoachModal from "@/components/antrenori/EditCoachModal";
 import api from "@/lib/axios";
-import { useAuthStore } from "@/store/auth.store";
 import { Coach } from "@/types";
+import { getErrorMessage } from "@/lib/error";
+import { useCanManage } from "@/lib/hooks/useCanManage";
+import { formatFullName } from "@/lib/utils";
+import LoadingState from "@/components/ui/LoadingState";
 
 export default function AntrenoriPage() {
-	const user = useAuthStore((s) => s.user);
-	const canManage = user?.role === "ADMIN";
+	const canManage = useCanManage();
 
 	const [coaches, setCoaches] = useState<Coach[]>([]);
 	const [loading, setLoading] = useState(true);
@@ -37,9 +39,7 @@ export default function AntrenoriPage() {
 	}, []);
 
 	const handleDelete = async (coach: Coach) => {
-		const fullName =
-			`${coach.firstName ?? ""} ${coach.lastName ?? ""}`.trim() ||
-			coach.email;
+		const fullName = formatFullName(coach.firstName, coach.lastName, coach.email);
 		if (!window.confirm(`Ștergi antrenorul ${fullName}?`)) return;
 
 		setDeleteError("");
@@ -47,11 +47,9 @@ export default function AntrenoriPage() {
 			await api.delete(`/coaches/${coach.id}`);
 			setCoaches((prev) => prev.filter((c) => c.id !== coach.id));
 		} catch (err: unknown) {
-			const message =
-				(err as { response?: { data?: { message?: string } } })
-					?.response?.data?.message ??
-				"Nu s-a putut șterge antrenorul.";
-			setDeleteError(Array.isArray(message) ? message.join(", ") : message);
+			setDeleteError(
+				getErrorMessage(err, "Nu s-a putut șterge antrenorul."),
+			);
 		}
 	};
 
@@ -98,7 +96,7 @@ export default function AntrenoriPage() {
 			)}
 
 			{loading ? (
-				<div className="text-sm text-[#8896b3]">Se încarcă...</div>
+				<LoadingState className="text-[#8896b3]" />
 			) : list.length === 0 ? (
 				<div className="rounded-xl border border-[#e8ecf5] bg-white p-6 text-sm text-[#8896b3]">
 					Niciun antrenor găsit.

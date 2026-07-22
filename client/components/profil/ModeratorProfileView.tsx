@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import api from "@/lib/axios";
 import { ModeratorProfileStats } from "@/types";
 import StatCard from "@/components/ui/StatCard";
+import LoadingState from "@/components/ui/LoadingState";
 
 export default function ModeratorProfileView() {
 	const [stats, setStats] = useState<ModeratorProfileStats | null>(null);
@@ -30,7 +31,7 @@ export default function ModeratorProfileView() {
 	}, []);
 
 	if (loading) {
-		return <div className="text-sm text-[#8896b3]">Se încarcă...</div>;
+		return <LoadingState className="text-[#8896b3]" />;
 	}
 	if (!stats) {
 		return (

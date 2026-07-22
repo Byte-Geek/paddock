@@ -4,34 +4,25 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import api from "@/lib/axios";
-import { useAuthStore } from "@/store/auth.store";
 import { Category, CompetitionEvent, EventStatus, ProtocolTemplate } from "@/types";
 import CompetitionFormModal from "@/components/competitii/CompetitionFormModal";
 import Badge from "@/components/ui/Badge";
+import {
+	EVENT_STATUS_LABELS,
+	EVENT_STATUS_VARIANTS,
+	EVENT_STATUS_OPTIONS,
+} from "@/lib/constants/event-status";
+import { getErrorMessage } from "@/lib/error";
+import { useCanManage } from "@/lib/hooks/useCanManage";
+import { formatFullName } from "@/lib/utils";
+import LoadingState from "@/components/ui/LoadingState";
+import EmptyState from "@/components/ui/EmptyState";
 
-const statusLabels: Record<EventStatus, string> = {
-	DRAFT: "Ciornă",
-	PUBLISHED: "Publicată",
-	ONGOING: "În desfășurare",
-	COMPLETED: "Finalizată",
-};
-
-const statusVariants: Record<
-	EventStatus,
-	"gray" | "warning" | "success" | "danger" | "blue"
-> = {
-	DRAFT: "gray",
-	PUBLISHED: "blue",
-	ONGOING: "warning",
-	COMPLETED: "success",
-};
-
-const statusOptions: EventStatus[] = [
-	"DRAFT",
-	"PUBLISHED",
-	"ONGOING",
-	"COMPLETED",
-];
+const statusLabels = EVENT_STATUS_LABELS;
+const statusVariants = EVENT_STATUS_VARIANTS;
+const statusOptions: EventStatus[] = EVENT_STATUS_OPTIONS.map(
+	(o) => o.value,
+);
 
 const nextStatus: Partial<Record<EventStatus, EventStatus>> = {
 	DRAFT: "PUBLISHED",
@@ -48,8 +39,7 @@ const nextStatusLabel: Partial<Record<EventStatus, string>> = {
 export default function EventManagePage() {
 	const params = useParams<{ id: string }>();
 	const router = useRouter();
-	const user = useAuthStore((s) => s.user);
-	const canManage = user?.role === "ADMIN";
+	const canManage = useCanManage();
 
 	const [event, setEvent] = useState<CompetitionEvent | null>(null);
 	const [categories, setCategories] = useState<Category[]>([]);
@@ -104,11 +94,7 @@ export default function EventManagePage() {
 			setTemplateId("");
 			setAdding(false);
 		} catch (err: unknown) {
-			const message =
-				(err as { response?: { data?: { message?: string } } })
-					?.response?.data?.message ??
-				"Nu s-a putut crea categoria.";
-			setError(Array.isArray(message) ? message.join(", ") : message);
+			setError(getErrorMessage(err, "Nu s-a putut crea categoria."));
 		} finally {
 			setSaving(false);
 		}
@@ -125,18 +111,16 @@ export default function EventManagePage() {
 			);
 			setEvent(data);
 		} catch (err: unknown) {
-			const message =
-				(err as { response?: { data?: { message?: string } } })
-					?.response?.data?.message ??
-				"Nu s-a putut schimba starea competiției.";
-			setError(Array.isArray(message) ? message.join(", ") : message);
+			setError(
+				getErrorMessage(err, "Nu s-a putut schimba starea competiției."),
+			);
 		} finally {
 			setStatusSaving(false);
 		}
 	};
 
 	if (loading) {
-		return <div className="text-sm text-[#6b7d92]">Se încarcă...</div>;
+		return <LoadingState />;
 	}
 
 	const isDraft = event?.status === "DRAFT";
@@ -203,10 +187,12 @@ export default function EventManagePage() {
 							Secretari:{" "}
 							{event?.secretaries && event.secretaries.length > 0
 								? event.secretaries
-										.map(
-											(s) =>
-												`${s.firstName ?? ""} ${s.lastName ?? ""}`.trim() ||
+										.map((s) =>
+											formatFullName(
+												s.firstName,
+												s.lastName,
 												s.email,
+											),
 										)
 										.join(", ")
 								: "niciunul asignat"}
@@ -305,9 +291,9 @@ export default function EventManagePage() {
 			)}
 
 			{categories.length === 0 ? (
-				<div className="rounded-[10px] border border-[#e2e8f0] bg-white p-6 text-sm text-[#6b7d92]">
+				<EmptyState>
 					Nicio categorie creată încă pentru acest eveniment.
-				</div>
+				</EmptyState>
 			) : (
 				<div className="flex flex-col gap-3">
 					{categories.map((c) => (

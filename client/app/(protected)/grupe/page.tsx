@@ -7,12 +7,13 @@ import GroupCard from "@/components/grupe/GroupCard";
 import GroupModal from "@/components/grupe/GroupModal";
 import GroupFormModal from "@/components/grupe/GroupFormModal";
 import api from "@/lib/axios";
-import { useAuthStore } from "@/store/auth.store";
 import { Group } from "@/types";
+import { getErrorMessage } from "@/lib/error";
+import { useCanManage } from "@/lib/hooks/useCanManage";
+import LoadingState from "@/components/ui/LoadingState";
 
 export default function GrupePage() {
-	const user = useAuthStore((s) => s.user);
-	const canManage = user?.role === "ADMIN";
+	const canManage = useCanManage();
 
 	const [groups, setGroups] = useState<Group[]>([]);
 	const [loading, setLoading] = useState(true);
@@ -45,11 +46,7 @@ export default function GrupePage() {
 			await api.delete(`/groups/${group.id}`);
 			setGroups((prev) => prev.filter((g) => g.id !== group.id));
 		} catch (err: unknown) {
-			const message =
-				(err as { response?: { data?: { message?: string } } })
-					?.response?.data?.message ??
-				"Nu s-a putut șterge grupa.";
-			setActionError(Array.isArray(message) ? message.join(", ") : message);
+			setActionError(getErrorMessage(err, "Nu s-a putut șterge grupa."));
 		}
 	};
 
@@ -90,7 +87,7 @@ export default function GrupePage() {
 			)}
 
 			{loading ? (
-				<div className="text-sm text-[#8896b3]">Se încarcă...</div>
+				<LoadingState className="text-[#8896b3]" />
 			) : list.length === 0 ? (
 				<div className="rounded-xl border border-[#e8ecf5] bg-white p-6 text-sm text-[#8896b3]">
 					Nicio grupă găsită.

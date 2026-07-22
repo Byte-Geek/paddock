@@ -26,6 +26,14 @@ export function cn(...classes: (string | undefined | false | null)[]): string {
 	return classes.filter(Boolean).join(" ");
 }
 
+export function formatFullName(
+	firstName: string | null | undefined,
+	lastName: string | null | undefined,
+	fallback: string,
+): string {
+	return `${firstName ?? ""} ${lastName ?? ""}`.trim() || fallback;
+}
+
 export function formatDate(date: string | Date | null): {
 	day: string;
 	month: string;

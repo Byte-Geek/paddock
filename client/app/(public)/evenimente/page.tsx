@@ -4,9 +4,12 @@ import { useEffect, useState } from "react";
 import PageHeader from "@/components/layout/PageHeader";
 import TabBar from "@/components/ui/TabBar";
 import Badge from "@/components/ui/Badge";
+import LoadingState from "@/components/ui/LoadingState";
+import EmptyState from "@/components/ui/EmptyState";
 import { MONTHS } from "@/lib/utils";
 import api from "@/lib/axios";
 import { CompetitionEvent } from "@/types";
+import { EVENT_STATUS_VARIANTS } from "@/lib/constants/event-status";
 
 const statusLabels: Record<string, string> = {
 	DRAFT: "Ciornă",
@@ -15,15 +18,7 @@ const statusLabels: Record<string, string> = {
 	COMPLETED: "Finalizat",
 };
 
-const statusVariants: Record<
-	string,
-	"gray" | "warning" | "success" | "danger" | "blue"
-> = {
-	DRAFT: "gray",
-	PUBLISHED: "blue",
-	ONGOING: "warning",
-	COMPLETED: "success",
-};
+const statusVariants = EVENT_STATUS_VARIANTS;
 
 export default function EvenimentePage() {
 	const [events, setEvents] = useState<CompetitionEvent[]>([]);
@@ -75,11 +70,9 @@ export default function EvenimentePage() {
 			/>
 
 			{loading ? (
-				<div className="text-sm text-[#6b7d92]">Se încarcă...</div>
+				<LoadingState />
 			) : list.length === 0 ? (
-				<div className="rounded-[10px] border border-[#e2e8f0] bg-white p-6 text-sm text-[#6b7d92]">
-					Niciun eveniment găsit.
-				</div>
+				<EmptyState>Niciun eveniment găsit.</EmptyState>
 			) : (
 				<div className="flex flex-col gap-3">
 					{list.map((e) => {

@@ -6,8 +6,10 @@ import PageHeader from "@/components/layout/PageHeader";
 import Badge from "@/components/ui/Badge";
 import ProtocolFormModal from "@/components/protocoale/ProtocolFormModal";
 import api from "@/lib/axios";
-import { useAuthStore } from "@/store/auth.store";
 import { ProtocolTemplate } from "@/types";
+import { useCanManage } from "@/lib/hooks/useCanManage";
+import LoadingState from "@/components/ui/LoadingState";
+import EmptyState from "@/components/ui/EmptyState";
 
 const algorithmLabels: Record<string, string> = {
 	SUM: "Sumă",
@@ -17,8 +19,7 @@ const algorithmLabels: Record<string, string> = {
 };
 
 export default function ProtocoalePage() {
-	const user = useAuthStore((s) => s.user);
-	const canManage = user?.role === "ADMIN";
+	const canManage = useCanManage();
 
 	const [templates, setTemplates] = useState<ProtocolTemplate[]>([]);
 	const [loading, setLoading] = useState(true);
@@ -59,11 +60,9 @@ export default function ProtocoalePage() {
 			/>
 
 			{loading ? (
-				<div className="text-sm text-[#6b7d92]">Se încarcă...</div>
+				<LoadingState />
 			) : templates.length === 0 ? (
-				<div className="rounded-[10px] border border-[#e2e8f0] bg-white p-6 text-sm text-[#6b7d92]">
-					Niciun protocol găsit.
-				</div>
+				<EmptyState>Niciun protocol găsit.</EmptyState>
 			) : (
 				<div className="bg-white rounded-[10px] border border-[#e2e8f0] overflow-hidden">
 					<table className="w-full text-sm">

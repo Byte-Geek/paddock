@@ -5,13 +5,8 @@ import { useAuthStore } from "@/store/auth.store";
 import api from "@/lib/axios";
 import { initials } from "@/lib/utils";
 import { User } from "@/types";
-
-const roleLabels: Record<string, string> = {
-	ADMIN: "Administrator",
-	MODERATOR: "Moderator",
-	COACH: "Antrenor",
-	ATHLETE: "Sportiv",
-};
+import { getErrorMessage } from "@/lib/error";
+import { ROLE_LABELS as roleLabels } from "@/lib/constants/roles";
 
 export default function ContPage() {
 	const user = useAuthStore((s) => s.user);
@@ -40,11 +35,7 @@ export default function ContPage() {
 			setSaved(true);
 			setTimeout(() => setSaved(false), 2000);
 		} catch (err: unknown) {
-			const message =
-				(err as { response?: { data?: { message?: string } } })
-					?.response?.data?.message ??
-				"Nu s-au putut salva modificările.";
-			setError(Array.isArray(message) ? message.join(", ") : message);
+			setError(getErrorMessage(err, "Nu s-au putut salva modificările."));
 		} finally {
 			setSaving(false);
 		}

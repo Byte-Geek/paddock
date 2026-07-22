@@ -6,7 +6,6 @@ import {
     HttpCode,
     HttpStatus,
     UseGuards,
-    Req,
     NotFoundException,
 } from '@nestjs/common'
 import { AuthService } from './auth.service'
@@ -17,10 +16,7 @@ import { LogInDto } from './dto/login.dto'
 
 import { UserService } from '../user/user.service'
 import { Public } from './decorators/public.decorator'
-
-interface AuthenticatedRequest {
-    user: { email: string; sub: string; role: string }
-}
+import { CurrentUser } from './decorators/current-user.decorator'
 
 @Controller('auth')
 export class AuthController {
@@ -42,17 +38,17 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     @Post('refresh')
     async refresh(
-        @Req() req: AuthenticatedRequest
+        @CurrentUser('email') email: string
     ): Promise<{ access_token: string }> {
-        return this.authService.refresh(req.user.email)
+        return this.authService.refresh(email)
     }
 
     @UseGuards(AuthGuard)
     @Get('profile')
     async getProfile(
-        @Req() req: AuthenticatedRequest
+        @CurrentUser('email') email: string
     ): Promise<{ email: string; name: string | null; role: string }> {
-        const user = await this.UserService.user({ email: req.user.email })
+        const user = await this.UserService.user({ email })
         if (!user) {
             throw new NotFoundException('User not found')
         }

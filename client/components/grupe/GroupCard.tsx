@@ -1,5 +1,5 @@
 import { Group } from "@/types";
-import { initials } from "@/lib/utils";
+import { initials, formatFullName } from "@/lib/utils";
 
 interface GroupCardProps {
 	group: Group;
@@ -14,9 +14,11 @@ export default function GroupCard({
 	onEdit,
 	onDelete,
 }: GroupCardProps) {
-	const coachName =
-		`${group.coach.firstName ?? ""} ${group.coach.lastName ?? ""}`.trim() ||
-		group.coach.email;
+	const coachName = formatFullName(
+		group.coach.firstName,
+		group.coach.lastName,
+		group.coach.email,
+	);
 
 	return (
 		<div className="bg-white rounded-xl border border-[#e8ecf5] p-5 flex flex-col gap-3">

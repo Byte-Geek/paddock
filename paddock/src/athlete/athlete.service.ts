@@ -9,6 +9,7 @@ import { PrismaService } from '../prisma.service'
 import { CreateAthleteDto } from './dto/create-athlete.dto'
 import { UpdateAthleteDto } from './dto/update-athlete.dto'
 import { AthleteDto } from './dto/athlete.dto'
+import { userNameSelect } from '../common/prisma-selects/user-name.select'
 
 @Injectable()
 export class AthleteService {
@@ -19,7 +20,7 @@ export class AthleteService {
             where: { user: { role: 'ATHLETE' } },
             include: {
                 user: {
-                    select: { firstName: true, lastName: true, email: true },
+                    select: userNameSelect,
                 },
                 groups: {
                     where: { leftAt: null },
@@ -70,9 +71,7 @@ export class AthleteService {
                 },
             },
             select: {
-                firstName: true,
-                lastName: true,
-                email: true,
+                ...userNameSelect,
                 athlete: {
                     select: {
                         id: true,
@@ -121,9 +120,7 @@ export class AthleteService {
                 lastName: dto.lastName,
             },
             select: {
-                firstName: true,
-                lastName: true,
-                email: true,
+                ...userNameSelect,
                 athlete: {
                     select: {
                         id: true,

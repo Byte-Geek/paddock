@@ -5,6 +5,7 @@ import api from "@/lib/axios";
 import { AthleteProfileStats } from "@/types";
 import MedalsSummary from "@/components/profil/MedalsSummary";
 import ParticipationHistoryTable from "@/components/profil/ParticipationHistoryTable";
+import LoadingState from "@/components/ui/LoadingState";
 
 export default function AthleteProfileView() {
 	const [stats, setStats] = useState<AthleteProfileStats | null>(null);
@@ -28,7 +29,7 @@ export default function AthleteProfileView() {
 	}, []);
 
 	if (loading) {
-		return <div className="text-sm text-[#8896b3]">Se încarcă...</div>;
+		return <LoadingState className="text-[#8896b3]" />;
 	}
 	if (!stats) {
 		return (

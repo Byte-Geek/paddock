@@ -1,5 +1,5 @@
 import { Athlete } from "@/types";
-import { initials } from "@/lib/utils";
+import { initials, formatFullName } from "@/lib/utils";
 
 interface AthleteGridProps {
 	athletes: Athlete[];
@@ -23,9 +23,7 @@ export default function AthleteGrid({
 	return (
 		<div className="grid grid-cols-4 gap-4">
 			{athletes.map((a) => {
-				const name =
-					`${a.firstName ?? ""} ${a.lastName ?? ""}`.trim() ||
-					a.email;
+				const name = formatFullName(a.firstName, a.lastName, a.email);
 				return (
 					<div
 						key={a.id}

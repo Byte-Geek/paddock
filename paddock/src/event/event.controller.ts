@@ -8,32 +8,28 @@ import {
     Param,
     Patch,
     Post,
-    Req,
 } from '@nestjs/common'
 import { EventService } from './event.service'
 import { CreateEventDto } from './dto/create-event.dto'
 import { UpdateEventDto } from './dto/update-event.dto'
 import { Roles } from '../auth/decorators/roles.decorator'
-
-interface AuthenticatedRequest {
-    user: { email: string; sub: string; role: string }
-}
+import { CurrentUser } from '../auth/decorators/current-user.decorator'
 
 @Controller('events')
 export class EventController {
     constructor(private readonly eventService: EventService) {}
 
     @Get()
-    async findAll(@Req() req: AuthenticatedRequest) {
-        return this.eventService.findAll(req.user.role)
+    async findAll(@CurrentUser('role') role: string) {
+        return this.eventService.findAll(role)
     }
 
     @Get(':id')
     async findOne(
         @Param('id') id: string,
-        @Req() req: AuthenticatedRequest
+        @CurrentUser('role') role: string
     ) {
-        return this.eventService.findOne(id, req.user.role)
+        return this.eventService.findOne(id, role)
     }
 
     @Roles('ADMIN')

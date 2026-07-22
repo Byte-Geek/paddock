@@ -5,16 +5,12 @@ import {
     Get,
     Patch,
     Query,
-    Req,
 } from '@nestjs/common'
 import { UserService } from './user.service'
 import { UpdateProfileDto } from './dto/update-profile.dto'
 import { Roles } from '../auth/decorators/roles.decorator'
 import { Role } from '../generated/prisma/enums'
-
-interface AuthenticatedRequest {
-    user: { email: string; sub: string; role: string }
-}
+import { CurrentUser } from '../auth/decorators/current-user.decorator'
 
 @Controller('users')
 export class UserController {
@@ -31,8 +27,8 @@ export class UserController {
     }
 
     @Get('me')
-    async getMe(@Req() req: AuthenticatedRequest) {
-        const user = await this.userService.user({ id: req.user.sub })
+    async getMe(@CurrentUser('sub') userId: string) {
+        const user = await this.userService.user({ id: userId })
         if (!user) return null
         const { password: _password, ...safeUser } = user
         return safeUser
@@ -40,19 +36,19 @@ export class UserController {
 
     @Patch('me')
     async updateMe(
-        @Req() req: AuthenticatedRequest,
+        @CurrentUser('sub') userId: string,
         @Body() dto: UpdateProfileDto
     ) {
         if (dto.email) {
             const existing = await this.userService.user({
                 email: dto.email,
             })
-            if (existing && existing.id !== req.user.sub) {
+            if (existing && existing.id !== userId) {
                 throw new ConflictException('Email already in use')
             }
         }
 
-        const updated = await this.userService.updateUser(req.user.sub, {
+        const updated = await this.userService.updateUser(userId, {
             email: dto.email,
             firstName: dto.firstName,
             lastName: dto.lastName,

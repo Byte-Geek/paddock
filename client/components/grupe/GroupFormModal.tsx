@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import api from "@/lib/axios";
 import { Coach, Group } from "@/types";
+import { getErrorMessage } from "@/lib/error";
+import { formatFullName } from "@/lib/utils";
 
 interface GroupFormModalProps {
 	group: Group | null;
@@ -50,11 +52,7 @@ export default function GroupFormModal({
 			onSaved(data);
 			onClose();
 		} catch (err: unknown) {
-			const message =
-				(err as { response?: { data?: { message?: string } } })
-					?.response?.data?.message ??
-				"Nu s-a putut salva grupa.";
-			setError(Array.isArray(message) ? message.join(", ") : message);
+			setError(getErrorMessage(err, "Nu s-a putut salva grupa."));
 		} finally {
 			setSaving(false);
 		}
@@ -117,8 +115,7 @@ export default function GroupFormModal({
 							)}
 							{coaches.map((c) => (
 								<option key={c.id} value={c.id}>
-									{`${c.firstName ?? ""} ${c.lastName ?? ""}`.trim() ||
-										c.email}
+									{formatFullName(c.firstName, c.lastName, c.email)}
 								</option>
 							))}
 						</select>

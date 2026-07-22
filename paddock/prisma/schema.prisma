@@ -184,6 +184,9 @@ model ProtocolTemplate {
 
   active Boolean @default(true)
 
+  pdfUrl      String?
+  pdfFileName String?
+
   elements   ProtocolElement[]
   categories Category[]
 

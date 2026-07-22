@@ -7,9 +7,13 @@ import GroupCard from "@/components/grupe/GroupCard";
 import GroupModal from "@/components/grupe/GroupModal";
 import GroupFormModal from "@/components/grupe/GroupFormModal";
 import api from "@/lib/axios";
+import { useAuthStore } from "@/store/auth.store";
 import { Group } from "@/types";
 
 export default function GrupePage() {
+	const user = useAuthStore((s) => s.user);
+	const canManage = user?.role === "ADMIN";
+
 	const [groups, setGroups] = useState<Group[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [q, setQ] = useState("");
@@ -59,12 +63,14 @@ export default function GrupePage() {
 				title="Grupe"
 				subtitle="Categorii de pregătire, cu sportivi și antrenori responsabili."
 				actions={
-					<button
-						onClick={() => setAdding(true)}
-						className="bg-[#4a7adb] hover:bg-[#3a6acb] text-white text-sm font-semibold px-4 py-2 rounded-lg transition"
-					>
-						+ Adaugă grupă
-					</button>
+					canManage && (
+						<button
+							onClick={() => setAdding(true)}
+							className="bg-[#4a7adb] hover:bg-[#3a6acb] text-white text-sm font-semibold px-4 py-2 rounded-lg transition"
+						>
+							+ Adaugă grupă
+						</button>
+					)
 				}
 			/>
 
@@ -96,8 +102,16 @@ export default function GrupePage() {
 							key={g.id}
 							group={g}
 							onDetails={() => setOpenGroup(g)}
-							onEdit={() => setEditingGroup(g)}
-							onDelete={() => handleDelete(g)}
+							onEdit={
+								canManage
+									? () => setEditingGroup(g)
+									: undefined
+							}
+							onDelete={
+								canManage
+									? () => handleDelete(g)
+									: undefined
+							}
 						/>
 					))}
 				</div>
@@ -110,7 +124,7 @@ export default function GrupePage() {
 				/>
 			)}
 
-			{(adding || editingGroup) && (
+			{(adding || editingGroup) && canManage && (
 				<GroupFormModal
 					group={editingGroup}
 					onClose={() => {

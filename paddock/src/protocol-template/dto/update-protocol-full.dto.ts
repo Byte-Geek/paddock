@@ -3,12 +3,13 @@ import {
     IsNotEmpty,
     IsOptional,
     IsInt,
-    IsEnum,
-    IsBoolean,
+    ValidateNested,
+    IsArray,
 } from 'class-validator'
-import { ScoringAlgorithm } from '../../generated/prisma/enums'
+import { Type } from 'class-transformer'
+import { ProtocolElementInputDto } from './protocol-element-input.dto'
 
-export class UpdateProtocolTemplateDto {
+export class UpdateProtocolFullDto {
     @IsString()
     @IsNotEmpty()
     @IsOptional()
@@ -17,10 +18,6 @@ export class UpdateProtocolTemplateDto {
     @IsString()
     @IsOptional()
     level?: string
-
-    @IsString()
-    @IsOptional()
-    description?: string
 
     @IsInt()
     @IsOptional()
@@ -34,11 +31,8 @@ export class UpdateProtocolTemplateDto {
     @IsOptional()
     estimatedTimeSeconds?: number
 
-    @IsEnum(ScoringAlgorithm)
-    @IsOptional()
-    scoringAlgorithm?: ScoringAlgorithm
-
-    @IsBoolean()
-    @IsOptional()
-    active?: boolean
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => ProtocolElementInputDto)
+    elements: ProtocolElementInputDto[]
 }

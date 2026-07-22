@@ -3,8 +3,8 @@ import { initials } from "@/lib/utils";
 
 interface AthleteTableProps {
 	athletes: Athlete[];
-	onEdit: (athlete: Athlete) => void;
-	onDelete: (athlete: Athlete) => void;
+	onEdit?: (athlete: Athlete) => void;
+	onDelete?: (athlete: Athlete) => void;
 }
 
 export default function AthleteTable({
@@ -71,20 +71,24 @@ export default function AthleteTable({
 									)}
 								</td>
 								<td className="px-5 py-3 text-right whitespace-nowrap">
-									<button
-										onClick={() => onEdit(a)}
-										title="Editează"
-										className="text-xs text-[#8896b3] hover:text-[#4a7adb] transition p-1"
-									>
-										✏️
-									</button>
-									<button
-										onClick={() => onDelete(a)}
-										title="Șterge"
-										className="text-xs text-[#8896b3] hover:text-red-500 transition p-1"
-									>
-										🗑️
-									</button>
+									{onEdit && (
+										<button
+											onClick={() => onEdit(a)}
+											title="Editează"
+											className="text-xs text-[#8896b3] hover:text-[#4a7adb] transition p-1"
+										>
+											✏️
+										</button>
+									)}
+									{onDelete && (
+										<button
+											onClick={() => onDelete(a)}
+											title="Șterge"
+											className="text-xs text-[#8896b3] hover:text-red-500 transition p-1"
+										>
+											🗑️
+										</button>
+									)}
 								</td>
 							</tr>
 						);

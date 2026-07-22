@@ -12,6 +12,8 @@ import { StatsModule } from './stats/stats.module'
 import { EventModule } from './event/event.module'
 import { ProtocolTemplateModule } from './protocol-template/protocol-template.module'
 import { ProfileModule } from './profile/profile.module'
+import { CategoryModule } from './category/category.module'
+import { EvaluationModule } from './evaluation/evaluation.module'
 
 @Module({
     imports: [
@@ -26,6 +28,8 @@ import { ProfileModule } from './profile/profile.module'
         EventModule,
         ProtocolTemplateModule,
         ProfileModule,
+        CategoryModule,
+        EvaluationModule,
     ],
     controllers: [AppController],
     providers: [AppService],

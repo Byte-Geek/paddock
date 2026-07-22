@@ -7,41 +7,22 @@ import Modal, {
 	ModalFooter,
 } from "@/components/ui/Modal";
 import api from "@/lib/axios";
-import { ProtocolTemplate, ScoringAlgorithm } from "@/types";
+import { ProtocolTemplate } from "@/types";
 
 interface ProtocolFormModalProps {
-	template: ProtocolTemplate | null;
 	onClose: () => void;
 	onSaved: (template: ProtocolTemplate) => void;
 }
 
-const algorithmOptions: { value: ScoringAlgorithm; label: string }[] = [
-	{ value: "SUM", label: "Sumă" },
-	{ value: "AVERAGE", label: "Medie" },
-	{ value: "AVERAGE_DROP_HIGH_LOW", label: "Medie fără extreme" },
-	{ value: "WEIGHTED_SUM", label: "Sumă ponderată" },
-];
-
 export default function ProtocolFormModal({
-	template,
 	onClose,
 	onSaved,
 }: ProtocolFormModalProps) {
-	const [name, setName] = useState(template?.name ?? "");
-	const [level, setLevel] = useState(template?.level ?? "");
-	const [description, setDescription] = useState(
-		template?.description ?? "",
-	);
-	const [compositionYear, setCompositionYear] = useState(
-		template?.compositionYear?.toString() ?? "",
-	);
-	const [revisionYear, setRevisionYear] = useState(
-		template?.revisionYear?.toString() ?? "",
-	);
-	const [scoringAlgorithm, setScoringAlgorithm] = useState<ScoringAlgorithm>(
-		template?.scoringAlgorithm ?? "SUM",
-	);
-	const [active, setActive] = useState(template?.active ?? true);
+	const [name, setName] = useState("");
+	const [level, setLevel] = useState("");
+	const [description, setDescription] = useState("");
+	const [compositionYear, setCompositionYear] = useState("");
+	const [revisionYear, setRevisionYear] = useState("");
 	const [error, setError] = useState("");
 	const [saving, setSaving] = useState(false);
 
@@ -58,18 +39,11 @@ export default function ProtocolFormModal({
 					? Number(compositionYear)
 					: undefined,
 				revisionYear: revisionYear ? Number(revisionYear) : undefined,
-				scoringAlgorithm,
-				active,
 			};
-			const { data } = template
-				? await api.patch<ProtocolTemplate>(
-						`/protocol-templates/${template.id}`,
-						payload,
-					)
-				: await api.post<ProtocolTemplate>(
-						"/protocol-templates",
-						payload,
-					);
+			const { data } = await api.post<ProtocolTemplate>(
+				"/protocol-templates",
+				payload,
+			);
 			onSaved(data);
 			onClose();
 		} catch (err: unknown) {
@@ -85,10 +59,7 @@ export default function ProtocolFormModal({
 
 	return (
 		<Modal onClose={onClose}>
-			<ModalHeader
-				title={template ? "Editează protocol" : "Adaugă protocol"}
-				onClose={onClose}
-			/>
+			<ModalHeader title="Adaugă protocol" onClose={onClose} />
 			<form onSubmit={handleSubmit}>
 				<ModalBody>
 					<div className="flex flex-col gap-3">
@@ -158,36 +129,6 @@ export default function ProtocolFormModal({
 								/>
 							</div>
 						</div>
-
-						<div className="flex flex-col gap-1">
-							<label className="text-xs font-medium text-[#6b7d92]">
-								Algoritm de punctaj
-							</label>
-							<select
-								value={scoringAlgorithm}
-								onChange={(e) =>
-									setScoringAlgorithm(
-										e.target.value as ScoringAlgorithm,
-									)
-								}
-								className="border border-[#e2e8f0] rounded-lg px-3 py-2 text-sm outline-none focus:border-[#2a6aa6]"
-							>
-								{algorithmOptions.map((opt) => (
-									<option key={opt.value} value={opt.value}>
-										{opt.label}
-									</option>
-								))}
-							</select>
-						</div>
-
-						<label className="flex items-center gap-2 text-sm text-[#0e1f33]">
-							<input
-								type="checkbox"
-								checked={active}
-								onChange={(e) => setActive(e.target.checked)}
-							/>
-							Activ
-						</label>
 
 						{error && (
 							<div className="text-xs text-red-500">

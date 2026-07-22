@@ -3,8 +3,8 @@ import { initials } from "@/lib/utils";
 
 interface AthleteGridProps {
 	athletes: Athlete[];
-	onEdit: (athlete: Athlete) => void;
-	onDelete: (athlete: Athlete) => void;
+	onEdit?: (athlete: Athlete) => void;
+	onDelete?: (athlete: Athlete) => void;
 }
 
 export default function AthleteGrid({
@@ -58,20 +58,26 @@ export default function AthleteGrid({
 								))
 							)}
 						</div>
-						<div className="flex gap-2 pt-2 border-t border-[#e8ecf5] w-full justify-center">
-							<button
-								onClick={() => onEdit(a)}
-								className="text-xs text-[#8896b3] hover:text-[#4a7adb] transition"
-							>
-								✏️ Editează
-							</button>
-							<button
-								onClick={() => onDelete(a)}
-								className="text-xs text-[#8896b3] hover:text-red-500 transition"
-							>
-								🗑️ Șterge
-							</button>
-						</div>
+						{(onEdit || onDelete) && (
+							<div className="flex gap-2 pt-2 border-t border-[#e8ecf5] w-full justify-center">
+								{onEdit && (
+									<button
+										onClick={() => onEdit(a)}
+										className="text-xs text-[#8896b3] hover:text-[#4a7adb] transition"
+									>
+										✏️ Editează
+									</button>
+								)}
+								{onDelete && (
+									<button
+										onClick={() => onDelete(a)}
+										className="text-xs text-[#8896b3] hover:text-red-500 transition"
+									>
+										🗑️ Șterge
+									</button>
+								)}
+							</div>
+						)}
 					</div>
 				);
 			})}

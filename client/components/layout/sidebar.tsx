@@ -173,7 +173,7 @@ const navSections = [
 	generalSection,
 	{
 		label: "Moderator",
-		roles: ["ADMIN", "MODERATOR"],
+		roles: ["ADMIN"],
 		items: [
 			{ href: "/profil", label: "Profil", icon: profileIcon },
 			{ href: "/antrenori", label: "Antrenori", icon: groupsIcon },

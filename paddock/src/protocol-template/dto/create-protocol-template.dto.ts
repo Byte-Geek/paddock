@@ -4,7 +4,6 @@ import {
     IsOptional,
     IsInt,
     IsEnum,
-    IsBoolean,
 } from 'class-validator'
 import { ScoringAlgorithm } from '../../generated/prisma/enums'
 
@@ -36,8 +35,4 @@ export class CreateProtocolTemplateDto {
     @IsEnum(ScoringAlgorithm)
     @IsOptional()
     scoringAlgorithm?: ScoringAlgorithm
-
-    @IsBoolean()
-    @IsOptional()
-    active?: boolean
 }

@@ -7,9 +7,13 @@ import CompetitionCard from "@/components/competitii/CompetitionCard";
 import CompetitionModal from "@/components/competitii/CompetitionModal";
 import CompetitionFormModal from "@/components/competitii/CompetitionFormModal";
 import api from "@/lib/axios";
+import { useAuthStore } from "@/store/auth.store";
 import { CompetitionEvent } from "@/types";
 
 export default function CompetitiiPage() {
+	const user = useAuthStore((s) => s.user);
+	const canManage = user?.role === "ADMIN";
+
 	const [competitions, setCompetitions] = useState<CompetitionEvent[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [tab, setTab] = useState("upcoming");
@@ -46,12 +50,14 @@ export default function CompetitiiPage() {
 				title="Competiții"
 				subtitle="Calendar și rezultate ale evenimentelor sportive ale școlii"
 				actions={
-					<button
-						onClick={() => setCreating(true)}
-						className="bg-[#2a6aa6] hover:bg-[#205280] text-white text-sm font-semibold px-4 py-2 rounded-[10px] transition"
-					>
-						+ Creează competiție
-					</button>
+					canManage && (
+						<button
+							onClick={() => setCreating(true)}
+							className="bg-[#2a6aa6] hover:bg-[#205280] text-white text-sm font-semibold px-4 py-2 rounded-[10px] transition"
+						>
+							+ Creează competiție
+						</button>
+					)
 				}
 			/>
 
@@ -93,7 +99,7 @@ export default function CompetitiiPage() {
 				/>
 			)}
 
-			{creating && (
+			{creating && canManage && (
 				<CompetitionFormModal
 					competition={null}
 					onClose={() => setCreating(false)}

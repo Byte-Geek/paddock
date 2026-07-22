@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import PageHeader from "@/components/layout/PageHeader";
 import Badge from "@/components/ui/Badge";
 import ProtocolFormModal from "@/components/protocoale/ProtocolFormModal";
 import api from "@/lib/axios";
+import { useAuthStore } from "@/store/auth.store";
 import { ProtocolTemplate } from "@/types";
 
 const algorithmLabels: Record<string, string> = {
@@ -15,12 +17,12 @@ const algorithmLabels: Record<string, string> = {
 };
 
 export default function ProtocoalePage() {
+	const user = useAuthStore((s) => s.user);
+	const canManage = user?.role === "ADMIN";
+
 	const [templates, setTemplates] = useState<ProtocolTemplate[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [adding, setAdding] = useState(false);
-	const [editingTemplate, setEditingTemplate] =
-		useState<ProtocolTemplate | null>(null);
-	const [actionError, setActionError] = useState("");
 
 	useEffect(() => {
 		const loadTemplates = async () => {
@@ -39,42 +41,22 @@ export default function ProtocoalePage() {
 		loadTemplates();
 	}, []);
 
-	const handleDelete = async (template: ProtocolTemplate) => {
-		if (!window.confirm(`Ștergi protocolul ${template.name}?`)) return;
-
-		setActionError("");
-		try {
-			await api.delete(`/protocol-templates/${template.id}`);
-			setTemplates((prev) => prev.filter((t) => t.id !== template.id));
-		} catch (err: unknown) {
-			const message =
-				(err as { response?: { data?: { message?: string } } })
-					?.response?.data?.message ??
-				"Nu s-a putut șterge protocolul.";
-			setActionError(Array.isArray(message) ? message.join(", ") : message);
-		}
-	};
-
 	return (
 		<div>
 			<PageHeader
 				title="Protocoale"
 				subtitle="Șabloane de arbitraj folosite la evaluarea competițiilor."
 				actions={
-					<button
-						onClick={() => setAdding(true)}
-						className="bg-[#2a6aa6] hover:bg-[#205280] text-white text-sm font-semibold px-4 py-2 rounded-[10px] transition"
-					>
-						+ Adaugă protocol
-					</button>
+					canManage && (
+						<button
+							onClick={() => setAdding(true)}
+							className="bg-[#2a6aa6] hover:bg-[#205280] text-white text-sm font-semibold px-4 py-2 rounded-[10px] transition"
+						>
+							+ Adaugă protocol
+						</button>
+					)
 				}
 			/>
-
-			{actionError && (
-				<div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-2.5 text-sm text-red-600">
-					{actionError}
-				</div>
-			)}
 
 			{loading ? (
 				<div className="text-sm text-[#6b7d92]">Se încarcă...</div>
@@ -92,6 +74,7 @@ export default function ProtocoalePage() {
 									"Nivel",
 									"Algoritm",
 									"Elemente",
+									"Utilizări",
 									"Status",
 									"",
 								].map((h) => (
@@ -163,9 +146,12 @@ export default function ProtocoalePage() {
 									<td className="px-5 py-3 text-[#34495e] font-semibold">
 										{t.elementCount}
 									</td>
+									<td className="px-5 py-3 text-[#34495e] font-semibold">
+										{t.categoryCount}
+									</td>
 									<td className="px-5 py-3">
 										{t.active ? (
-											<Badge variant="success">
+											<Badge variant="warning">
 												Activ
 											</Badge>
 										) : (
@@ -175,25 +161,14 @@ export default function ProtocoalePage() {
 										)}
 									</td>
 									<td className="px-5 py-3">
-										<div className="flex items-center gap-1 justify-end">
-											<button
-												onClick={() =>
-													setEditingTemplate(t)
-												}
+										<div className="flex items-center justify-end">
+											<Link
+												href={`/protocoale/${t.id}`}
 												className="w-8 h-8 rounded-[6px] hover:bg-[#f1f7fc] text-[#6b7d92] hover:text-[#205280] grid place-items-center transition"
-												title="Editează"
+												title="Vizualizează"
 											>
-												✏️
-											</button>
-											<button
-												onClick={() =>
-													handleDelete(t)
-												}
-												className="w-8 h-8 rounded-[6px] hover:bg-red-50 text-[#6b7d92] hover:text-red-500 grid place-items-center transition"
-												title="Șterge"
-											>
-												🗑️
-											</button>
+												👁
+											</Link>
 										</div>
 									</td>
 								</tr>
@@ -203,21 +178,11 @@ export default function ProtocoalePage() {
 				</div>
 			)}
 
-			{(adding || editingTemplate) && (
+			{adding && canManage && (
 				<ProtocolFormModal
-					template={editingTemplate}
-					onClose={() => {
-						setAdding(false);
-						setEditingTemplate(null);
-					}}
+					onClose={() => setAdding(false)}
 					onSaved={(saved) =>
-						setTemplates((prev) =>
-							editingTemplate
-								? prev.map((t) =>
-										t.id === saved.id ? saved : t,
-									)
-								: [saved, ...prev],
-						)
+						setTemplates((prev) => [saved, ...prev])
 					}
 				/>
 			)}

@@ -1,0 +1,565 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import api from "@/lib/axios";
+import { useAuthStore } from "@/store/auth.store";
+import { Athlete, CategoryDetail, EvaluationDetail } from "@/types";
+
+interface ScoreRowState {
+	value: string;
+	correction: string;
+	remark: string;
+}
+
+export default function CategoryScoringPage() {
+	const params = useParams<{ id: string; categoryId: string }>();
+	const router = useRouter();
+	const user = useAuthStore((s) => s.user);
+	const canManage = user?.role === "ADMIN";
+
+	const [category, setCategory] = useState<CategoryDetail | null>(null);
+	const [athletes, setAthletes] = useState<Athlete[]>([]);
+	const [loading, setLoading] = useState(true);
+
+	const [addingReferee, setAddingReferee] = useState(false);
+	const [refFirstName, setRefFirstName] = useState("");
+	const [refLastName, setRefLastName] = useState("");
+	const [refLetterCode, setRefLetterCode] = useState("");
+
+	const [addingParticipation, setAddingParticipation] = useState(false);
+	const [selectedAthleteId, setSelectedAthleteId] = useState("");
+	const [horseName, setHorseName] = useState("");
+
+	const [participationId, setParticipationId] = useState("");
+	const [refereeId, setRefereeId] = useState("");
+	const [rows, setRows] = useState<Record<string, ScoreRowState>>({});
+	const [evaluation, setEvaluation] = useState<EvaluationDetail | null>(
+		null,
+	);
+	const [loadingEvaluation, setLoadingEvaluation] = useState(false);
+	const [saving, setSaving] = useState(false);
+	const [error, setError] = useState("");
+
+	const loadCategory = async () => {
+		try {
+			const { data } = await api.get<CategoryDetail>(
+				`/categories/${params.categoryId}`,
+			);
+			setCategory(data);
+		} catch (err) {
+			console.error("Failed to load category", err);
+			setError("Nu s-a putut încărca categoria.");
+		}
+	};
+
+	useEffect(() => {
+		const load = async () => {
+			try {
+				const [, athletesRes] = await Promise.all([
+					loadCategory(),
+					api.get<Athlete[]>("/athletes"),
+				]);
+				setAthletes(athletesRes.data);
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		load();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [params.categoryId]);
+
+	const emptyRows = (): Record<string, ScoreRowState> => {
+		const map: Record<string, ScoreRowState> = {};
+		category?.elements.forEach((el) => {
+			map[el.id] = { value: "", correction: "", remark: "" };
+		});
+		return map;
+	};
+
+	useEffect(() => {
+		const loadEvaluation = async () => {
+			if (!participationId || !refereeId) {
+				setEvaluation(null);
+				setRows(emptyRows());
+				return;
+			}
+			setLoadingEvaluation(true);
+			try {
+				const { data } = await api.get<EvaluationDetail | null>(
+					"/evaluations",
+					{ params: { participationId, categoryRefereeId: refereeId } },
+				);
+				setEvaluation(data);
+				const map = emptyRows();
+				if (data) {
+					for (const s of data.scores) {
+						map[s.elementId] = {
+							value: s.value ?? "",
+							correction: s.correction ?? "",
+							remark: s.remark ?? "",
+						};
+					}
+				}
+				setRows(map);
+			} catch (err) {
+				console.error("Failed to load evaluation", err);
+			} finally {
+				setLoadingEvaluation(false);
+			}
+		};
+
+		loadEvaluation();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [participationId, refereeId, category]);
+
+	const updateRow = (
+		elementId: string,
+		field: keyof ScoreRowState,
+		value: string,
+	) => {
+		setRows((prev) => ({
+			...prev,
+			[elementId]: { ...prev[elementId], [field]: value },
+		}));
+	};
+
+	const handleAddReferee = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		setError("");
+		try {
+			await api.post(`/categories/${params.categoryId}/referees`, {
+				firstName: refFirstName,
+				lastName: refLastName,
+				letterCode: refLetterCode,
+			});
+			setRefFirstName("");
+			setRefLastName("");
+			setRefLetterCode("");
+			setAddingReferee(false);
+			await loadCategory();
+		} catch (err: unknown) {
+			const message =
+				(err as { response?: { data?: { message?: string } } })
+					?.response?.data?.message ??
+				"Nu s-a putut adăuga arbitrul.";
+			setError(Array.isArray(message) ? message.join(", ") : message);
+		}
+	};
+
+	const handleAddParticipation = async (
+		e: React.FormEvent<HTMLFormElement>,
+	) => {
+		e.preventDefault();
+		setError("");
+		try {
+			await api.post(
+				`/categories/${params.categoryId}/participations`,
+				{ athleteId: selectedAthleteId, horseName: horseName || undefined },
+			);
+			setSelectedAthleteId("");
+			setHorseName("");
+			setAddingParticipation(false);
+			await loadCategory();
+		} catch (err: unknown) {
+			const message =
+				(err as { response?: { data?: { message?: string } } })
+					?.response?.data?.message ??
+				"Nu s-a putut înscrie sportivul.";
+			setError(Array.isArray(message) ? message.join(", ") : message);
+		}
+	};
+
+	const handleSave = async (finalized: boolean) => {
+		if (!category || !participationId || !refereeId) return;
+		setError("");
+		setSaving(true);
+		try {
+			const { data } = await api.put<EvaluationDetail>("/evaluations", {
+				participationId,
+				categoryRefereeId: refereeId,
+				finalized,
+				scores: category.elements.map((el) => ({
+					elementId: el.id,
+					value: rows[el.id]?.value
+						? Number(rows[el.id].value)
+						: undefined,
+					correction: rows[el.id]?.correction
+						? Number(rows[el.id].correction)
+						: undefined,
+					remark: rows[el.id]?.remark || undefined,
+				})),
+			});
+			setEvaluation(data);
+		} catch (err: unknown) {
+			const message =
+				(err as { response?: { data?: { message?: string } } })
+					?.response?.data?.message ??
+				"Nu s-a putut salva evaluarea.";
+			setError(Array.isArray(message) ? message.join(", ") : message);
+		} finally {
+			setSaving(false);
+		}
+	};
+
+	if (loading) {
+		return <div className="text-sm text-[#6b7d92]">Se încarcă...</div>;
+	}
+	if (!category) {
+		return (
+			<div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+				Categoria nu a fost găsită.
+			</div>
+		);
+	}
+
+	return (
+		<div className="flex flex-col gap-5">
+			<button
+				onClick={() => router.push(`/competitii/${params.id}`)}
+				className="text-sm text-[#2a6aa6] hover:underline self-start"
+			>
+				← Înapoi la eveniment
+			</button>
+
+			<div>
+				<h1 className="text-2xl font-bold text-[#0e1f33]">
+					{category.name}
+				</h1>
+				<p className="text-sm text-[#6b7d92] mt-1">
+					Protocol: {category.protocolTemplateName}
+				</p>
+			</div>
+
+			{error && (
+				<div className="rounded-lg border border-red-200 bg-red-50 px-4 py-2.5 text-sm text-red-600">
+					{error}
+				</div>
+			)}
+
+			{/* Referees */}
+			<div className="bg-white rounded-[10px] border border-[#e2e8f0] p-4">
+				<div className="flex items-center justify-between mb-2">
+					<h3 className="font-semibold text-[#0e1f33] text-sm">
+						Arbitri
+					</h3>
+					{canManage && (
+						<button
+							onClick={() => setAddingReferee((v) => !v)}
+							className="text-xs text-[#2a6aa6] hover:underline"
+						>
+							+ Adaugă arbitru
+						</button>
+					)}
+				</div>
+				{addingReferee && canManage && (
+					<form
+						onSubmit={handleAddReferee}
+						className="flex flex-wrap gap-2 items-end mb-3"
+					>
+						<input
+							value={refFirstName}
+							onChange={(e) => setRefFirstName(e.target.value)}
+							placeholder="Prenume"
+							required
+							className="border border-[#e2e8f0] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[#2a6aa6]"
+						/>
+						<input
+							value={refLastName}
+							onChange={(e) => setRefLastName(e.target.value)}
+							placeholder="Nume"
+							required
+							className="border border-[#e2e8f0] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[#2a6aa6]"
+						/>
+						<input
+							value={refLetterCode}
+							onChange={(e) =>
+								setRefLetterCode(e.target.value.toUpperCase())
+							}
+							placeholder="Literă (C, H...)"
+							required
+							maxLength={2}
+							className="border border-[#e2e8f0] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[#2a6aa6] w-32"
+						/>
+						<button
+							type="submit"
+							className="bg-[#2a6aa6] hover:bg-[#205280] text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition"
+						>
+							Salvează
+						</button>
+					</form>
+				)}
+				{category.referees.length === 0 ? (
+					<p className="text-xs text-[#8896b3]">
+						Niciun arbitru adăugat încă.
+					</p>
+				) : (
+					<div className="flex flex-wrap gap-2">
+						{category.referees.map((r) => (
+							<span
+								key={r.id}
+								className="text-xs bg-[#f1f7fc] text-[#205280] px-2 py-1 rounded-md"
+							>
+								{r.letterCode} — {r.firstName} {r.lastName}
+							</span>
+						))}
+					</div>
+				)}
+			</div>
+
+			{/* Participations */}
+			<div className="bg-white rounded-[10px] border border-[#e2e8f0] p-4">
+				<div className="flex items-center justify-between mb-2">
+					<h3 className="font-semibold text-[#0e1f33] text-sm">
+						Participanți
+					</h3>
+					{canManage && (
+						<button
+							onClick={() => setAddingParticipation((v) => !v)}
+							className="text-xs text-[#2a6aa6] hover:underline"
+						>
+							+ Înscrie sportiv
+						</button>
+					)}
+				</div>
+				{addingParticipation && canManage && (
+					<form
+						onSubmit={handleAddParticipation}
+						className="flex flex-wrap gap-2 items-end mb-3"
+					>
+						<select
+							value={selectedAthleteId}
+							onChange={(e) =>
+								setSelectedAthleteId(e.target.value)
+							}
+							required
+							className="border border-[#e2e8f0] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[#2a6aa6]"
+						>
+							<option value="">Alege sportiv</option>
+							{athletes.map((a) => (
+								<option key={a.id} value={a.id}>
+									{`${a.firstName ?? ""} ${a.lastName ?? ""}`.trim() ||
+										a.email}
+								</option>
+							))}
+						</select>
+						<input
+							value={horseName}
+							onChange={(e) => setHorseName(e.target.value)}
+							placeholder="Nume cal (opțional)"
+							className="border border-[#e2e8f0] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[#2a6aa6]"
+						/>
+						<button
+							type="submit"
+							className="bg-[#2a6aa6] hover:bg-[#205280] text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition"
+						>
+							Salvează
+						</button>
+					</form>
+				)}
+				{category.participations.length === 0 ? (
+					<p className="text-xs text-[#8896b3]">
+						Niciun sportiv înscris încă.
+					</p>
+				) : (
+					<div className="flex flex-wrap gap-2">
+						{category.participations.map((p) => (
+							<span
+								key={p.id}
+								className="text-xs bg-[#f1f7fc] text-[#205280] px-2 py-1 rounded-md"
+							>
+								{p.athleteName}
+								{p.horseName ? ` · ${p.horseName}` : ""}
+							</span>
+						))}
+					</div>
+				)}
+			</div>
+
+			{/* Scoring */}
+			<div className="bg-white rounded-[10px] border border-[#e2e8f0] p-4 flex flex-col gap-4">
+				<h3 className="font-semibold text-[#0e1f33] text-sm">
+					Notare
+				</h3>
+
+				<div className="flex flex-wrap gap-3">
+					<select
+						value={participationId}
+						onChange={(e) => setParticipationId(e.target.value)}
+						className="border border-[#e2e8f0] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[#2a6aa6]"
+					>
+						<option value="">Alege participant</option>
+						{category.participations.map((p) => (
+							<option key={p.id} value={p.id}>
+								{p.athleteName}
+								{p.horseName ? ` · ${p.horseName}` : ""}
+							</option>
+						))}
+					</select>
+					<select
+						value={refereeId}
+						onChange={(e) => setRefereeId(e.target.value)}
+						className="border border-[#e2e8f0] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[#2a6aa6]"
+					>
+						<option value="">Alege arbitru</option>
+						{category.referees.map((r) => (
+							<option key={r.id} value={r.id}>
+								{r.letterCode} — {r.firstName} {r.lastName}
+							</option>
+						))}
+					</select>
+				</div>
+
+				{!participationId || !refereeId ? (
+					<p className="text-xs text-[#8896b3]">
+						Alege un participant și un arbitru pentru a începe
+						notarea.
+					</p>
+				) : loadingEvaluation ? (
+					<div className="text-sm text-[#6b7d92]">
+						Se încarcă evaluarea...
+					</div>
+				) : (
+					<>
+						<div className="overflow-x-auto">
+							<table className="w-full text-sm border-collapse">
+								<thead className="bg-[#f4f6fb]">
+									<tr>
+										{[
+											"№",
+											"Element",
+											"Scor max",
+											"Notă",
+											"Corecție",
+											"Coef.",
+											"Observații",
+										].map((h) => (
+											<th
+												key={h}
+												className="text-left px-2 py-1.5 text-xs font-semibold text-[#6b7d92] border border-[#e2e8f0]"
+											>
+												{h}
+											</th>
+										))}
+									</tr>
+								</thead>
+								<tbody>
+									{category.elements.map((el) => (
+										<tr key={el.id}>
+											<td className="border border-[#e2e8f0] px-2 py-1.5 text-center font-semibold">
+												{el.order}
+											</td>
+											<td className="border border-[#e2e8f0] px-2 py-1.5">
+												{el.letters
+													? `${el.letters} — `
+													: ""}
+												{el.name}
+											</td>
+											<td className="border border-[#e2e8f0] px-2 py-1.5 text-center">
+												{el.maxScore}
+											</td>
+											<td className="border border-[#e2e8f0] p-0 w-20">
+												<input
+													type="number"
+													step="0.5"
+													disabled={!canManage}
+													value={
+														rows[el.id]?.value ??
+														""
+													}
+													onChange={(e) =>
+														updateRow(
+															el.id,
+															"value",
+															e.target.value,
+														)
+													}
+													className="w-full px-2 py-1.5 text-sm outline-none focus:bg-[#f1f7fc] disabled:bg-[#f8f9fb] disabled:text-[#6b7d92]"
+												/>
+											</td>
+											<td className="border border-[#e2e8f0] p-0 w-20">
+												<input
+													type="number"
+													step="0.5"
+													disabled={!canManage}
+													value={
+														rows[el.id]
+															?.correction ?? ""
+													}
+													onChange={(e) =>
+														updateRow(
+															el.id,
+															"correction",
+															e.target.value,
+														)
+													}
+													className="w-full px-2 py-1.5 text-sm outline-none focus:bg-[#f1f7fc] disabled:bg-[#f8f9fb] disabled:text-[#6b7d92]"
+												/>
+											</td>
+											<td className="border border-[#e2e8f0] px-2 py-1.5 text-center">
+												{Number(el.coefficient) === 2
+													? "2"
+													: ""}
+											</td>
+											<td className="border border-[#e2e8f0] p-0">
+												<input
+													disabled={!canManage}
+													value={
+														rows[el.id]?.remark ??
+														""
+													}
+													onChange={(e) =>
+														updateRow(
+															el.id,
+															"remark",
+															e.target.value,
+														)
+													}
+													className="w-full px-2 py-1.5 text-sm outline-none focus:bg-[#f1f7fc] disabled:bg-[#f8f9fb] disabled:text-[#6b7d92]"
+												/>
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</div>
+
+						{evaluation && (
+							<div className="text-sm text-[#0e1f33]">
+								Scor total:{" "}
+								<b>{evaluation.finalScore ?? "—"}</b>
+								{evaluation.percentage && (
+									<span className="text-[#6b7d92]">
+										{" "}
+										({Number(evaluation.percentage).toFixed(2)}
+										%)
+									</span>
+								)}
+							</div>
+						)}
+
+						{canManage && (
+							<div className="flex justify-end gap-2">
+								<button
+									onClick={() => handleSave(false)}
+									disabled={saving}
+									className="border border-[#b5d7f1] text-[#2a6aa6] disabled:opacity-50 text-sm font-semibold px-4 py-2 rounded-lg hover:bg-[#f1f7fc] transition"
+								>
+									{saving ? "Se salvează..." : "Salvează"}
+								</button>
+								<button
+									onClick={() => handleSave(true)}
+									disabled={saving}
+									className="bg-[#2a6aa6] hover:bg-[#205280] disabled:opacity-50 text-white text-sm font-semibold px-4 py-2 rounded-lg transition"
+								>
+									Finalizează
+								</button>
+							</div>
+						)}
+					</>
+				)}
+			</div>
+		</div>
+	);
+}

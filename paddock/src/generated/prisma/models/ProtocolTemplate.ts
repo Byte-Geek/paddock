@@ -48,6 +48,8 @@ export type ProtocolTemplateMinAggregateOutputType = {
   estimatedTimeSeconds: number | null
   scoringAlgorithm: $Enums.ScoringAlgorithm | null
   active: boolean | null
+  pdfUrl: string | null
+  pdfFileName: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -62,6 +64,8 @@ export type ProtocolTemplateMaxAggregateOutputType = {
   estimatedTimeSeconds: number | null
   scoringAlgorithm: $Enums.ScoringAlgorithm | null
   active: boolean | null
+  pdfUrl: string | null
+  pdfFileName: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -77,6 +81,8 @@ export type ProtocolTemplateCountAggregateOutputType = {
   scoringAlgorithm: number
   algorithmConfig: number
   active: number
+  pdfUrl: number
+  pdfFileName: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -105,6 +111,8 @@ export type ProtocolTemplateMinAggregateInputType = {
   estimatedTimeSeconds?: true
   scoringAlgorithm?: true
   active?: true
+  pdfUrl?: true
+  pdfFileName?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -119,6 +127,8 @@ export type ProtocolTemplateMaxAggregateInputType = {
   estimatedTimeSeconds?: true
   scoringAlgorithm?: true
   active?: true
+  pdfUrl?: true
+  pdfFileName?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -134,6 +144,8 @@ export type ProtocolTemplateCountAggregateInputType = {
   scoringAlgorithm?: true
   algorithmConfig?: true
   active?: true
+  pdfUrl?: true
+  pdfFileName?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -236,6 +248,8 @@ export type ProtocolTemplateGroupByOutputType = {
   scoringAlgorithm: $Enums.ScoringAlgorithm
   algorithmConfig: runtime.JsonValue | null
   active: boolean
+  pdfUrl: string | null
+  pdfFileName: string | null
   createdAt: Date
   updatedAt: Date
   _count: ProtocolTemplateCountAggregateOutputType | null
@@ -274,6 +288,8 @@ export type ProtocolTemplateWhereInput = {
   scoringAlgorithm?: Prisma.EnumScoringAlgorithmFilter<"ProtocolTemplate"> | $Enums.ScoringAlgorithm
   algorithmConfig?: Prisma.JsonNullableFilter<"ProtocolTemplate">
   active?: Prisma.BoolFilter<"ProtocolTemplate"> | boolean
+  pdfUrl?: Prisma.StringNullableFilter<"ProtocolTemplate"> | string | null
+  pdfFileName?: Prisma.StringNullableFilter<"ProtocolTemplate"> | string | null
   createdAt?: Prisma.DateTimeFilter<"ProtocolTemplate"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ProtocolTemplate"> | Date | string
   elements?: Prisma.ProtocolElementListRelationFilter
@@ -291,6 +307,8 @@ export type ProtocolTemplateOrderByWithRelationInput = {
   scoringAlgorithm?: Prisma.SortOrder
   algorithmConfig?: Prisma.SortOrderInput | Prisma.SortOrder
   active?: Prisma.SortOrder
+  pdfUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  pdfFileName?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   elements?: Prisma.ProtocolElementOrderByRelationAggregateInput
@@ -311,6 +329,8 @@ export type ProtocolTemplateWhereUniqueInput = Prisma.AtLeast<{
   scoringAlgorithm?: Prisma.EnumScoringAlgorithmFilter<"ProtocolTemplate"> | $Enums.ScoringAlgorithm
   algorithmConfig?: Prisma.JsonNullableFilter<"ProtocolTemplate">
   active?: Prisma.BoolFilter<"ProtocolTemplate"> | boolean
+  pdfUrl?: Prisma.StringNullableFilter<"ProtocolTemplate"> | string | null
+  pdfFileName?: Prisma.StringNullableFilter<"ProtocolTemplate"> | string | null
   createdAt?: Prisma.DateTimeFilter<"ProtocolTemplate"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ProtocolTemplate"> | Date | string
   elements?: Prisma.ProtocolElementListRelationFilter
@@ -328,6 +348,8 @@ export type ProtocolTemplateOrderByWithAggregationInput = {
   scoringAlgorithm?: Prisma.SortOrder
   algorithmConfig?: Prisma.SortOrderInput | Prisma.SortOrder
   active?: Prisma.SortOrder
+  pdfUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  pdfFileName?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ProtocolTemplateCountOrderByAggregateInput
@@ -351,6 +373,8 @@ export type ProtocolTemplateScalarWhereWithAggregatesInput = {
   scoringAlgorithm?: Prisma.EnumScoringAlgorithmWithAggregatesFilter<"ProtocolTemplate"> | $Enums.ScoringAlgorithm
   algorithmConfig?: Prisma.JsonNullableWithAggregatesFilter<"ProtocolTemplate">
   active?: Prisma.BoolWithAggregatesFilter<"ProtocolTemplate"> | boolean
+  pdfUrl?: Prisma.StringNullableWithAggregatesFilter<"ProtocolTemplate"> | string | null
+  pdfFileName?: Prisma.StringNullableWithAggregatesFilter<"ProtocolTemplate"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ProtocolTemplate"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"ProtocolTemplate"> | Date | string
 }
@@ -366,6 +390,8 @@ export type ProtocolTemplateCreateInput = {
   scoringAlgorithm?: $Enums.ScoringAlgorithm
   algorithmConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   active?: boolean
+  pdfUrl?: string | null
+  pdfFileName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   elements?: Prisma.ProtocolElementCreateNestedManyWithoutTemplateInput
@@ -383,6 +409,8 @@ export type ProtocolTemplateUncheckedCreateInput = {
   scoringAlgorithm?: $Enums.ScoringAlgorithm
   algorithmConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   active?: boolean
+  pdfUrl?: string | null
+  pdfFileName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   elements?: Prisma.ProtocolElementUncheckedCreateNestedManyWithoutTemplateInput
@@ -400,6 +428,8 @@ export type ProtocolTemplateUpdateInput = {
   scoringAlgorithm?: Prisma.EnumScoringAlgorithmFieldUpdateOperationsInput | $Enums.ScoringAlgorithm
   algorithmConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pdfUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pdfFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   elements?: Prisma.ProtocolElementUpdateManyWithoutTemplateNestedInput
@@ -417,6 +447,8 @@ export type ProtocolTemplateUncheckedUpdateInput = {
   scoringAlgorithm?: Prisma.EnumScoringAlgorithmFieldUpdateOperationsInput | $Enums.ScoringAlgorithm
   algorithmConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pdfUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pdfFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   elements?: Prisma.ProtocolElementUncheckedUpdateManyWithoutTemplateNestedInput
@@ -434,6 +466,8 @@ export type ProtocolTemplateCreateManyInput = {
   scoringAlgorithm?: $Enums.ScoringAlgorithm
   algorithmConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   active?: boolean
+  pdfUrl?: string | null
+  pdfFileName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -449,6 +483,8 @@ export type ProtocolTemplateUpdateManyMutationInput = {
   scoringAlgorithm?: Prisma.EnumScoringAlgorithmFieldUpdateOperationsInput | $Enums.ScoringAlgorithm
   algorithmConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pdfUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pdfFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -464,6 +500,8 @@ export type ProtocolTemplateUncheckedUpdateManyInput = {
   scoringAlgorithm?: Prisma.EnumScoringAlgorithmFieldUpdateOperationsInput | $Enums.ScoringAlgorithm
   algorithmConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pdfUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pdfFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -479,6 +517,8 @@ export type ProtocolTemplateCountOrderByAggregateInput = {
   scoringAlgorithm?: Prisma.SortOrder
   algorithmConfig?: Prisma.SortOrder
   active?: Prisma.SortOrder
+  pdfUrl?: Prisma.SortOrder
+  pdfFileName?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -499,6 +539,8 @@ export type ProtocolTemplateMaxOrderByAggregateInput = {
   estimatedTimeSeconds?: Prisma.SortOrder
   scoringAlgorithm?: Prisma.SortOrder
   active?: Prisma.SortOrder
+  pdfUrl?: Prisma.SortOrder
+  pdfFileName?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -513,6 +555,8 @@ export type ProtocolTemplateMinOrderByAggregateInput = {
   estimatedTimeSeconds?: Prisma.SortOrder
   scoringAlgorithm?: Prisma.SortOrder
   active?: Prisma.SortOrder
+  pdfUrl?: Prisma.SortOrder
+  pdfFileName?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -583,6 +627,8 @@ export type ProtocolTemplateCreateWithoutElementsInput = {
   scoringAlgorithm?: $Enums.ScoringAlgorithm
   algorithmConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   active?: boolean
+  pdfUrl?: string | null
+  pdfFileName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   categories?: Prisma.CategoryCreateNestedManyWithoutProtocolTemplateInput
@@ -599,6 +645,8 @@ export type ProtocolTemplateUncheckedCreateWithoutElementsInput = {
   scoringAlgorithm?: $Enums.ScoringAlgorithm
   algorithmConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   active?: boolean
+  pdfUrl?: string | null
+  pdfFileName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutProtocolTemplateInput
@@ -631,6 +679,8 @@ export type ProtocolTemplateUpdateWithoutElementsInput = {
   scoringAlgorithm?: Prisma.EnumScoringAlgorithmFieldUpdateOperationsInput | $Enums.ScoringAlgorithm
   algorithmConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pdfUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pdfFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categories?: Prisma.CategoryUpdateManyWithoutProtocolTemplateNestedInput
@@ -647,6 +697,8 @@ export type ProtocolTemplateUncheckedUpdateWithoutElementsInput = {
   scoringAlgorithm?: Prisma.EnumScoringAlgorithmFieldUpdateOperationsInput | $Enums.ScoringAlgorithm
   algorithmConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pdfUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pdfFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutProtocolTemplateNestedInput
@@ -663,6 +715,8 @@ export type ProtocolTemplateCreateWithoutCategoriesInput = {
   scoringAlgorithm?: $Enums.ScoringAlgorithm
   algorithmConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   active?: boolean
+  pdfUrl?: string | null
+  pdfFileName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   elements?: Prisma.ProtocolElementCreateNestedManyWithoutTemplateInput
@@ -679,6 +733,8 @@ export type ProtocolTemplateUncheckedCreateWithoutCategoriesInput = {
   scoringAlgorithm?: $Enums.ScoringAlgorithm
   algorithmConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   active?: boolean
+  pdfUrl?: string | null
+  pdfFileName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   elements?: Prisma.ProtocolElementUncheckedCreateNestedManyWithoutTemplateInput
@@ -711,6 +767,8 @@ export type ProtocolTemplateUpdateWithoutCategoriesInput = {
   scoringAlgorithm?: Prisma.EnumScoringAlgorithmFieldUpdateOperationsInput | $Enums.ScoringAlgorithm
   algorithmConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pdfUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pdfFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   elements?: Prisma.ProtocolElementUpdateManyWithoutTemplateNestedInput
@@ -727,6 +785,8 @@ export type ProtocolTemplateUncheckedUpdateWithoutCategoriesInput = {
   scoringAlgorithm?: Prisma.EnumScoringAlgorithmFieldUpdateOperationsInput | $Enums.ScoringAlgorithm
   algorithmConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pdfUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pdfFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   elements?: Prisma.ProtocolElementUncheckedUpdateManyWithoutTemplateNestedInput
@@ -783,6 +843,8 @@ export type ProtocolTemplateSelect<ExtArgs extends runtime.Types.Extensions.Inte
   scoringAlgorithm?: boolean
   algorithmConfig?: boolean
   active?: boolean
+  pdfUrl?: boolean
+  pdfFileName?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   elements?: boolean | Prisma.ProtocolTemplate$elementsArgs<ExtArgs>
@@ -801,6 +863,8 @@ export type ProtocolTemplateSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   scoringAlgorithm?: boolean
   algorithmConfig?: boolean
   active?: boolean
+  pdfUrl?: boolean
+  pdfFileName?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["protocolTemplate"]>
@@ -816,6 +880,8 @@ export type ProtocolTemplateSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   scoringAlgorithm?: boolean
   algorithmConfig?: boolean
   active?: boolean
+  pdfUrl?: boolean
+  pdfFileName?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["protocolTemplate"]>
@@ -831,11 +897,13 @@ export type ProtocolTemplateSelectScalar = {
   scoringAlgorithm?: boolean
   algorithmConfig?: boolean
   active?: boolean
+  pdfUrl?: boolean
+  pdfFileName?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ProtocolTemplateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "level" | "description" | "compositionYear" | "revisionYear" | "estimatedTimeSeconds" | "scoringAlgorithm" | "algorithmConfig" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["protocolTemplate"]>
+export type ProtocolTemplateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "level" | "description" | "compositionYear" | "revisionYear" | "estimatedTimeSeconds" | "scoringAlgorithm" | "algorithmConfig" | "active" | "pdfUrl" | "pdfFileName" | "createdAt" | "updatedAt", ExtArgs["result"]["protocolTemplate"]>
 export type ProtocolTemplateInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   elements?: boolean | Prisma.ProtocolTemplate$elementsArgs<ExtArgs>
   categories?: boolean | Prisma.ProtocolTemplate$categoriesArgs<ExtArgs>
@@ -861,6 +929,8 @@ export type $ProtocolTemplatePayload<ExtArgs extends runtime.Types.Extensions.In
     scoringAlgorithm: $Enums.ScoringAlgorithm
     algorithmConfig: runtime.JsonValue | null
     active: boolean
+    pdfUrl: string | null
+    pdfFileName: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["protocolTemplate"]>
@@ -1298,6 +1368,8 @@ export interface ProtocolTemplateFieldRefs {
   readonly scoringAlgorithm: Prisma.FieldRef<"ProtocolTemplate", 'ScoringAlgorithm'>
   readonly algorithmConfig: Prisma.FieldRef<"ProtocolTemplate", 'Json'>
   readonly active: Prisma.FieldRef<"ProtocolTemplate", 'Boolean'>
+  readonly pdfUrl: Prisma.FieldRef<"ProtocolTemplate", 'String'>
+  readonly pdfFileName: Prisma.FieldRef<"ProtocolTemplate", 'String'>
   readonly createdAt: Prisma.FieldRef<"ProtocolTemplate", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"ProtocolTemplate", 'DateTime'>
 }

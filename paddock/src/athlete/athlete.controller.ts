@@ -12,6 +12,7 @@ import {
 import { AthleteService } from './athlete.service'
 import { CreateAthleteDto } from './dto/create-athlete.dto'
 import { UpdateAthleteDto } from './dto/update-athlete.dto'
+import { Roles } from '../auth/decorators/roles.decorator'
 
 @Controller('athletes')
 export class AthleteController {
@@ -22,16 +23,19 @@ export class AthleteController {
         return this.athleteService.findAll()
     }
 
+    @Roles('ADMIN')
     @Post()
     async create(@Body() dto: CreateAthleteDto) {
         return this.athleteService.create(dto)
     }
 
+    @Roles('ADMIN')
     @Patch(':id')
     async update(@Param('id') id: string, @Body() dto: UpdateAthleteDto) {
         return this.athleteService.update(id, dto)
     }
 
+    @Roles('ADMIN')
     @Delete(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
     async remove(@Param('id') id: string) {

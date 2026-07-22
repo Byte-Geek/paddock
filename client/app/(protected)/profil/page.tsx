@@ -19,7 +19,7 @@ export default function ProfilPage() {
 
 			{user?.role === "ATHLETE" && <AthleteProfileView />}
 			{user?.role === "COACH" && <CoachProfileView />}
-			{(user?.role === "ADMIN" || user?.role === "MODERATOR") && (
+			{user?.role === "ADMIN" && (
 				<ModeratorProfileView />
 			)}
 		</div>

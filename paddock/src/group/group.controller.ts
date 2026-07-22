@@ -12,6 +12,7 @@ import {
 import { GroupService } from './group.service'
 import { CreateGroupDto } from './dto/create-group.dto'
 import { UpdateGroupDto } from './dto/update-group.dto'
+import { Roles } from '../auth/decorators/roles.decorator'
 
 @Controller('groups')
 export class GroupController {
@@ -27,16 +28,19 @@ export class GroupController {
         return this.groupService.findOne(id)
     }
 
+    @Roles('ADMIN')
     @Post()
     async create(@Body() dto: CreateGroupDto) {
         return this.groupService.create(dto)
     }
 
+    @Roles('ADMIN')
     @Patch(':id')
     async update(@Param('id') id: string, @Body() dto: UpdateGroupDto) {
         return this.groupService.update(id, dto)
     }
 
+    @Roles('ADMIN')
     @Delete(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
     async remove(@Param('id') id: string) {

@@ -7,9 +7,13 @@ import CoachCard from "@/components/antrenori/CoachCard";
 import AddCoachModal from "@/components/antrenori/AddCoachModal";
 import EditCoachModal from "@/components/antrenori/EditCoachModal";
 import api from "@/lib/axios";
+import { useAuthStore } from "@/store/auth.store";
 import { Coach } from "@/types";
 
 export default function AntrenoriPage() {
+	const user = useAuthStore((s) => s.user);
+	const canManage = user?.role === "ADMIN";
+
 	const [coaches, setCoaches] = useState<Coach[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [q, setQ] = useState("");
@@ -64,12 +68,14 @@ export default function AntrenoriPage() {
 				title="Antrenori"
 				subtitle="Cadrele didactice ale școlii. Gestionează contul și grupele asociate."
 				actions={
-					<button
-						onClick={() => setAdding(true)}
-						className="bg-[#4a7adb] hover:bg-[#3a6acb] text-white text-sm font-semibold px-4 py-2 rounded-lg transition"
-					>
-						+ Adaugă antrenor
-					</button>
+					canManage && (
+						<button
+							onClick={() => setAdding(true)}
+							className="bg-[#4a7adb] hover:bg-[#3a6acb] text-white text-sm font-semibold px-4 py-2 rounded-lg transition"
+						>
+							+ Adaugă antrenor
+						</button>
+					)
 				}
 			/>
 
@@ -103,14 +109,14 @@ export default function AntrenoriPage() {
 						<CoachCard
 							key={c.id}
 							coach={c}
-							onEdit={setEditingCoach}
-							onDelete={handleDelete}
+							onEdit={canManage ? setEditingCoach : undefined}
+							onDelete={canManage ? handleDelete : undefined}
 						/>
 					))}
 				</div>
 			)}
 
-			{adding && (
+			{adding && canManage && (
 				<AddCoachModal
 					onClose={() => setAdding(false)}
 					onCreated={(coach) =>
@@ -119,7 +125,7 @@ export default function AntrenoriPage() {
 				/>
 			)}
 
-			{editingCoach && (
+			{editingCoach && canManage && (
 				<EditCoachModal
 					coach={editingCoach}
 					onClose={() => setEditingCoach(null)}

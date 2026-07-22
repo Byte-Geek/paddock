@@ -8,6 +8,7 @@ import AthleteTable from "@/components/sportivi/AthleteTable";
 import AthleteGrid from "@/components/sportivi/AthleteGrid";
 import AthleteFormModal from "@/components/sportivi/AthleteFormModal";
 import api from "@/lib/axios";
+import { useAuthStore } from "@/store/auth.store";
 import { Athlete } from "@/types";
 
 const viewOptions = [
@@ -16,6 +17,9 @@ const viewOptions = [
 ];
 
 export default function SportiviPage() {
+	const user = useAuthStore((s) => s.user);
+	const canManage = user?.role === "ADMIN";
+
 	const [athletes, setAthletes] = useState<Athlete[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [q, setQ] = useState("");
@@ -71,12 +75,14 @@ export default function SportiviPage() {
 				title="Sportivi"
 				subtitle={`${list.length} sportivi`}
 				actions={
-					<button
-						onClick={() => setAdding(true)}
-						className="bg-[#4a7adb] hover:bg-[#3a6acb] text-white text-sm font-semibold px-4 py-2 rounded-lg transition"
-					>
-						+ Adaugă sportiv
-					</button>
+					canManage && (
+						<button
+							onClick={() => setAdding(true)}
+							className="bg-[#4a7adb] hover:bg-[#3a6acb] text-white text-sm font-semibold px-4 py-2 rounded-lg transition"
+						>
+							+ Adaugă sportiv
+						</button>
+					)
 				}
 			/>
 
@@ -105,18 +111,18 @@ export default function SportiviPage() {
 			) : view === "table" ? (
 				<AthleteTable
 					athletes={list}
-					onEdit={setEditingAthlete}
-					onDelete={handleDelete}
+					onEdit={canManage ? setEditingAthlete : undefined}
+					onDelete={canManage ? handleDelete : undefined}
 				/>
 			) : (
 				<AthleteGrid
 					athletes={list}
-					onEdit={setEditingAthlete}
-					onDelete={handleDelete}
+					onEdit={canManage ? setEditingAthlete : undefined}
+					onDelete={canManage ? handleDelete : undefined}
 				/>
 			)}
 
-			{(adding || editingAthlete) && (
+			{(adding || editingAthlete) && canManage && (
 				<AthleteFormModal
 					athlete={editingAthlete}
 					onClose={() => {

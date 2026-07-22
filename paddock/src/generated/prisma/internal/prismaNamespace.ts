@@ -1660,6 +1660,8 @@ export const ProtocolTemplateScalarFieldEnum = {
   scoringAlgorithm: 'scoringAlgorithm',
   algorithmConfig: 'algorithmConfig',
   active: 'active',
+  pdfUrl: 'pdfUrl',
+  pdfFileName: 'pdfFileName',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

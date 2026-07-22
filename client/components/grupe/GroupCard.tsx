@@ -4,8 +4,8 @@ import { initials } from "@/lib/utils";
 interface GroupCardProps {
 	group: Group;
 	onDetails: () => void;
-	onEdit: () => void;
-	onDelete: () => void;
+	onEdit?: () => void;
+	onDelete?: () => void;
 }
 
 export default function GroupCard({
@@ -35,20 +35,24 @@ export default function GroupCard({
 					<div className="bg-[#4a7adb] text-white text-xs font-bold px-2.5 py-1 rounded-full">
 						{group.athleteCount}
 					</div>
-					<button
-						onClick={onEdit}
-						title="Editează"
-						className="p-1.5 rounded-lg hover:bg-[#f4f6fb] text-[#8896b3] hover:text-[#0f1729] transition text-xs"
-					>
-						✏️
-					</button>
-					<button
-						onClick={onDelete}
-						title="Șterge"
-						className="p-1.5 rounded-lg hover:bg-red-50 text-[#8896b3] hover:text-red-500 transition text-xs"
-					>
-						🗑️
-					</button>
+					{onEdit && (
+						<button
+							onClick={onEdit}
+							title="Editează"
+							className="p-1.5 rounded-lg hover:bg-[#f4f6fb] text-[#8896b3] hover:text-[#0f1729] transition text-xs"
+						>
+							✏️
+						</button>
+					)}
+					{onDelete && (
+						<button
+							onClick={onDelete}
+							title="Șterge"
+							className="p-1.5 rounded-lg hover:bg-red-50 text-[#8896b3] hover:text-red-500 transition text-xs"
+						>
+							🗑️
+						</button>
+					)}
 				</div>
 			</div>
 

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Badge from "@/components/ui/Badge";
 import { formatDate } from "@/lib/utils";
 import { CompetitionEvent } from "@/types";
@@ -99,7 +100,14 @@ export default function CompetitionCard({
 					</svg>
 					{c.participantCount} participanți
 				</span>
-				<span className="ml-auto text-[#205280] font-semibold flex items-center gap-1">
+				<Link
+					href={`/competitii/${c.id}`}
+					onClick={(e) => e.stopPropagation()}
+					className="text-xs text-[#2a6aa6] border border-[#b5d7f1] px-2.5 py-1 rounded-[6px] hover:bg-[#f1f7fc] transition"
+				>
+					⚙️ Gestionează
+				</Link>
+				<span className="text-[#205280] font-semibold flex items-center gap-1">
 					{isPast ? "Vezi rezultate" : "Vezi detalii"}
 					<svg
 						width="11"

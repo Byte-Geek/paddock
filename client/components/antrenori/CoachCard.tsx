@@ -3,8 +3,8 @@ import { initials } from "@/lib/utils";
 
 interface CoachCardProps {
 	coach: Coach;
-	onEdit: (coach: Coach) => void;
-	onDelete: (coach: Coach) => void;
+	onEdit?: (coach: Coach) => void;
+	onDelete?: (coach: Coach) => void;
 }
 
 export default function CoachCard({ coach, onEdit, onDelete }: CoachCardProps) {
@@ -26,22 +26,28 @@ export default function CoachCard({ coach, onEdit, onDelete }: CoachCardProps) {
 						{coach.email}
 					</div>
 				</div>
-				<div className="flex gap-1 flex-shrink-0">
-					<button
-						onClick={() => onEdit(coach)}
-						title="Editează"
-						className="p-1.5 rounded-lg hover:bg-[#f4f6fb] text-[#8896b3] hover:text-[#0f1729] transition text-xs"
-					>
-						✏️
-					</button>
-					<button
-						onClick={() => onDelete(coach)}
-						title="Șterge"
-						className="p-1.5 rounded-lg hover:bg-red-50 text-[#8896b3] hover:text-red-500 transition text-xs"
-					>
-						🗑️
-					</button>
-				</div>
+				{(onEdit || onDelete) && (
+					<div className="flex gap-1 flex-shrink-0">
+						{onEdit && (
+							<button
+								onClick={() => onEdit(coach)}
+								title="Editează"
+								className="p-1.5 rounded-lg hover:bg-[#f4f6fb] text-[#8896b3] hover:text-[#0f1729] transition text-xs"
+							>
+								✏️
+							</button>
+						)}
+						{onDelete && (
+							<button
+								onClick={() => onDelete(coach)}
+								title="Șterge"
+								className="p-1.5 rounded-lg hover:bg-red-50 text-[#8896b3] hover:text-red-500 transition text-xs"
+							>
+								🗑️
+							</button>
+						)}
+					</div>
+				)}
 			</div>
 
 			<div className="border-t border-[#eef2f7] pt-3">

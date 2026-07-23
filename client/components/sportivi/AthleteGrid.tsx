@@ -18,7 +18,7 @@ export default function AthleteGrid({
 	}
 
 	return (
-		<div className="grid grid-cols-4 gap-4">
+		<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 			{athletes.map((a) => {
 				const name = formatFullName(a.firstName, a.lastName, a.email);
 				return (

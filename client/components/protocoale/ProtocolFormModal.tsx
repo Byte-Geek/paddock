@@ -61,10 +61,11 @@ export default function ProtocolFormModal({
 				<ModalBody>
 					<div className="flex flex-col gap-3">
 						<div className="flex flex-col gap-1">
-							<label className="text-xs font-medium text-[var(--color-slate-500)]">
+							<label htmlFor="protocol-name" className="text-xs font-medium text-[var(--color-slate-500)]">
 								Nume
 							</label>
 							<input
+								id="protocol-name"
 								value={name}
 								onChange={(e) => setName(e.target.value)}
 								required
@@ -73,10 +74,11 @@ export default function ProtocolFormModal({
 						</div>
 
 						<div className="flex flex-col gap-1">
-							<label className="text-xs font-medium text-[var(--color-slate-500)]">
+							<label htmlFor="protocol-level" className="text-xs font-medium text-[var(--color-slate-500)]">
 								Nivel
 							</label>
 							<input
+								id="protocol-level"
 								value={level}
 								onChange={(e) => setLevel(e.target.value)}
 								placeholder="ex: Nivel Începători"
@@ -85,10 +87,11 @@ export default function ProtocolFormModal({
 						</div>
 
 						<div className="flex flex-col gap-1">
-							<label className="text-xs font-medium text-[var(--color-slate-500)]">
+							<label htmlFor="protocol-description" className="text-xs font-medium text-[var(--color-slate-500)]">
 								Descriere
 							</label>
 							<textarea
+								id="protocol-description"
 								value={description}
 								onChange={(e) =>
 									setDescription(e.target.value)
@@ -100,10 +103,11 @@ export default function ProtocolFormModal({
 
 						<div className="grid grid-cols-2 gap-3">
 							<div className="flex flex-col gap-1">
-								<label className="text-xs font-medium text-[var(--color-slate-500)]">
+								<label htmlFor="protocol-composition-year" className="text-xs font-medium text-[var(--color-slate-500)]">
 									An compoziție
 								</label>
 								<input
+									id="protocol-composition-year"
 									type="number"
 									value={compositionYear}
 									onChange={(e) =>
@@ -113,10 +117,11 @@ export default function ProtocolFormModal({
 								/>
 							</div>
 							<div className="flex flex-col gap-1">
-								<label className="text-xs font-medium text-[var(--color-slate-500)]">
+								<label htmlFor="protocol-revision-year" className="text-xs font-medium text-[var(--color-slate-500)]">
 									An revizuire
 								</label>
 								<input
+									id="protocol-revision-year"
 									type="number"
 									value={revisionYear}
 									onChange={(e) =>
@@ -128,7 +133,7 @@ export default function ProtocolFormModal({
 						</div>
 
 						{error && (
-							<div className="text-xs text-red-500">
+							<div role="alert" className="text-xs text-red-500">
 								{error}
 							</div>
 						)}

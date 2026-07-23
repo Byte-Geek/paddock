@@ -117,7 +117,7 @@ export default function GrupePage() {
 			) : list.length === 0 ? (
 				<EmptyState>Nicio grupă găsită.</EmptyState>
 			) : (
-				<div className="grid grid-cols-2 gap-4">
+				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 					{list.map((g) => (
 						<GroupCard
 							key={g.id}

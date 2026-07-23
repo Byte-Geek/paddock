@@ -75,35 +75,40 @@ export default function LoginPage() {
 						className="flex flex-col gap-4"
 					>
 						<div className="flex flex-col gap-1.5">
-							<label className="text-[var(--color-slate-500)] text-sm font-medium">
+							<label htmlFor="login-email" className="text-[var(--color-slate-500)] text-sm font-medium">
 								Email
 							</label>
 							<input
+								id="login-email"
 								type="email"
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
 								placeholder="exemplu@paddock.md"
 								required
+								aria-invalid={!!error}
 								className="bg-[var(--color-ink-900)] border border-[var(--color-ink-700)] rounded-lg px-4 py-2.5 text-white text-sm placeholder:text-[var(--color-slate-500)] focus:outline-none focus:border-[var(--color-blue-600)] transition"
 							/>
 						</div>
 
 						<div className="flex flex-col gap-1.5">
-							<label className="text-[var(--color-slate-500)] text-sm font-medium">
+							<label htmlFor="login-password" className="text-[var(--color-slate-500)] text-sm font-medium">
 								Parolă
 							</label>
 							<input
+								id="login-password"
 								type="password"
 								value={password}
 								onChange={(e) => setPassword(e.target.value)}
 								placeholder="••••••••"
 								required
+								aria-invalid={!!error}
+								aria-describedby={error ? "login-error" : undefined}
 								className="bg-[var(--color-ink-900)] border border-[var(--color-ink-700)] rounded-lg px-4 py-2.5 text-white text-sm placeholder:text-[var(--color-slate-500)] focus:outline-none focus:border-[var(--color-blue-600)] transition"
 							/>
 						</div>
 
 						{error && (
-							<div className="bg-red-500/10 border border-red-500/30 rounded-lg px-4 py-2.5 text-red-400 text-sm">
+							<div id="login-error" role="alert" className="bg-red-500/10 border border-red-500/30 rounded-lg px-4 py-2.5 text-red-400 text-sm">
 								{error}
 							</div>
 						)}

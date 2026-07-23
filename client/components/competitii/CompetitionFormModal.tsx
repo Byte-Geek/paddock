@@ -104,8 +104,9 @@ export default function CompetitionFormModal({
 				<ModalBody>
 					<div className="flex flex-col gap-3">
 						<div className="flex flex-col gap-1">
-							<Label>Nume</Label>
+							<Label htmlFor="competition-name">Nume</Label>
 							<Input
+								id="competition-name"
 								value={name}
 								onChange={(e) => setName(e.target.value)}
 								required
@@ -113,18 +114,20 @@ export default function CompetitionFormModal({
 						</div>
 
 						<div className="flex flex-col gap-1">
-							<Label>Locație</Label>
+							<Label htmlFor="competition-location">Locație</Label>
 							<Input
+								id="competition-location"
 								value={location}
 								onChange={(e) => setLocation(e.target.value)}
 							/>
 						</div>
 
 						<div className="flex flex-col gap-1">
-							<label className="text-xs font-medium text-[var(--color-slate-500)]">
+							<label htmlFor="competition-description" className="text-xs font-medium text-[var(--color-slate-500)]">
 								Descriere
 							</label>
 							<textarea
+								id="competition-description"
 								value={description}
 								onChange={(e) =>
 									setDescription(e.target.value)
@@ -136,8 +139,9 @@ export default function CompetitionFormModal({
 
 						<div className="grid grid-cols-2 gap-3">
 							<div className="flex flex-col gap-1">
-								<Label>Data început</Label>
+								<Label htmlFor="competition-start-date">Data început</Label>
 								<Input
+									id="competition-start-date"
 									type="date"
 									value={startDate}
 									onChange={(e) =>
@@ -146,8 +150,9 @@ export default function CompetitionFormModal({
 								/>
 							</div>
 							<div className="flex flex-col gap-1">
-								<Label>Data sfârșit</Label>
+								<Label htmlFor="competition-end-date">Data sfârșit</Label>
 								<Input
+									id="competition-end-date"
 									type="date"
 									value={endDate}
 									onChange={(e) =>
@@ -158,8 +163,9 @@ export default function CompetitionFormModal({
 						</div>
 
 						<div className="flex flex-col gap-1">
-							<Label>Status</Label>
+							<Label htmlFor="competition-status">Status</Label>
 							<Select
+								id="competition-status"
 								value={status}
 								onChange={(e) =>
 									setStatus(e.target.value as EventStatus)
@@ -174,7 +180,7 @@ export default function CompetitionFormModal({
 						</div>
 
 						<div className="flex flex-col gap-1">
-							<Label>Secretari</Label>
+							<Label id="competition-secretaries-label">Secretari</Label>
 							<SecretaryMultiSelect
 								options={secretaries}
 								selectedIds={secretaryIds}
@@ -183,7 +189,7 @@ export default function CompetitionFormModal({
 						</div>
 
 						{error && (
-							<div className="text-xs text-red-500">
+							<div role="alert" className="text-xs text-red-500">
 								{error}
 							</div>
 						)}

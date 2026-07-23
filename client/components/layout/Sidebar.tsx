@@ -2,10 +2,13 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useAuthStore } from "@/store/auth.store";
 
 interface SidebarProps {
 	collapsed: boolean;
+	mobileOpen?: boolean;
+	onCloseMobile?: () => void;
 }
 
 const dashboardIcon = (
@@ -218,10 +221,19 @@ const navSections = [
 	resourceSection,
 ];
 
-export default function Sidebar({ collapsed }: SidebarProps) {
+export default function Sidebar({
+	collapsed,
+	mobileOpen = false,
+	onCloseMobile,
+}: SidebarProps) {
 	const pathname = usePathname();
 	const router = useRouter();
 	const { token, user, logout } = useAuthStore();
+
+	useEffect(() => {
+		onCloseMobile?.();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [pathname]);
 
 	const handleLogout = () => {
 		logout();
@@ -238,71 +250,97 @@ export default function Sidebar({ collapsed }: SidebarProps) {
 	});
 
 	return (
-		<aside
-			className={`h-full bg-[var(--color-ink-900)] border-r border-white/[0.06] text-white flex flex-col overflow-hidden transition-all duration-300 ${collapsed ? "w-[70px]" : "w-[222px]"}`}
-		>
-			{/* Scroll area */}
-			<div className="flex-1 overflow-y-auto px-3 py-[18px] scrollbar-thin">
-				{filteredNavSections.map((section: any, i: number) => (
-					<div key={i}>
-						{collapsed ? (
-							i > 0 && (
-								<div className="h-px bg-surface/10 my-2 mx-1.5" />
-							)
-						) : (
+		<>
+			{mobileOpen && (
+				<div
+					className="fixed inset-0 bg-black/40 z-30 md:hidden"
+					onClick={onCloseMobile}
+					aria-hidden="true"
+				/>
+			)}
+			<aside
+				className={`fixed inset-y-0 left-0 z-40 w-[222px] md:static md:z-auto h-full bg-[var(--color-ink-900)] border-r border-white/[0.06] text-white flex flex-col overflow-hidden transition-all duration-300 ${mobileOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 ${collapsed ? "md:w-[70px]" : "md:w-[222px]"}`}
+			>
+				{/* Scroll area */}
+				<div className="flex-1 overflow-y-auto px-3 py-[18px] scrollbar-thin">
+					{filteredNavSections.map((section: any, i: number) => (
+						<div key={i}>
 							<div
-								className={`text-[10px] tracking-[0.12em] text-white/40 uppercase font-semibold pb-1.5 px-3 ${i === 0 ? "pt-0" : "pt-[14px]"}`}
+								className={`${collapsed ? "md:hidden" : ""} text-[10px] tracking-[0.12em] text-white/40 uppercase font-semibold pb-1.5 px-3 ${i === 0 ? "pt-0" : "pt-[14px]"}`}
 							>
 								{section.label}
 							</div>
-						)}
-						{section.items.map((item: any) => {
-							const active = pathname === item.href;
-							return (
-								<Link
-									key={item.href}
-									href={item.href}
-									title={collapsed ? item.label : undefined}
-									className={`w-full flex items-center gap-3 pl-[13px] pr-3 py-[9px] text-[13.5px] transition relative mb-0.5 border-l-2
-                  ${collapsed ? "justify-center px-0 border-l-0" : ""}
-                  ${
-						active
-							? "border-l-[var(--color-blue-300)] bg-[var(--color-blue-300)]/[0.12] text-white font-semibold"
-							: "border-l-transparent text-white/70 hover:bg-surface/[0.05] hover:text-white"
-					}`}
-								>
-									<span className="w-[18px] h-[18px] flex-shrink-0 grid place-items-center opacity-85">
-										{item.icon}
-									</span>
-									{!collapsed && (
-										<span className="flex-1">
+							{collapsed && i > 0 && (
+								<div className="hidden md:block h-px bg-surface/10 my-2 mx-1.5" />
+							)}
+							{section.items.map((item: any) => {
+								const active = pathname === item.href;
+								return (
+									<Link
+										key={item.href}
+										href={item.href}
+										title={collapsed ? item.label : undefined}
+										className={`w-full flex items-center gap-3 pl-[13px] pr-3 py-[9px] text-[13.5px] transition relative mb-0.5 border-l-2
+									${collapsed ? "md:justify-center md:px-0 md:border-l-0" : ""}
+									${
+										active
+											? "border-l-[var(--color-blue-300)] bg-[var(--color-blue-300)]/[0.12] text-white font-semibold"
+											: "border-l-transparent text-white/70 hover:bg-surface/[0.05] hover:text-white"
+									}`}
+									>
+										<span className="w-[18px] h-[18px] flex-shrink-0 grid place-items-center opacity-85">
+											{item.icon}
+										</span>
+										<span className={`flex-1 ${collapsed ? "md:hidden" : ""}`}>
 											{item.label}
 										</span>
-									)}
-									{!collapsed &&
-										"badge" in item &&
-										item.badge && (
-											<span className="bg-[var(--color-blue-300)] text-[var(--color-ink-900)] text-[10px] font-bold px-1.5 py-[1px] rounded-full">
+										{"badge" in item && item.badge && (
+											<span
+												className={`${collapsed ? "md:hidden" : ""} bg-[var(--color-blue-300)] text-[var(--color-ink-900)] text-[10px] font-bold px-1.5 py-[1px] rounded-full`}
+											>
 												{item.badge}
 											</span>
 										)}
-								</Link>
-							);
-						})}
-					</div>
-				))}
-			</div>
+									</Link>
+								);
+							})}
+						</div>
+					))}
+				</div>
 
-			{/* Footer */}
-			<div className="border-t border-white/6">
-				{token ? (
-					<div
-						className={`grid px-3 transition-[grid-template-rows] duration-200 ease-out ${collapsed ? "grid-rows-[0fr]" : "grid-rows-[1fr]"}`}
-					>
-						<div className="overflow-hidden">
+				{/* Footer */}
+				<div className="border-t border-white/6">
+					{token ? (
+						<div
+							className={`grid px-3 transition-[grid-template-rows] duration-200 ease-out grid-rows-[1fr] ${collapsed ? "md:grid-rows-[0fr]" : "md:grid-rows-[1fr]"}`}
+						>
+							<div className="overflow-hidden">
+								<button
+									onClick={handleLogout}
+									className={`w-full bg-[var(--color-danger)] text-white border-0 px-3 py-[8px] rounded-md text-[12px] font-semibold flex items-center justify-center gap-1.5 my-3 hover:bg-[var(--color-danger)]/90 transition-opacity duration-200 ease-out opacity-100 ${collapsed ? "md:opacity-0" : "md:opacity-100"}`}
+								>
+									<svg
+										width="14"
+										height="14"
+										viewBox="0 0 24 24"
+										fill="none"
+										stroke="currentColor"
+										strokeWidth="2"
+										className="flex-shrink-0"
+									>
+										<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+										<polyline points="16 17 21 12 16 7" />
+										<line x1="21" y1="12" x2="9" y2="12" />
+									</svg>
+									Deconectare
+								</button>
+							</div>
+						</div>
+					) : (
+						<div className="px-3 py-3">
 							<button
-								onClick={handleLogout}
-								className={`w-full bg-[var(--color-danger)] text-white border-0 px-3 py-[8px] rounded-md text-[12px] font-semibold flex items-center justify-center gap-1.5 my-3 hover:bg-[var(--color-danger)]/90 transition-opacity duration-200 ease-out ${collapsed ? "opacity-0" : "opacity-100"}`}
+								onClick={handleLogin}
+								className="w-full bg-[var(--color-blue-600)] text-white border-0 px-3 py-[8px] rounded-md text-[12px] font-semibold flex items-center justify-center gap-1.5 hover:bg-[var(--color-blue-800)] transition"
 							>
 								<svg
 									width="14"
@@ -311,39 +349,19 @@ export default function Sidebar({ collapsed }: SidebarProps) {
 									fill="none"
 									stroke="currentColor"
 									strokeWidth="2"
-									className="flex-shrink-0"
 								>
-									<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-									<polyline points="16 17 21 12 16 7" />
-									<line x1="21" y1="12" x2="9" y2="12" />
+									<path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+									<polyline points="10 17 15 12 10 7" />
+									<line x1="15" y1="12" x2="3" y2="12" />
 								</svg>
-								Deconectare
+								<span className={collapsed ? "md:hidden" : ""}>
+									Autentificare
+								</span>
 							</button>
 						</div>
-					</div>
-				) : (
-					<div className="px-3 py-3">
-						<button
-							onClick={handleLogin}
-							className="w-full bg-[var(--color-blue-600)] text-white border-0 px-3 py-[8px] rounded-md text-[12px] font-semibold flex items-center justify-center gap-1.5 hover:bg-[var(--color-blue-800)] transition"
-						>
-							<svg
-								width="14"
-								height="14"
-								viewBox="0 0 24 24"
-								fill="none"
-								stroke="currentColor"
-								strokeWidth="2"
-							>
-								<path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
-								<polyline points="10 17 15 12 10 7" />
-								<line x1="15" y1="12" x2="3" y2="12" />
-							</svg>
-							{!collapsed && "Autentificare"}
-						</button>
-					</div>
-				)}
-			</div>
-		</aside>
+					)}
+				</div>
+			</aside>
+		</>
 	);
 }

@@ -210,7 +210,6 @@ export default function ProtocolViewPage() {
 				className="bg-surface border border-black mx-auto w-full max-w-[900px] text-[11px] leading-tight text-black"
 				style={{ fontFamily: "Arial, Helvetica, sans-serif" }}
 			>
-				
 				<div className="flex items-start justify-between p-3 border-b-2 border-black">
 					<div>
 						<div className="text-base font-bold uppercase">
@@ -227,9 +226,7 @@ export default function ProtocolViewPage() {
 						</div>
 					</div>
 
-					
 				</div>
-
 
 				
 				<table
@@ -357,11 +354,6 @@ export default function ProtocolViewPage() {
 						)}
 					</tbody>
 				</table>
-
-				{template.elements.length > 0 && (
-					<div className="p-3 flex justify-between text-[11px]">
-					</div>
-				)}
 			</div>
 		</div>
 	);

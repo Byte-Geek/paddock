@@ -1,9 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import Modal, {
+	ModalBody,
+	ModalFooter,
+	ModalHeader,
+} from "@/components/ui/Modal";
 import api from "@/lib/axios";
-import { Coach } from "@/types";
 import { getErrorMessage } from "@/lib/error";
+import type { Coach } from "@/types";
 
 interface AddCoachModalProps {
 	onClose: () => void;
@@ -42,95 +47,108 @@ export default function AddCoachModal({
 	};
 
 	return (
-		<div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-			<div className="bg-surface rounded-2xl w-full max-w-md p-6">
-				<div className="flex items-center justify-between mb-4">
-					<h2 className="text-lg font-bold text-[var(--color-ink-800)]">
-						Adaugă antrenor
-					</h2>
+		<Modal onClose={onClose}>
+			<form onSubmit={handleSubmit}>
+				<ModalHeader title="Adaugă antrenor" onClose={onClose} />
+				<ModalBody>
+					<div className="flex flex-col gap-3">
+						<div className="grid grid-cols-2 gap-3">
+							<div className="flex flex-col gap-1">
+								<label
+									htmlFor="add-coach-first-name"
+									className="text-xs font-medium text-[var(--color-slate-500)]"
+								>
+									Prenume
+								</label>
+								<input
+									id="add-coach-first-name"
+									value={firstName}
+									onChange={(e) => setFirstName(e.target.value)}
+									required
+									className="border border-[var(--color-border-soft)] rounded-lg px-3 py-2 text-sm outline-none focus:border-[var(--color-blue-600)]"
+								/>
+							</div>
+							<div className="flex flex-col gap-1">
+								<label
+									htmlFor="add-coach-last-name"
+									className="text-xs font-medium text-[var(--color-slate-500)]"
+								>
+									Nume
+								</label>
+								<input
+									id="add-coach-last-name"
+									value={lastName}
+									onChange={(e) => setLastName(e.target.value)}
+									required
+									className="border border-[var(--color-border-soft)] rounded-lg px-3 py-2 text-sm outline-none focus:border-[var(--color-blue-600)]"
+								/>
+							</div>
+						</div>
+
+						<div className="flex flex-col gap-1">
+							<label
+								htmlFor="add-coach-email"
+								className="text-xs font-medium text-[var(--color-slate-500)]"
+							>
+								Email
+							</label>
+							<input
+								id="add-coach-email"
+								type="email"
+								value={email}
+								onChange={(e) => setEmail(e.target.value)}
+								required
+								aria-describedby={error ? "add-coach-error" : undefined}
+								className="border border-[var(--color-border-soft)] rounded-lg px-3 py-2 text-sm outline-none focus:border-[var(--color-blue-600)]"
+							/>
+						</div>
+
+						<div className="flex flex-col gap-1">
+							<label
+								htmlFor="add-coach-password"
+								className="text-xs font-medium text-[var(--color-slate-500)]"
+							>
+								Parolă
+							</label>
+							<input
+								id="add-coach-password"
+								type="password"
+								value={password}
+								onChange={(e) => setPassword(e.target.value)}
+								required
+								minLength={6}
+								className="border border-[var(--color-border-soft)] rounded-lg px-3 py-2 text-sm outline-none focus:border-[var(--color-blue-600)]"
+							/>
+						</div>
+
+						{error && (
+							<div
+								id="add-coach-error"
+								role="alert"
+								className="text-xs text-red-500"
+							>
+								{error}
+							</div>
+						)}
+					</div>
+				</ModalBody>
+				<ModalFooter>
 					<button
+						type="button"
 						onClick={onClose}
-						className="text-[var(--color-slate-500)] hover:text-[var(--color-ink-800)]"
+						className="px-4 py-2 rounded-lg text-sm font-semibold text-[var(--color-slate-500)] hover:bg-[var(--color-blue-50)]"
 					>
-						✕
+						Anulează
 					</button>
-				</div>
-
-				<form onSubmit={handleSubmit} className="flex flex-col gap-3">
-					<div className="grid grid-cols-2 gap-3">
-						<div className="flex flex-col gap-1">
-							<label className="text-xs font-medium text-[var(--color-slate-500)]">
-								Prenume
-							</label>
-							<input
-								value={firstName}
-								onChange={(e) => setFirstName(e.target.value)}
-								required
-								className="border border-[var(--color-border-soft)] rounded-lg px-3 py-2 text-sm outline-none focus:border-[var(--color-blue-600)]"
-							/>
-						</div>
-						<div className="flex flex-col gap-1">
-							<label className="text-xs font-medium text-[var(--color-slate-500)]">
-								Nume
-							</label>
-							<input
-								value={lastName}
-								onChange={(e) => setLastName(e.target.value)}
-								required
-								className="border border-[var(--color-border-soft)] rounded-lg px-3 py-2 text-sm outline-none focus:border-[var(--color-blue-600)]"
-							/>
-						</div>
-					</div>
-
-					<div className="flex flex-col gap-1">
-						<label className="text-xs font-medium text-[var(--color-slate-500)]">
-							Email
-						</label>
-						<input
-							type="email"
-							value={email}
-							onChange={(e) => setEmail(e.target.value)}
-							required
-							className="border border-[var(--color-border-soft)] rounded-lg px-3 py-2 text-sm outline-none focus:border-[var(--color-blue-600)]"
-						/>
-					</div>
-
-					<div className="flex flex-col gap-1">
-						<label className="text-xs font-medium text-[var(--color-slate-500)]">
-							Parolă
-						</label>
-						<input
-							type="password"
-							value={password}
-							onChange={(e) => setPassword(e.target.value)}
-							required
-							minLength={6}
-							className="border border-[var(--color-border-soft)] rounded-lg px-3 py-2 text-sm outline-none focus:border-[var(--color-blue-600)]"
-						/>
-					</div>
-
-					{error && (
-						<div className="text-xs text-red-500">{error}</div>
-					)}
-
-					<div className="flex justify-end gap-2 mt-2">
-						<button
-							type="button"
-							onClick={onClose}
-							className="px-4 py-2 rounded-lg text-sm font-semibold text-[var(--color-slate-500)] hover:bg-[var(--color-blue-50)]"
-						>
-							Anulează
-						</button>
-						<button
-							type="submit"
-							disabled={saving}
-							className="bg-[var(--color-blue-600)] hover:bg-[var(--color-blue-800)] disabled:opacity-50 text-white text-sm font-semibold px-4 py-2 rounded-lg transition"
-						>
-							{saving ? "Se salvează..." : "Adaugă"}
-						</button>
-					</div>
-				</form>
-			</div>
-		</div>
+					<button
+						type="submit"
+						disabled={saving}
+						className="bg-[var(--color-blue-600)] hover:bg-[var(--color-blue-800)] disabled:opacity-50 text-white text-sm font-semibold px-4 py-2 rounded-lg transition"
+					>
+						{saving ? "Se salvează..." : "Adaugă"}
+					</button>
+				</ModalFooter>
+			</form>
+		</Modal>
 	);
 }

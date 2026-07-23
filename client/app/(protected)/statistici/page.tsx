@@ -67,7 +67,7 @@ export default function StatisticiPage() {
 			) : (
 				<>
 					{/* Medal stats */}
-					<div className="grid grid-cols-4 gap-4 mb-6">
+					<div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
 						<StatCard label="Aur" value={medals?.gold ?? 0} />
 						<StatCard label="Argint" value={medals?.silver ?? 0} />
 						<StatCard label="Bronz" value={medals?.bronze ?? 0} />
@@ -78,7 +78,7 @@ export default function StatisticiPage() {
 					</div>
 
 					{/* Charts row 1 */}
-					<div className="grid grid-cols-[2fr_1fr] gap-4 mb-4">
+					<div className="grid grid-cols-1 xl:grid-cols-[2fr_1fr] gap-4 mb-4">
 						<div className="bg-surface rounded-md border border-[var(--color-border)]">
 							<div className="flex items-center justify-between px-5 py-4 border-b border-[var(--color-border-soft)]">
 								<h3 className="font-semibold text-[var(--color-blue-900)]">
@@ -137,7 +137,7 @@ export default function StatisticiPage() {
 					</div>
 
 					{/* Charts row 2 */}
-					<div className="grid grid-cols-2 gap-4">
+					<div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
 						<div className="bg-surface rounded-md border border-[var(--color-border)]">
 							<div className="px-5 py-4 border-b border-[var(--color-border-soft)]">
 								<h3 className="font-semibold text-[var(--color-blue-900)]">

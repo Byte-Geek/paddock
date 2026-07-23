@@ -34,10 +34,6 @@ export default function Navbar({ onToggleSidebar }: NavbarProps) {
 		router.push("/");
 	};
 
-	const handleLogin = () => {
-		router.push("/login");
-	};
-
 	return (
 		<header className="h-[64px] bg-[var(--color-blue-900)] text-white flex items-center px-5 gap-3.5 z-30 flex-shrink-0 shadow-[0_1px_0_rgba(0,0,0,0.08),0_8px_24px_-16px_rgba(14,39,64,0.4)]">
 			{/* Toggle */}
@@ -100,57 +96,6 @@ export default function Navbar({ onToggleSidebar }: NavbarProps) {
 
 			<div className="flex-1" />
 
-			{/* Search - only for authenticated users */}
-			{token && (
-				<div
-					className="flex items-center gap-2 bg-surface/6 border border-white/8 rounded-full px-3 py-[7px] w-[320px] text-white/75 hover:bg-surface/10 transition cursor-text"
-					onClick={(e) =>
-						(
-							e.currentTarget.querySelector(
-								"input",
-							) as HTMLInputElement
-						)?.focus()
-					}
-				>
-					<svg
-						width="15"
-						height="15"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						strokeWidth="2"
-					>
-						<circle cx="11" cy="11" r="8" />
-						<path d="m21 21-4.35-4.35" />
-					</svg>
-					<input
-						placeholder="Caută sportivi, competiții, grupe…"
-						className="bg-transparent border-0 outline-none text-white text-[13px] flex-1 min-w-0 placeholder:text-white/45"
-					/>
-					<kbd className="font-mono text-[10px] px-1.5 py-[1px] rounded bg-surface/10 text-white/70 border border-white/8">
-						⌘K
-					</kbd>
-				</div>
-			)}
-
-			{/* Bell - only for authenticated users */}
-			{token && (
-				<button className="w-[38px] h-[38px] grid place-items-center text-white/85 rounded-[6px] hover:bg-surface/8 relative transition">
-					<svg
-						width="18"
-						height="18"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						strokeWidth="2"
-					>
-						<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-						<path d="M13.73 21a2 2 0 0 1-3.46 0" />
-					</svg>
-					<span className="absolute top-2 right-[9px] w-[7px] h-[7px] bg-[#ff7a59] rounded-full shadow-[0_0_0_2px_var(--color-blue-900)]" />
-				</button>
-			)}
-
 			{/* Auth section */}
 			{token ? (
 				/* Avatar + dropdown for authenticated users */
@@ -184,7 +129,7 @@ export default function Navbar({ onToggleSidebar }: NavbarProps) {
 					</button>
 
 					{menuOpen && (
-						<div className="absolute right-0 top-[calc(100%+6px)] w-[280px] bg-surface rounded-lg shadow-[0_20px_40px_-16px_rgba(14,39,64,0.22),0_4px_8px_rgba(14,39,64,0.06)] border border-[var(--color-border)] overflow-hidden z-50 animate-[menu-in_0.14s_ease-out]">
+						<div className="absolute right-0 top-[calc(100%+6px)] w-[280px] bg-surface rounded-lg shadow-[0_20px_40px_-16px_rgba(14,39,64,0.22),0_4px_8px_rgba(14,39,64,0.06)] border border-[var(--color-border)] overflow-hidden z-50 motion-safe:animate-[menu-in_0.14s_ease-out]">
 							{/* Head */}
 							<div className="p-4 border-b border-[var(--color-border-soft)] grid grid-cols-[44px_1fr] gap-3 items-center">
 								<div className="w-11 h-11 rounded-full bg-gradient-to-br from-[var(--color-blue-300)] to-[var(--color-blue-100)] text-[var(--color-ink-900)] grid place-items-center font-bold text-base">
@@ -220,23 +165,6 @@ export default function Navbar({ onToggleSidebar }: NavbarProps) {
 											>
 												<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
 												<circle cx="12" cy="7" r="4" />
-											</svg>
-										),
-									},
-									{
-										label: "Setări cont",
-										href: "/setari",
-										icon: (
-											<svg
-												width="16"
-												height="16"
-												viewBox="0 0 24 24"
-												fill="none"
-												stroke="currentColor"
-												strokeWidth="2"
-											>
-												<circle cx="12" cy="12" r="3" />
-												<path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
 											</svg>
 										),
 									},
@@ -280,16 +208,7 @@ export default function Navbar({ onToggleSidebar }: NavbarProps) {
 						</div>
 					)}
 				</div>
-			) : (
-				/* Login button for guest users */
-				// <button
-				// 	onClick={handleLogin}
-				// 	className="bg-[var(--color-blue-600)] hover:bg-[var(--color-blue-800)] text-white font-semibold rounded-lg px-6 py-2 text-sm transition"
-				// >
-				// 	Autentificare
-				// </button>
-				<></>
-			)}
+			) : null}
 		</header>
 	);
 }

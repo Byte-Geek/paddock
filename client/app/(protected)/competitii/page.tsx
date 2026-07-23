@@ -106,7 +106,7 @@ export default function CompetitiiPage() {
 			) : list.length === 0 ? (
 				<EmptyState>Nicio competiție găsită.</EmptyState>
 			) : (
-				<div className="grid grid-cols-2 gap-4">
+				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 					{list.map((c) => (
 						<CompetitionCard
 							key={c.id}

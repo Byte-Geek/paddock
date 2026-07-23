@@ -52,7 +52,7 @@ export default function ContPage() {
 				</p>
 			</div>
 
-			<div className="grid grid-cols-[1fr_2fr] gap-5">
+			<div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-5">
 				{/* Avatar card */}
 				<div className="bg-surface rounded-md border border-[var(--color-border-soft)] p-6 flex flex-col items-center text-center gap-4">
 					<div className="w-24 h-24 rounded-full bg-[var(--color-blue-600)] text-white flex items-center justify-center text-3xl font-bold">
@@ -94,46 +94,50 @@ export default function ContPage() {
 							Date personale
 						</h3>
 					</div>
-					<div className="p-6 grid grid-cols-2 gap-4">
+					<div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
 						<div className="flex flex-col gap-1.5">
-							<label className="text-xs font-medium text-[var(--color-slate-500)]">
+							<label htmlFor="cont-first-name" className="text-xs font-medium text-[var(--color-slate-500)]">
 								Prenume
 							</label>
 							<input
+								id="cont-first-name"
 								value={firstName}
 								onChange={(e) => setFirstName(e.target.value)}
 								className="border border-[var(--color-border-soft)] rounded-lg px-3 py-2.5 text-sm text-[var(--color-ink-800)] focus:outline-none focus:border-[var(--color-blue-600)] transition"
 							/>
 						</div>
 						<div className="flex flex-col gap-1.5">
-							<label className="text-xs font-medium text-[var(--color-slate-500)]">
+							<label htmlFor="cont-last-name" className="text-xs font-medium text-[var(--color-slate-500)]">
 								Nume
 							</label>
 							<input
+								id="cont-last-name"
 								value={lastName}
 								onChange={(e) => setLastName(e.target.value)}
 								className="border border-[var(--color-border-soft)] rounded-lg px-3 py-2.5 text-sm text-[var(--color-ink-800)] focus:outline-none focus:border-[var(--color-blue-600)] transition"
 							/>
 						</div>
-						<div className="col-span-2 flex flex-col gap-1.5">
-							<label className="text-xs font-medium text-[var(--color-slate-500)]">
+						<div className="sm:col-span-2 flex flex-col gap-1.5">
+							<label htmlFor="cont-email" className="text-xs font-medium text-[var(--color-slate-500)]">
 								Email
 							</label>
 							<input
+								id="cont-email"
 								type="email"
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
+								aria-describedby={error ? "cont-error" : undefined}
 								className="border border-[var(--color-border-soft)] rounded-lg px-3 py-2.5 text-sm text-[var(--color-ink-800)] focus:outline-none focus:border-[var(--color-blue-600)] transition"
 							/>
 						</div>
 
 						{error && (
-							<div className="col-span-2 text-xs text-red-500">
+							<div id="cont-error" role="alert" className="sm:col-span-2 text-xs text-red-500">
 								{error}
 							</div>
 						)}
 
-						<div className="col-span-2 flex justify-end gap-3">
+						<div className="sm:col-span-2 flex justify-end gap-3">
 							<button
 								onClick={handleSave}
 								disabled={saving}

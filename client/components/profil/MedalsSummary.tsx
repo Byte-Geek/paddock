@@ -8,7 +8,7 @@ export default function MedalsSummary({
 	label?: string;
 }) {
 	return (
-		<div className="grid grid-cols-4 gap-3">
+		<div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
 			<div className="bg-surface rounded-md border border-[var(--color-border-soft)] p-4 text-center">
 				<div className="text-2xl">🥇</div>
 				<div className="text-xl font-bold text-[var(--color-ink-800)] mt-1">

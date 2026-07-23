@@ -164,7 +164,7 @@ export default function CoachProfileView() {
 				<h3 className="font-semibold text-ink-800 mb-3">
 					Statistici generale — grupele mele
 				</h3>
-				<div className="grid grid-cols-3 gap-4 mb-4">
+				<div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
 					<div className="bg-surface rounded-md border border-border-soft p-4 text-center">
 						<div className="text-xl font-bold text-ink-800">
 							{stats.groups.length}

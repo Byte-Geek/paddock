@@ -292,10 +292,22 @@ export interface CategoryParticipation {
 	athleteId: string;
 	athleteName: string;
 	horseName: string | null;
+	startOrder: number | null;
+	startTime: string | null;
 	participationNumber: number;
 	finalScore: string | null;
 	rank: number | null;
 	status: string;
+	livePercentage: number | null;
+	liveRank: number | null;
+	accumulatedScore: number | null;
+	refereeScores: RefereeScore[];
+}
+
+export interface RefereeScore {
+	refereeId: string;
+	finalScore: string | null;
+	percentage: string | null;
 }
 
 export interface CategoryElement {

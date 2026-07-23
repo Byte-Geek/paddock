@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import api from "@/lib/axios";
 import { CompetitionEventDetail, CategoryDetail } from "@/types";
 import Badge from "@/components/ui/Badge";
 import LoadingState from "@/components/ui/LoadingState";
 import EmptyState from "@/components/ui/EmptyState";
-import { formatFullName } from "@/lib/utils";
+import { formatFullName, formatPercentage } from "@/lib/utils";
 import {
 	EVENT_STATUS_LABELS,
 	EVENT_STATUS_VARIANTS,
@@ -159,46 +159,225 @@ export default function CompetitionViewPage() {
 								</div>
 							)}
 
-							{cat.participations.length > 0 && (
-								<div>
-									<div className="text-xs font-semibold text-[var(--color-slate-500)] mb-1">
-										Participanți
+							{cat.participations.length > 0 &&
+								cat.eventStatus === "COMPLETED" && (
+									<div>
+										<div className="text-xs font-semibold text-[var(--color-slate-500)] mb-1">
+											Rezultate finale
+										</div>
+										<div className="overflow-x-auto">
+											<table className="w-full text-sm border-collapse">
+												<thead className="bg-[var(--color-silver-bg)]">
+													<tr>
+														<th
+															rowSpan={2}
+															className="text-left px-2 py-1.5 text-xs font-semibold text-[var(--color-slate-500)] border border-[var(--color-border)]"
+														>
+															Ordine
+														</th>
+														<th
+															rowSpan={2}
+															className="text-left px-2 py-1.5 text-xs font-semibold text-[var(--color-slate-500)] border border-[var(--color-border)]"
+														>
+															Sportiv
+														</th>
+														<th
+															rowSpan={2}
+															className="text-left px-2 py-1.5 text-xs font-semibold text-[var(--color-slate-500)] border border-[var(--color-border)]"
+														>
+															Cal
+														</th>
+														{cat.referees.map(
+															(r) => (
+																<th
+																	key={r.id}
+																	colSpan={2}
+																	className="text-center px-2 py-1.5 text-xs font-semibold text-[var(--color-blue-800)] border border-[var(--color-border)] whitespace-nowrap"
+																>
+																	{
+																		r.letterCode
+																	}{" "}
+																	—{" "}
+																	{
+																		r.firstName
+																	}{" "}
+																	{
+																		r.lastName
+																	}
+																</th>
+															),
+														)}
+														<th
+															colSpan={2}
+															className="text-center px-2 py-1.5 text-xs font-semibold text-[var(--color-blue-900)] border border-[var(--color-border)]"
+														>
+															Rezultat final
+														</th>
+														<th
+															rowSpan={2}
+															className="text-center px-2 py-1.5 text-xs font-semibold text-[var(--color-blue-900)] border border-[var(--color-border)]"
+														>
+															Loc
+														</th>
+													</tr>
+													<tr>
+														{cat.referees.map(
+															(r) => (
+																<Fragment
+																	key={r.id}
+																>
+																	<th className="text-center px-2 py-1 text-[10px] font-semibold text-[var(--color-slate-500)] border border-[var(--color-border)]">
+																		Scor
+																	</th>
+																	<th className="text-center px-2 py-1 text-[10px] font-semibold text-[var(--color-slate-500)] border border-[var(--color-border)]">
+																		%
+																	</th>
+																</Fragment>
+															),
+														)}
+														<th className="text-center px-2 py-1 text-[10px] font-semibold text-[var(--color-slate-500)] border border-[var(--color-border)]">
+															Scor
+														</th>
+														<th className="text-center px-2 py-1 text-[10px] font-semibold text-[var(--color-slate-500)] border border-[var(--color-border)]">
+															%
+														</th>
+													</tr>
+												</thead>
+												<tbody>
+													{[...cat.participations]
+														.sort((a, b) => {
+															if (
+																a.liveRank ==
+																null
+															)
+																return 1;
+															if (
+																b.liveRank ==
+																null
+															)
+																return -1;
+															return (
+																a.liveRank -
+																b.liveRank
+															);
+														})
+														.map((p) => (
+															<tr key={p.id}>
+																<td className="border border-[var(--color-border)] px-2 py-1.5 text-center font-semibold">
+																	{p.startOrder ??
+																		"—"}
+																</td>
+																<td className="border border-[var(--color-border)] px-2 py-1.5 font-semibold text-[var(--color-blue-800)]">
+																	{
+																		p.athleteName
+																	}
+																</td>
+																<td className="border border-[var(--color-border)] px-2 py-1.5">
+																	{p.horseName ??
+																		"—"}
+																</td>
+																{cat.referees.map(
+																	(r) => {
+																		const score =
+																			p.refereeScores.find(
+																				(
+																					rs,
+																				) =>
+																					rs.refereeId ===
+																					r.id,
+																			);
+																		return (
+																			<Fragment
+																				key={
+																					r.id
+																				}
+																			>
+																				<td className="border border-[var(--color-border)] px-2 py-1.5 text-center">
+																					{score?.finalScore ??
+																						"—"}
+																				</td>
+																				<td className="border border-[var(--color-border)] px-2 py-1.5 text-center">
+																					{score?.percentage
+																						? `${formatPercentage(Number(score.percentage))}%`
+																						: "—"}
+																				</td>
+																			</Fragment>
+																		);
+																	},
+																)}
+																<td className="border border-[var(--color-border)] px-2 py-1.5 text-center font-semibold text-[var(--color-blue-900)]">
+																	{p.accumulatedScore !==
+																	null
+																		? p.accumulatedScore.toFixed(
+																				2,
+																			)
+																		: "—"}
+																</td>
+																<td className="border border-[var(--color-border)] px-2 py-1.5 text-center font-semibold text-[var(--color-blue-900)]">
+																	{p.livePercentage !==
+																	null
+																		? `${formatPercentage(p.livePercentage)}%`
+																		: "—"}
+																</td>
+																<td className="border border-[var(--color-border)] px-2 py-1.5 text-center font-semibold text-[var(--color-blue-900)]">
+																	{p.liveRank ??
+																		"—"}
+																</td>
+															</tr>
+														))}
+												</tbody>
+											</table>
+										</div>
 									</div>
-									<div className="overflow-x-auto">
-										<table className="w-full text-sm border-collapse">
-											<thead className="bg-[var(--color-silver-bg)]">
-												<tr>
-													{["Sportiv", "Cal"].map(
-														(h) => (
+								)}
+
+							{cat.participations.length > 0 &&
+								cat.eventStatus !== "COMPLETED" && (
+									<div>
+										<div className="text-xs font-semibold text-[var(--color-slate-500)] mb-1">
+											Participanți
+										</div>
+										<div className="overflow-x-auto">
+											<table className="w-full text-sm border-collapse">
+												<thead className="bg-[var(--color-silver-bg)]">
+													<tr>
+														{[
+															"Ordine",
+															"Sportiv",
+															"Cal",
+														].map((h) => (
 															<th
 																key={h}
 																className="text-left px-2 py-1.5 text-xs font-semibold text-[var(--color-slate-500)] border border-[var(--color-border)]"
 															>
 																{h}
 															</th>
+														))}
+													</tr>
+												</thead>
+												<tbody>
+													{cat.participations.map(
+														(p) => (
+															<tr key={p.id}>
+																<td className="border border-[var(--color-border)] px-2 py-1.5 text-center font-semibold">
+																	{p.startOrder ??
+																		"—"}
+																</td>
+																<td className="border border-[var(--color-border)] px-2 py-1.5">
+																	{p.athleteName}
+																</td>
+																<td className="border border-[var(--color-border)] px-2 py-1.5">
+																	{p.horseName ??
+																		"—"}
+																</td>
+															</tr>
 														),
 													)}
-												</tr>
-											</thead>
-											<tbody>
-												{cat.participations.map(
-													(p) => (
-														<tr key={p.id}>
-															<td className="border border-[var(--color-border)] px-2 py-1.5">
-																{p.athleteName}
-															</td>
-															<td className="border border-[var(--color-border)] px-2 py-1.5">
-																{p.horseName ??
-																	"—"}
-															</td>
-														</tr>
-													),
-												)}
-											</tbody>
-										</table>
+												</tbody>
+											</table>
+										</div>
 									</div>
-								</div>
-							)}
+								)}
 						</div>
 					))}
 				</div>

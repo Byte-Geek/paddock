@@ -9,6 +9,7 @@ import { CreateCategoryDto } from './dto/create-category.dto'
 import { UpdateCategoryDto } from './dto/update-category.dto'
 import { CreateRefereeDto } from './dto/create-referee.dto'
 import { CreateParticipationDto } from './dto/create-participation.dto'
+import { UpdateParticipationDto } from './dto/update-participation.dto'
 import { CategoryDto, CategoryDetailDto } from './dto/category.dto'
 import { formatFullName } from '../common/utils/name.util'
 import { assertStatus } from '../common/utils/assert-status.util'
@@ -70,8 +71,21 @@ export class CategoryService {
                 },
                 referees: true,
                 participations: {
-                    include: { athlete: { include: { user: true } } },
-                    orderBy: { participationNumber: 'asc' },
+                    include: {
+                        athlete: { include: { user: true } },
+                        evaluations: {
+                            where: { finalized: true },
+                            select: {
+                                categoryRefereeId: true,
+                                finalScore: true,
+                                percentage: true,
+                            },
+                        },
+                    },
+                    orderBy: [
+                        { startOrder: 'asc' },
+                        { participationNumber: 'asc' },
+                    ],
                 },
             },
         })
@@ -81,6 +95,35 @@ export class CategoryService {
         ) {
             throw new NotFoundException('Category not found')
         }
+
+        const livePercentageByParticipation = new Map<string, number>()
+        const accumulatedScoreByParticipation = new Map<string, number>()
+        for (const p of category.participations) {
+            if (p.evaluations.length === 0) continue
+            const avg =
+                p.evaluations.reduce(
+                    (sum, e) => sum + Number(e.percentage ?? 0),
+                    0
+                ) / p.evaluations.length
+            livePercentageByParticipation.set(p.id, avg)
+            const total = p.evaluations.reduce(
+                (sum, e) => sum + Number(e.finalScore ?? 0),
+                0
+            )
+            accumulatedScoreByParticipation.set(p.id, total)
+        }
+        const liveRankByParticipation = new Map<string, number>()
+        let previousPercentage: number | null = null
+        let currentRank = 0
+        Array.from(livePercentageByParticipation.entries())
+            .sort((a, b) => b[1] - a[1])
+            .forEach(([participationId, percentage]) => {
+                if (previousPercentage === null || percentage !== previousPercentage) {
+                    currentRank += 1
+                }
+                liveRankByParticipation.set(participationId, currentRank)
+                previousPercentage = percentage
+            })
 
         return {
             id: category.id,
@@ -118,10 +161,22 @@ export class CategoryService {
                     p.athlete.user.email
                 ),
                 horseName: p.horseName,
+                startOrder: p.startOrder,
+                startTime: p.startTime,
                 participationNumber: p.participationNumber,
                 finalScore: p.finalScore?.toString() ?? null,
                 rank: p.rank,
                 status: p.status,
+                livePercentage:
+                    livePercentageByParticipation.get(p.id) ?? null,
+                liveRank: liveRankByParticipation.get(p.id) ?? null,
+                accumulatedScore:
+                    accumulatedScoreByParticipation.get(p.id) ?? null,
+                refereeScores: p.evaluations.map((e) => ({
+                    refereeId: e.categoryRefereeId,
+                    finalScore: e.finalScore?.toString() ?? null,
+                    percentage: e.percentage?.toString() ?? null,
+                })),
             })),
         }
     }
@@ -234,11 +289,11 @@ export class CategoryService {
         if (!category) {
             throw new NotFoundException('Category not found')
         }
-        assertStatus(
-            category.event.status,
-            'DRAFT',
-            'Arbitrii pot fi asociați doar cât timp competiția este în ciornă.'
-        )
+        if (!['DRAFT', 'PUBLISHED'].includes(category.event.status)) {
+            throw new BadRequestException(
+                'Arbitrii pot fi asociați doar cât timp competiția este în ciornă sau publicată.'
+            )
+        }
 
         const existing = await this.prisma.categoryReferee.findUnique({
             where: {
@@ -267,11 +322,11 @@ export class CategoryService {
         if (!referee || referee.categoryId !== categoryId) {
             throw new NotFoundException('Referee not found')
         }
-        assertStatus(
-            referee.category.event.status,
-            'DRAFT',
-            'Arbitrii pot fi eliminați doar cât timp competiția este în ciornă.'
-        )
+        if (!['DRAFT', 'PUBLISHED'].includes(referee.category.event.status)) {
+            throw new BadRequestException(
+                'Arbitrii pot fi eliminați doar cât timp competiția este în ciornă sau publicată.'
+            )
+        }
 
         await this.prisma.categoryReferee.delete({ where: { id: refereeId } })
     }
@@ -303,12 +358,61 @@ export class CategoryService {
             throw new NotFoundException('Athlete not found')
         }
 
+        let participationNumber = dto.participationNumber
+        if (participationNumber === undefined) {
+            const existing = await this.prisma.participation.findMany({
+                where: { categoryId, athleteId: dto.athleteId },
+                select: { participationNumber: true },
+                orderBy: { participationNumber: 'desc' },
+                take: 1,
+            })
+            participationNumber = (existing[0]?.participationNumber ?? 0) + 1
+        }
+
+        const maxStartOrder = await this.prisma.participation.aggregate({
+            where: { categoryId },
+            _max: { startOrder: true },
+        })
+        const startOrder = (maxStartOrder._max.startOrder ?? 0) + 1
+
         return this.prisma.participation.create({
             data: {
                 categoryId,
                 athleteId: dto.athleteId,
                 horseName: dto.horseName,
-                participationNumber: dto.participationNumber ?? 1,
+                participationNumber,
+                startOrder,
+            },
+        })
+    }
+
+    async updateParticipation(
+        categoryId: string,
+        participationId: string,
+        dto: UpdateParticipationDto
+    ) {
+        const participation = await this.prisma.participation.findUnique({
+            where: { id: participationId },
+            include: { category: { include: { event: true } } },
+        })
+        if (!participation || participation.categoryId !== categoryId) {
+            throw new NotFoundException('Participation not found')
+        }
+        if (
+            participation.category.event.status !== 'PUBLISHED' &&
+            participation.category.event.status !== 'ONGOING'
+        ) {
+            throw new BadRequestException(
+                'Participanții pot fi modificați doar cât timp competiția este publicată sau în desfășurare.'
+            )
+        }
+
+        return this.prisma.participation.update({
+            where: { id: participationId },
+            data: {
+                horseName: dto.horseName,
+                startOrder: dto.startOrder,
+                startTime: dto.startTime,
             },
         })
     }

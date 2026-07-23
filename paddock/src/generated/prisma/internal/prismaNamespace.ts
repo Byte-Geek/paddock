@@ -1717,6 +1717,8 @@ export const ParticipationScalarFieldEnum = {
   athleteId: 'athleteId',
   categoryId: 'categoryId',
   horseName: 'horseName',
+  startOrder: 'startOrder',
+  startTime: 'startTime',
   participationNumber: 'participationNumber',
   finalScore: 'finalScore',
   percentage: 'percentage',

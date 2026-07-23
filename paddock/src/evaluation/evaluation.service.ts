@@ -11,6 +11,30 @@ import { EvaluationDetailDto } from './dto/evaluation-detail.dto'
 export class EvaluationService {
     constructor(private readonly prisma: PrismaService) {}
 
+    async findAllForParticipation(
+        participationId: string
+    ): Promise<EvaluationDetailDto[]> {
+        const evaluations = await this.prisma.evaluation.findMany({
+            where: { participationId },
+            include: { scores: true },
+        })
+
+        return evaluations.map((evaluation) => ({
+            id: evaluation.id,
+            participationId: evaluation.participationId,
+            categoryRefereeId: evaluation.categoryRefereeId,
+            finalScore: evaluation.finalScore?.toString() ?? null,
+            percentage: evaluation.percentage?.toString() ?? null,
+            finalized: evaluation.finalized,
+            scores: evaluation.scores.map((s) => ({
+                elementId: s.elementId,
+                value: s.value?.toString() ?? null,
+                correction: s.correction?.toString() ?? null,
+                remark: s.remark,
+            })),
+        }))
+    }
+
     async find(
         participationId: string,
         categoryRefereeId: string

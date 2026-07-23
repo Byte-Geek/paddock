@@ -14,6 +14,7 @@ import { CreateCategoryDto } from './dto/create-category.dto'
 import { UpdateCategoryDto } from './dto/update-category.dto'
 import { CreateRefereeDto } from './dto/create-referee.dto'
 import { CreateParticipationDto } from './dto/create-participation.dto'
+import { UpdateParticipationDto } from './dto/update-participation.dto'
 import { Roles } from '../auth/decorators/roles.decorator'
 import { CurrentUser } from '../auth/decorators/current-user.decorator'
 
@@ -78,5 +79,19 @@ export class CategoryController {
         @Body() dto: CreateParticipationDto
     ) {
         return this.categoryService.addParticipation(id, dto)
+    }
+
+    @Roles('ADMIN')
+    @Patch('categories/:id/participations/:participationId')
+    async updateParticipation(
+        @Param('id') id: string,
+        @Param('participationId') participationId: string,
+        @Body() dto: UpdateParticipationDto
+    ) {
+        return this.categoryService.updateParticipation(
+            id,
+            participationId,
+            dto
+        )
     }
 }

@@ -35,10 +35,7 @@ export default function CompetitiiPage() {
 		loadCompetitions();
 	}, []);
 
-	const now = new Date();
-	const isPast = (c: CompetitionEvent) =>
-		c.status === "COMPLETED" ||
-		(c.startDate ? new Date(c.startDate) < now : false);
+	const isPast = (c: CompetitionEvent) => c.status === "COMPLETED";
 	const upcoming = competitions.filter((c) => !isPast(c));
 	const past = competitions.filter(isPast);
 	const list = tab === "upcoming" ? upcoming : past;

@@ -27,6 +27,7 @@ export type AggregateParticipation = {
 }
 
 export type ParticipationAvgAggregateOutputType = {
+  startOrder: number | null
   participationNumber: number | null
   finalScore: runtime.Decimal | null
   percentage: runtime.Decimal | null
@@ -34,6 +35,7 @@ export type ParticipationAvgAggregateOutputType = {
 }
 
 export type ParticipationSumAggregateOutputType = {
+  startOrder: number | null
   participationNumber: number | null
   finalScore: runtime.Decimal | null
   percentage: runtime.Decimal | null
@@ -45,6 +47,8 @@ export type ParticipationMinAggregateOutputType = {
   athleteId: string | null
   categoryId: string | null
   horseName: string | null
+  startOrder: number | null
+  startTime: string | null
   participationNumber: number | null
   finalScore: runtime.Decimal | null
   percentage: runtime.Decimal | null
@@ -59,6 +63,8 @@ export type ParticipationMaxAggregateOutputType = {
   athleteId: string | null
   categoryId: string | null
   horseName: string | null
+  startOrder: number | null
+  startTime: string | null
   participationNumber: number | null
   finalScore: runtime.Decimal | null
   percentage: runtime.Decimal | null
@@ -73,6 +79,8 @@ export type ParticipationCountAggregateOutputType = {
   athleteId: number
   categoryId: number
   horseName: number
+  startOrder: number
+  startTime: number
   participationNumber: number
   finalScore: number
   percentage: number
@@ -85,6 +93,7 @@ export type ParticipationCountAggregateOutputType = {
 
 
 export type ParticipationAvgAggregateInputType = {
+  startOrder?: true
   participationNumber?: true
   finalScore?: true
   percentage?: true
@@ -92,6 +101,7 @@ export type ParticipationAvgAggregateInputType = {
 }
 
 export type ParticipationSumAggregateInputType = {
+  startOrder?: true
   participationNumber?: true
   finalScore?: true
   percentage?: true
@@ -103,6 +113,8 @@ export type ParticipationMinAggregateInputType = {
   athleteId?: true
   categoryId?: true
   horseName?: true
+  startOrder?: true
+  startTime?: true
   participationNumber?: true
   finalScore?: true
   percentage?: true
@@ -117,6 +129,8 @@ export type ParticipationMaxAggregateInputType = {
   athleteId?: true
   categoryId?: true
   horseName?: true
+  startOrder?: true
+  startTime?: true
   participationNumber?: true
   finalScore?: true
   percentage?: true
@@ -131,6 +145,8 @@ export type ParticipationCountAggregateInputType = {
   athleteId?: true
   categoryId?: true
   horseName?: true
+  startOrder?: true
+  startTime?: true
   participationNumber?: true
   finalScore?: true
   percentage?: true
@@ -232,6 +248,8 @@ export type ParticipationGroupByOutputType = {
   athleteId: string
   categoryId: string
   horseName: string | null
+  startOrder: number | null
+  startTime: string | null
   participationNumber: number
   finalScore: runtime.Decimal | null
   percentage: runtime.Decimal | null
@@ -269,6 +287,8 @@ export type ParticipationWhereInput = {
   athleteId?: Prisma.StringFilter<"Participation"> | string
   categoryId?: Prisma.StringFilter<"Participation"> | string
   horseName?: Prisma.StringNullableFilter<"Participation"> | string | null
+  startOrder?: Prisma.IntNullableFilter<"Participation"> | number | null
+  startTime?: Prisma.StringNullableFilter<"Participation"> | string | null
   participationNumber?: Prisma.IntFilter<"Participation"> | number
   finalScore?: Prisma.DecimalNullableFilter<"Participation"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   percentage?: Prisma.DecimalNullableFilter<"Participation"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -286,6 +306,8 @@ export type ParticipationOrderByWithRelationInput = {
   athleteId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   horseName?: Prisma.SortOrderInput | Prisma.SortOrder
+  startOrder?: Prisma.SortOrderInput | Prisma.SortOrder
+  startTime?: Prisma.SortOrderInput | Prisma.SortOrder
   participationNumber?: Prisma.SortOrder
   finalScore?: Prisma.SortOrderInput | Prisma.SortOrder
   percentage?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -307,6 +329,8 @@ export type ParticipationWhereUniqueInput = Prisma.AtLeast<{
   athleteId?: Prisma.StringFilter<"Participation"> | string
   categoryId?: Prisma.StringFilter<"Participation"> | string
   horseName?: Prisma.StringNullableFilter<"Participation"> | string | null
+  startOrder?: Prisma.IntNullableFilter<"Participation"> | number | null
+  startTime?: Prisma.StringNullableFilter<"Participation"> | string | null
   participationNumber?: Prisma.IntFilter<"Participation"> | number
   finalScore?: Prisma.DecimalNullableFilter<"Participation"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   percentage?: Prisma.DecimalNullableFilter<"Participation"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -324,6 +348,8 @@ export type ParticipationOrderByWithAggregationInput = {
   athleteId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   horseName?: Prisma.SortOrderInput | Prisma.SortOrder
+  startOrder?: Prisma.SortOrderInput | Prisma.SortOrder
+  startTime?: Prisma.SortOrderInput | Prisma.SortOrder
   participationNumber?: Prisma.SortOrder
   finalScore?: Prisma.SortOrderInput | Prisma.SortOrder
   percentage?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -346,6 +372,8 @@ export type ParticipationScalarWhereWithAggregatesInput = {
   athleteId?: Prisma.StringWithAggregatesFilter<"Participation"> | string
   categoryId?: Prisma.StringWithAggregatesFilter<"Participation"> | string
   horseName?: Prisma.StringNullableWithAggregatesFilter<"Participation"> | string | null
+  startOrder?: Prisma.IntNullableWithAggregatesFilter<"Participation"> | number | null
+  startTime?: Prisma.StringNullableWithAggregatesFilter<"Participation"> | string | null
   participationNumber?: Prisma.IntWithAggregatesFilter<"Participation"> | number
   finalScore?: Prisma.DecimalNullableWithAggregatesFilter<"Participation"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   percentage?: Prisma.DecimalNullableWithAggregatesFilter<"Participation"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -358,6 +386,8 @@ export type ParticipationScalarWhereWithAggregatesInput = {
 export type ParticipationCreateInput = {
   id?: string
   horseName?: string | null
+  startOrder?: number | null
+  startTime?: string | null
   participationNumber?: number
   finalScore?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -375,6 +405,8 @@ export type ParticipationUncheckedCreateInput = {
   athleteId: string
   categoryId: string
   horseName?: string | null
+  startOrder?: number | null
+  startTime?: string | null
   participationNumber?: number
   finalScore?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -388,6 +420,8 @@ export type ParticipationUncheckedCreateInput = {
 export type ParticipationUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   horseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  startTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   participationNumber?: Prisma.IntFieldUpdateOperationsInput | number
   finalScore?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   percentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -405,6 +439,8 @@ export type ParticipationUncheckedUpdateInput = {
   athleteId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   horseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  startTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   participationNumber?: Prisma.IntFieldUpdateOperationsInput | number
   finalScore?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   percentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -420,6 +456,8 @@ export type ParticipationCreateManyInput = {
   athleteId: string
   categoryId: string
   horseName?: string | null
+  startOrder?: number | null
+  startTime?: string | null
   participationNumber?: number
   finalScore?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -432,6 +470,8 @@ export type ParticipationCreateManyInput = {
 export type ParticipationUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   horseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  startTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   participationNumber?: Prisma.IntFieldUpdateOperationsInput | number
   finalScore?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   percentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -446,6 +486,8 @@ export type ParticipationUncheckedUpdateManyInput = {
   athleteId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   horseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  startTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   participationNumber?: Prisma.IntFieldUpdateOperationsInput | number
   finalScore?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   percentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -476,6 +518,8 @@ export type ParticipationCountOrderByAggregateInput = {
   athleteId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   horseName?: Prisma.SortOrder
+  startOrder?: Prisma.SortOrder
+  startTime?: Prisma.SortOrder
   participationNumber?: Prisma.SortOrder
   finalScore?: Prisma.SortOrder
   percentage?: Prisma.SortOrder
@@ -486,6 +530,7 @@ export type ParticipationCountOrderByAggregateInput = {
 }
 
 export type ParticipationAvgOrderByAggregateInput = {
+  startOrder?: Prisma.SortOrder
   participationNumber?: Prisma.SortOrder
   finalScore?: Prisma.SortOrder
   percentage?: Prisma.SortOrder
@@ -497,6 +542,8 @@ export type ParticipationMaxOrderByAggregateInput = {
   athleteId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   horseName?: Prisma.SortOrder
+  startOrder?: Prisma.SortOrder
+  startTime?: Prisma.SortOrder
   participationNumber?: Prisma.SortOrder
   finalScore?: Prisma.SortOrder
   percentage?: Prisma.SortOrder
@@ -511,6 +558,8 @@ export type ParticipationMinOrderByAggregateInput = {
   athleteId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   horseName?: Prisma.SortOrder
+  startOrder?: Prisma.SortOrder
+  startTime?: Prisma.SortOrder
   participationNumber?: Prisma.SortOrder
   finalScore?: Prisma.SortOrder
   percentage?: Prisma.SortOrder
@@ -521,6 +570,7 @@ export type ParticipationMinOrderByAggregateInput = {
 }
 
 export type ParticipationSumOrderByAggregateInput = {
+  startOrder?: Prisma.SortOrder
   participationNumber?: Prisma.SortOrder
   finalScore?: Prisma.SortOrder
   percentage?: Prisma.SortOrder
@@ -645,6 +695,8 @@ export type ParticipationUpdateOneRequiredWithoutEvaluationsNestedInput = {
 export type ParticipationCreateWithoutAthleteInput = {
   id?: string
   horseName?: string | null
+  startOrder?: number | null
+  startTime?: string | null
   participationNumber?: number
   finalScore?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -660,6 +712,8 @@ export type ParticipationUncheckedCreateWithoutAthleteInput = {
   id?: string
   categoryId: string
   horseName?: string | null
+  startOrder?: number | null
+  startTime?: string | null
   participationNumber?: number
   finalScore?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -704,6 +758,8 @@ export type ParticipationScalarWhereInput = {
   athleteId?: Prisma.StringFilter<"Participation"> | string
   categoryId?: Prisma.StringFilter<"Participation"> | string
   horseName?: Prisma.StringNullableFilter<"Participation"> | string | null
+  startOrder?: Prisma.IntNullableFilter<"Participation"> | number | null
+  startTime?: Prisma.StringNullableFilter<"Participation"> | string | null
   participationNumber?: Prisma.IntFilter<"Participation"> | number
   finalScore?: Prisma.DecimalNullableFilter<"Participation"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   percentage?: Prisma.DecimalNullableFilter<"Participation"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -716,6 +772,8 @@ export type ParticipationScalarWhereInput = {
 export type ParticipationCreateWithoutCategoryInput = {
   id?: string
   horseName?: string | null
+  startOrder?: number | null
+  startTime?: string | null
   participationNumber?: number
   finalScore?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -731,6 +789,8 @@ export type ParticipationUncheckedCreateWithoutCategoryInput = {
   id?: string
   athleteId: string
   horseName?: string | null
+  startOrder?: number | null
+  startTime?: string | null
   participationNumber?: number
   finalScore?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -770,6 +830,8 @@ export type ParticipationUpdateManyWithWhereWithoutCategoryInput = {
 export type ParticipationCreateWithoutEvaluationsInput = {
   id?: string
   horseName?: string | null
+  startOrder?: number | null
+  startTime?: string | null
   participationNumber?: number
   finalScore?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -786,6 +848,8 @@ export type ParticipationUncheckedCreateWithoutEvaluationsInput = {
   athleteId: string
   categoryId: string
   horseName?: string | null
+  startOrder?: number | null
+  startTime?: string | null
   participationNumber?: number
   finalScore?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -814,6 +878,8 @@ export type ParticipationUpdateToOneWithWhereWithoutEvaluationsInput = {
 export type ParticipationUpdateWithoutEvaluationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   horseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  startTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   participationNumber?: Prisma.IntFieldUpdateOperationsInput | number
   finalScore?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   percentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -830,6 +896,8 @@ export type ParticipationUncheckedUpdateWithoutEvaluationsInput = {
   athleteId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   horseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  startTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   participationNumber?: Prisma.IntFieldUpdateOperationsInput | number
   finalScore?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   percentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -843,6 +911,8 @@ export type ParticipationCreateManyAthleteInput = {
   id?: string
   categoryId: string
   horseName?: string | null
+  startOrder?: number | null
+  startTime?: string | null
   participationNumber?: number
   finalScore?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -855,6 +925,8 @@ export type ParticipationCreateManyAthleteInput = {
 export type ParticipationUpdateWithoutAthleteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   horseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  startTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   participationNumber?: Prisma.IntFieldUpdateOperationsInput | number
   finalScore?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   percentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -870,6 +942,8 @@ export type ParticipationUncheckedUpdateWithoutAthleteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   horseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  startTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   participationNumber?: Prisma.IntFieldUpdateOperationsInput | number
   finalScore?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   percentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -884,6 +958,8 @@ export type ParticipationUncheckedUpdateManyWithoutAthleteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   horseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  startTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   participationNumber?: Prisma.IntFieldUpdateOperationsInput | number
   finalScore?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   percentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -897,6 +973,8 @@ export type ParticipationCreateManyCategoryInput = {
   id?: string
   athleteId: string
   horseName?: string | null
+  startOrder?: number | null
+  startTime?: string | null
   participationNumber?: number
   finalScore?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   percentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -909,6 +987,8 @@ export type ParticipationCreateManyCategoryInput = {
 export type ParticipationUpdateWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   horseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  startTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   participationNumber?: Prisma.IntFieldUpdateOperationsInput | number
   finalScore?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   percentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -924,6 +1004,8 @@ export type ParticipationUncheckedUpdateWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   athleteId?: Prisma.StringFieldUpdateOperationsInput | string
   horseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  startTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   participationNumber?: Prisma.IntFieldUpdateOperationsInput | number
   finalScore?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   percentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -938,6 +1020,8 @@ export type ParticipationUncheckedUpdateManyWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   athleteId?: Prisma.StringFieldUpdateOperationsInput | string
   horseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  startTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   participationNumber?: Prisma.IntFieldUpdateOperationsInput | number
   finalScore?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   percentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -983,6 +1067,8 @@ export type ParticipationSelect<ExtArgs extends runtime.Types.Extensions.Interna
   athleteId?: boolean
   categoryId?: boolean
   horseName?: boolean
+  startOrder?: boolean
+  startTime?: boolean
   participationNumber?: boolean
   finalScore?: boolean
   percentage?: boolean
@@ -1001,6 +1087,8 @@ export type ParticipationSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   athleteId?: boolean
   categoryId?: boolean
   horseName?: boolean
+  startOrder?: boolean
+  startTime?: boolean
   participationNumber?: boolean
   finalScore?: boolean
   percentage?: boolean
@@ -1017,6 +1105,8 @@ export type ParticipationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   athleteId?: boolean
   categoryId?: boolean
   horseName?: boolean
+  startOrder?: boolean
+  startTime?: boolean
   participationNumber?: boolean
   finalScore?: boolean
   percentage?: boolean
@@ -1033,6 +1123,8 @@ export type ParticipationSelectScalar = {
   athleteId?: boolean
   categoryId?: boolean
   horseName?: boolean
+  startOrder?: boolean
+  startTime?: boolean
   participationNumber?: boolean
   finalScore?: boolean
   percentage?: boolean
@@ -1042,7 +1134,7 @@ export type ParticipationSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ParticipationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "athleteId" | "categoryId" | "horseName" | "participationNumber" | "finalScore" | "percentage" | "rank" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["participation"]>
+export type ParticipationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "athleteId" | "categoryId" | "horseName" | "startOrder" | "startTime" | "participationNumber" | "finalScore" | "percentage" | "rank" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["participation"]>
 export type ParticipationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   athlete?: boolean | Prisma.AthleteDefaultArgs<ExtArgs>
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
@@ -1070,6 +1162,8 @@ export type $ParticipationPayload<ExtArgs extends runtime.Types.Extensions.Inter
     athleteId: string
     categoryId: string
     horseName: string | null
+    startOrder: number | null
+    startTime: string | null
     participationNumber: number
     finalScore: runtime.Decimal | null
     percentage: runtime.Decimal | null
@@ -1507,6 +1601,8 @@ export interface ParticipationFieldRefs {
   readonly athleteId: Prisma.FieldRef<"Participation", 'String'>
   readonly categoryId: Prisma.FieldRef<"Participation", 'String'>
   readonly horseName: Prisma.FieldRef<"Participation", 'String'>
+  readonly startOrder: Prisma.FieldRef<"Participation", 'Int'>
+  readonly startTime: Prisma.FieldRef<"Participation", 'String'>
   readonly participationNumber: Prisma.FieldRef<"Participation", 'Int'>
   readonly finalScore: Prisma.FieldRef<"Participation", 'Decimal'>
   readonly percentage: Prisma.FieldRef<"Participation", 'Decimal'>

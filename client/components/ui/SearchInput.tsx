@@ -3,6 +3,9 @@ interface SearchInputProps {
 	onChange: (value: string) => void;
 	placeholder?: string;
 	className?: string;
+	onFocus?: () => void;
+	onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+	autoFocus?: boolean;
 }
 
 export default function SearchInput({
@@ -10,6 +13,9 @@ export default function SearchInput({
 	onChange,
 	placeholder,
 	className,
+	onFocus,
+	onKeyDown,
+	autoFocus,
 }: SearchInputProps) {
 	return (
 		<div
@@ -30,6 +36,9 @@ export default function SearchInput({
 			<input
 				value={value}
 				onChange={(e) => onChange(e.target.value)}
+				onFocus={onFocus}
+				onKeyDown={onKeyDown}
+				autoFocus={autoFocus}
 				placeholder={placeholder}
 				className="bg-transparent border-0 outline-none text-[var(--color-ink-800)] text-sm flex-1 min-w-0 placeholder:text-[var(--color-slate-400)]"
 			/>

@@ -272,11 +272,13 @@ model Participation {
   category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
   horseName String?
+  startOrder Int?
+  startTime  String?
 
   participationNumber Int @default(1)
 
   finalScore Decimal? @db.Decimal(6, 2)
-  percentage Decimal? @db.Decimal(5, 2)
+  percentage Decimal? @db.Decimal(7, 4)
   rank       Int?
 
   status ParticipationStatus @default(REGISTERED)
@@ -301,7 +303,7 @@ model Evaluation {
   enteredBy       User?           @relation("EvaluationEnteredBy", fields: [enteredByUserId], references: [id], onDelete: SetNull)
 
   finalScore Decimal? @db.Decimal(6, 2)
-  percentage Decimal? @db.Decimal(5, 2)
+  percentage Decimal? @db.Decimal(7, 4)
 
   finalized Boolean @default(false)
 

@@ -6,15 +6,27 @@ export class RefereeDto {
     position: string | null
 }
 
+export class RefereeScoreDto {
+    refereeId: string
+    finalScore: string | null
+    percentage: string | null
+}
+
 export class ParticipationDto {
     id: string
     athleteId: string
     athleteName: string
     horseName: string | null
+    startOrder: number | null
+    startTime: string | null
     participationNumber: number
     finalScore: string | null
     rank: number | null
     status: string
+    livePercentage: number | null
+    liveRank: number | null
+    accumulatedScore: number | null
+    refereeScores: RefereeScoreDto[]
 }
 
 export class CategoryElementDto {

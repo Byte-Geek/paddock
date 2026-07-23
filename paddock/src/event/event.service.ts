@@ -4,6 +4,7 @@ import { CreateEventDto } from './dto/create-event.dto'
 import { UpdateEventDto } from './dto/update-event.dto'
 import { EventDto, EventDetailDto } from './dto/event.dto'
 import { formatFullName } from '../common/utils/name.util'
+import { EventStatus } from '../generated/prisma/enums'
 import {
     userNameSelect,
     userNameWithIdSelect,
@@ -14,10 +15,99 @@ export class EventService {
     constructor(private readonly prisma: PrismaService) {}
 
     private async syncScheduledTransitions(): Promise<void> {
-        await this.prisma.event.updateMany({
-            where: { status: 'PUBLISHED', startDate: { lte: new Date() } },
-            data: { status: 'ONGOING' },
+        const now = new Date()
+
+        const duePublished = await this.prisma.event.findMany({
+            where: { status: 'PUBLISHED', startDate: { lte: now } },
+            select: {
+                id: true,
+                categories: {
+                    select: { _count: { select: { participations: true } } },
+                },
+            },
         })
+        const readyToStart = duePublished
+            .filter(
+                (e) =>
+                    e.categories.length > 0 &&
+                    e.categories.every((c) => c._count.participations > 0)
+            )
+            .map((e) => e.id)
+        if (readyToStart.length > 0) {
+            await this.prisma.event.updateMany({
+                where: { id: { in: readyToStart } },
+                data: { status: 'ONGOING' },
+            })
+        }
+
+        const dueOngoing = await this.prisma.event.findMany({
+            where: {
+                status: 'ONGOING',
+                endDate: { lte: now },
+            },
+            select: { id: true },
+        })
+        const readyToComplete: string[] = []
+        for (const e of dueOngoing) {
+            if (await this.areAllProtocolsComplete(e.id)) {
+                readyToComplete.push(e.id)
+            }
+        }
+        if (readyToComplete.length > 0) {
+            await this.prisma.event.updateMany({
+                where: { id: { in: readyToComplete } },
+                data: { status: 'COMPLETED' },
+            })
+        }
+    }
+
+    private async hasAtLeastOneCategory(eventId: string): Promise<boolean> {
+        const count = await this.prisma.category.count({
+            where: { eventId },
+        })
+        return count > 0
+    }
+
+    private async doAllCategoriesHaveAthlete(
+        eventId: string
+    ): Promise<boolean> {
+        const categories = await this.prisma.category.findMany({
+            where: { eventId },
+            select: { _count: { select: { participations: true } } },
+        })
+        return (
+            categories.length > 0 &&
+            categories.every((c) => c._count.participations > 0)
+        )
+    }
+
+    private async areAllProtocolsComplete(eventId: string): Promise<boolean> {
+        const categories = await this.prisma.category.findMany({
+            where: { eventId },
+            select: {
+                _count: { select: { referees: true } },
+                participations: {
+                    select: {
+                        _count: {
+                            select: {
+                                evaluations: { where: { finalized: true } },
+                            },
+                        },
+                    },
+                },
+            },
+        })
+
+        return (
+            categories.length > 0 &&
+            categories.every(
+                (c) =>
+                    c._count.referees > 0 &&
+                    c.participations.every(
+                        (p) => p._count.evaluations === c._count.referees
+                    )
+            )
+        )
     }
 
     async findAll(requesterRole?: string): Promise<EventDto[]> {
@@ -207,6 +297,10 @@ export class EventService {
             )
         }
 
+        if (dto.status !== undefined && dto.status !== event.status) {
+            await this.assertCanTransitionTo(id, dto.status)
+        }
+
         const updated = await this.prisma.event.update({
             where: { id },
             data: {
@@ -257,6 +351,35 @@ export class EventService {
             status: updated.status,
             participantCount: athleteIds.size,
             secretaries: updated.secretaries.map((s) => s.user),
+        }
+    }
+
+    private async assertCanTransitionTo(
+        id: string,
+        targetStatus: EventStatus
+    ): Promise<void> {
+        if (targetStatus === 'PUBLISHED') {
+            if (!(await this.hasAtLeastOneCategory(id))) {
+                throw new BadRequestException(
+                    'Competiția poate fi publicată doar dacă are cel puțin o categorie asociată.'
+                )
+            }
+        }
+
+        if (targetStatus === 'ONGOING') {
+            if (!(await this.doAllCategoriesHaveAthlete(id))) {
+                throw new BadRequestException(
+                    'Competiția poate trece în desfășurare doar dacă fiecare categorie are cel puțin un sportiv înscris.'
+                )
+            }
+        }
+
+        if (targetStatus === 'COMPLETED') {
+            if (!(await this.areAllProtocolsComplete(id))) {
+                throw new BadRequestException(
+                    'Competiția poate fi finalizată doar după ce toate protocoalele au fost completate pentru toți sportivii.'
+                )
+            }
         }
     }
 

@@ -34,6 +34,15 @@ export function formatFullName(
 	return `${firstName ?? ""} ${lastName ?? ""}`.trim() || fallback;
 }
 
+export function formatPercentage(value: number): string {
+	let str = value.toFixed(4);
+	str = str.replace(/0+$/, "");
+	if (str.endsWith(".")) {
+		str += "0";
+	}
+	return str;
+}
+
 export function formatDate(date: string | Date | null): {
 	day: string;
 	month: string;

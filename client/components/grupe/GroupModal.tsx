@@ -39,41 +39,41 @@ export default function GroupModal({ group, onClose }: GroupModalProps) {
 
 	return (
 		<div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-			<div className="bg-white rounded-2xl w-full max-w-2xl max-h-[85vh] flex flex-col">
-				<div className="flex items-center justify-between px-6 py-4 border-b border-[#e8ecf5]">
+			<div className="bg-surface rounded-2xl w-full max-w-2xl max-h-[85vh] flex flex-col">
+				<div className="flex items-center justify-between px-6 py-4 border-b border-[var(--color-border-soft)]">
 					<div>
-						<h2 className="text-lg font-bold text-[#0f1729]">
+						<h2 className="text-lg font-bold text-[var(--color-ink-800)]">
 							{group.name}
 						</h2>
-						<p className="text-xs text-[#8896b3] mt-0.5">
+						<p className="text-xs text-[var(--color-slate-500)] mt-0.5">
 							Antrenor: {coachName}
 						</p>
 					</div>
 					<button
 						onClick={onClose}
-						className="text-[#8896b3] hover:text-[#0f1729]"
+						className="text-[var(--color-slate-500)] hover:text-[var(--color-ink-800)]"
 					>
 						✕
 					</button>
 				</div>
 
-				<div className="px-6 py-3 border-b border-[#e8ecf5] text-xs text-[#8896b3]">
+				<div className="px-6 py-3 border-b border-[var(--color-border-soft)] text-xs text-[var(--color-slate-500)]">
 					{group.athleteCount} sportivi
 				</div>
 
 				<div className="overflow-auto flex-1">
 					{loading ? (
-						<div className="px-6 py-10 text-center text-sm text-[#8896b3]">
+						<div className="px-6 py-10 text-center text-sm text-[var(--color-slate-500)]">
 							Se încarcă...
 						</div>
 					) : (
 						<table className="w-full text-sm">
-							<thead className="bg-[#f4f6fb]">
+							<thead className="bg-[var(--color-silver-bg)]">
 								<tr>
 									{["Sportiv", "Email"].map((h) => (
 										<th
 											key={h}
-											className="text-left px-5 py-3 text-xs font-semibold text-[#8896b3] uppercase tracking-wide"
+											className="text-left px-5 py-3 text-xs font-semibold text-[var(--color-slate-500)] uppercase tracking-wide"
 										>
 											{h}
 										</th>
@@ -86,14 +86,14 @@ export default function GroupModal({ group, onClose }: GroupModalProps) {
 										key={m.id}
 										className={
 											i % 2 === 0
-												? "bg-white"
-												: "bg-[#fafbfd]"
+												? "bg-surface"
+												: "bg-[var(--color-surface-subtle)]"
 										}
 									>
-										<td className="px-5 py-3 font-semibold text-[#0f1729]">
+										<td className="px-5 py-3 font-semibold text-[var(--color-ink-800)]">
 											{formatFullName(m.firstName, m.lastName, m.email)}
 										</td>
-										<td className="px-5 py-3 text-[#8896b3]">
+										<td className="px-5 py-3 text-[var(--color-slate-500)]">
 											{m.email}
 										</td>
 									</tr>
@@ -102,7 +102,7 @@ export default function GroupModal({ group, onClose }: GroupModalProps) {
 									<tr>
 										<td
 											colSpan={2}
-											className="px-5 py-10 text-center text-[#b0bcd4] text-sm"
+											className="px-5 py-10 text-center text-[var(--color-slate-400)] text-sm"
 										>
 											Niciun sportiv asociat încă.
 										</td>

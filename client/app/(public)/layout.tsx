@@ -26,7 +26,7 @@ export default function PublicLayout({
 			<Navbar onToggleSidebar={() => setCollapsed((p) => !p)} />
 			<div className="flex flex-1 overflow-hidden">
 				<Sidebar collapsed={collapsed} />
-				<main className="flex-1 overflow-auto bg-[#f3f6fa] p-8">
+				<main className="flex-1 overflow-auto bg-[var(--color-blue-50)] p-8">
 					{children}
 				</main>
 			</div>

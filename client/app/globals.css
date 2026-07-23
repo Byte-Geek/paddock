@@ -1,5 +1,59 @@
 @import "tailwindcss";
 
+@theme inline {
+	--font-sans: var(--font-outfit);
+	--font-mono: var(--font-jetbrains-mono);
+
+	/* Neutrals — cool navy-tinted gray scale */
+	--color-ink-900: #0a1220;
+	--color-ink-800: #0f1729;
+	--color-ink-700: #1c2a3f;
+	--color-sidebar: #101d33;
+	--color-slate-500: #8896b3;
+	--color-slate-400: #a4b0c7;
+	--color-slate-300: #cbd5e1;
+	--color-border: #e2e8f0;
+	--color-border-soft: #eef1f8;
+	--color-surface: #ffffff;
+	--color-surface-subtle: #fafbfd;
+
+	/* Blue accent scale — single accent family, deepened for hierarchy */
+	--color-blue-50: #f1f7fc;
+	--color-blue-100: #e0eef9;
+	--color-blue-300: #8fb7dd;
+	--color-blue-500: #2f6fb8;
+	--color-blue-600: #1d4f8f;
+	--color-blue-800: #123a6e;
+	--color-blue-900: #0e1f33;
+
+	/* Semantic */
+	--color-success: #059669;
+	--color-success-bg: #ecfdf5;
+	--color-warning: #b45309;
+	--color-warning-bg: #fffbeb;
+	--color-danger: #dc2626;
+	--color-danger-bg: #fef2f2;
+
+	/* Medal accents — used sparingly, only for ranking contexts */
+	--color-gold: #9c7f2c;
+	--color-gold-bg: #faf6e8;
+	--color-silver: #6b7d92;
+	--color-silver-bg: #f4f6fb;
+	--color-bronze: #a5573f;
+	--color-bronze-bg: #fbeee9;
+
+	/* Radius scale */
+	--radius-sm: 8px;
+	--radius-md: 10px;
+	--radius-lg: 14px;
+	--radius-xl: 20px;
+
+	/* Tinted shadow scale — navy hue, not pure black */
+	--shadow-panel: 0 1px 2px rgba(14, 39, 64, 0.04), 0 10px 24px -16px rgba(14, 39, 64, 0.12);
+	--shadow-panel-hover: 0 1px 2px rgba(14, 39, 64, 0.05), 0 16px 32px -16px rgba(14, 39, 64, 0.18);
+	--shadow-float: 0 24px 48px -12px rgba(14, 31, 51, 0.35);
+}
+
 * {
 	scrollbar-width: none;
 	-ms-overflow-style: none;
@@ -8,28 +62,52 @@
 *::-webkit-scrollbar {
 	display: none;
 }
-/* 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+	scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-} */
+	font-variant-numeric: tabular-nums;
+}
+
+h1,
+h2,
+h3 {
+	text-wrap: balance;
+}
+
+p {
+	text-wrap: pretty;
+}
+
+:focus-visible {
+	outline: 2px solid var(--color-blue-600);
+	outline-offset: 2px;
+	border-radius: 4px;
+}
+
+::selection {
+	background: var(--color-blue-300);
+	color: var(--color-blue-900);
+}
+
+@keyframes fade-in {
+	from {
+		opacity: 0;
+	}
+}
+
+@keyframes modal-in {
+	from {
+		opacity: 0;
+		transform: translateY(8px) scale(0.98);
+	}
+}
+
+@keyframes menu-in {
+	from {
+		opacity: 0;
+		transform: translateY(-6px);
+	}
+}

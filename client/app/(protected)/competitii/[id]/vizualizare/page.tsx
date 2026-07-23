@@ -62,30 +62,30 @@ export default function CompetitionViewPage() {
 		<div className="flex flex-col gap-5">
 			<button
 				onClick={() => router.push("/competitii")}
-				className="text-sm text-[#2a6aa6] hover:underline self-start"
+				className="text-sm text-[var(--color-blue-600)] hover:underline self-start"
 			>
 				← Înapoi la competiții
 			</button>
 
-			<div className="bg-white rounded-[10px] border border-[#e2e8f0] p-4 flex flex-col gap-2">
+			<div className="bg-surface rounded-md border border-[var(--color-border)] p-4 flex flex-col gap-2">
 				<div className="flex items-center gap-2 mb-1">
 					<Badge variant={EVENT_STATUS_VARIANTS[event.status]}>
 						{EVENT_STATUS_LABELS[event.status]}
 					</Badge>
 				</div>
-				<h1 className="text-2xl font-bold text-[#0e1f33]">
+				<h1 className="text-2xl font-bold text-[var(--color-blue-900)]">
 					{event.name}
 				</h1>
 				{event.location && (
-					<p className="text-sm text-[#6b7d92]">{event.location}</p>
+					<p className="text-sm text-[var(--color-slate-500)]">{event.location}</p>
 				)}
 				{event.description && (
-					<p className="text-sm text-[#6b7d92]">
+					<p className="text-sm text-[var(--color-slate-500)]">
 						{event.description}
 					</p>
 				)}
 
-				<div className="flex flex-wrap gap-x-6 gap-y-1 text-xs text-[#6b7d92] mt-1">
+				<div className="flex flex-wrap gap-x-6 gap-y-1 text-xs text-[var(--color-slate-500)] mt-1">
 					{(event.startDate || event.endDate) && (
 						<span>
 							{event.startDate
@@ -118,7 +118,7 @@ export default function CompetitionViewPage() {
 				</div>
 			</div>
 
-			<h2 className="font-semibold text-[#0e1f33]">Categorii</h2>
+			<h2 className="font-semibold text-[var(--color-blue-900)]">Categorii</h2>
 
 			{categories.length === 0 ? (
 				<EmptyState>
@@ -129,27 +129,27 @@ export default function CompetitionViewPage() {
 					{categories.map((cat) => (
 						<div
 							key={cat.id}
-							className="bg-white rounded-[10px] border border-[#e2e8f0] p-4 flex flex-col gap-3"
+							className="bg-surface rounded-md border border-[var(--color-border)] p-4 flex flex-col gap-3"
 						>
 							<div>
-								<div className="font-semibold text-[#0e1f33]">
+								<div className="font-semibold text-[var(--color-blue-900)]">
 									{cat.name}
 								</div>
-								<div className="text-xs text-[#6b7d92] mt-0.5">
+								<div className="text-xs text-[var(--color-slate-500)] mt-0.5">
 									Protocol: {cat.protocolTemplateName}
 								</div>
 							</div>
 
 							{cat.referees.length > 0 && (
 								<div>
-									<div className="text-xs font-semibold text-[#6b7d92] mb-1">
+									<div className="text-xs font-semibold text-[var(--color-slate-500)] mb-1">
 										Arbitri
 									</div>
 									<div className="flex flex-wrap gap-2">
 										{cat.referees.map((r) => (
 											<span
 												key={r.id}
-												className="text-xs bg-[#f1f7fc] text-[#205280] px-2 py-1 rounded-md"
+												className="text-xs bg-[var(--color-blue-50)] text-[var(--color-blue-800)] px-2 py-1 rounded-md"
 											>
 												{r.letterCode} — {r.firstName}{" "}
 												{r.lastName}
@@ -161,18 +161,18 @@ export default function CompetitionViewPage() {
 
 							{cat.participations.length > 0 && (
 								<div>
-									<div className="text-xs font-semibold text-[#6b7d92] mb-1">
+									<div className="text-xs font-semibold text-[var(--color-slate-500)] mb-1">
 										Participanți
 									</div>
 									<div className="overflow-x-auto">
 										<table className="w-full text-sm border-collapse">
-											<thead className="bg-[#f4f6fb]">
+											<thead className="bg-[var(--color-silver-bg)]">
 												<tr>
 													{["Sportiv", "Cal"].map(
 														(h) => (
 															<th
 																key={h}
-																className="text-left px-2 py-1.5 text-xs font-semibold text-[#6b7d92] border border-[#e2e8f0]"
+																className="text-left px-2 py-1.5 text-xs font-semibold text-[var(--color-slate-500)] border border-[var(--color-border)]"
 															>
 																{h}
 															</th>
@@ -184,10 +184,10 @@ export default function CompetitionViewPage() {
 												{cat.participations.map(
 													(p) => (
 														<tr key={p.id}>
-															<td className="border border-[#e2e8f0] px-2 py-1.5">
+															<td className="border border-[var(--color-border)] px-2 py-1.5">
 																{p.athleteName}
 															</td>
-															<td className="border border-[#e2e8f0] px-2 py-1.5">
+															<td className="border border-[var(--color-border)] px-2 py-1.5">
 																{p.horseName ??
 																	"—"}
 															</td>

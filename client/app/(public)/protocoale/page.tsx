@@ -51,7 +51,7 @@ export default function ProtocoalePage() {
 					canManage && (
 						<button
 							onClick={() => setAdding(true)}
-							className="bg-[#2a6aa6] hover:bg-[#205280] text-white text-sm font-semibold px-4 py-2 rounded-[10px] transition"
+							className="bg-[var(--color-blue-600)] hover:bg-[var(--color-blue-800)] text-white text-sm font-semibold px-4 py-2 rounded-md transition"
 						>
 							+ Adaugă protocol
 						</button>
@@ -64,9 +64,9 @@ export default function ProtocoalePage() {
 			) : templates.length === 0 ? (
 				<EmptyState>Niciun protocol găsit.</EmptyState>
 			) : (
-				<div className="bg-white rounded-[10px] border border-[#e2e8f0] overflow-hidden">
+				<div className="bg-surface rounded-md border border-[var(--color-border)] overflow-hidden">
 					<table className="w-full text-sm">
-						<thead className="bg-[#f1f7fc]">
+						<thead className="bg-[var(--color-blue-50)]">
 							<tr>
 								{[
 									"Protocol",
@@ -79,7 +79,7 @@ export default function ProtocoalePage() {
 								].map((h) => (
 									<th
 										key={h}
-										className="text-left px-5 py-3 text-xs font-semibold text-[#6b7d92] uppercase tracking-wide"
+										className="text-left px-5 py-3 text-xs font-semibold text-[var(--color-slate-500)] uppercase tracking-wide"
 									>
 										{h}
 									</th>
@@ -90,11 +90,11 @@ export default function ProtocoalePage() {
 							{templates.map((t, i) => (
 								<tr
 									key={t.id}
-									className={`border-t border-[#eef2f7] ${i % 2 === 0 ? "bg-white" : "bg-[#fafbfd]"} hover:bg-[#f1f7fc] transition`}
+									className={`border-t border-[var(--color-border-soft)] ${i % 2 === 0 ? "bg-surface" : "bg-[var(--color-surface-subtle)]"} hover:bg-[var(--color-blue-50)] transition`}
 								>
 									<td className="px-5 py-3">
 										<div className="flex items-center gap-3">
-											<div className="w-9 h-9 rounded-[8px] bg-[#f1f7fc] text-[#205280] grid place-items-center flex-shrink-0">
+											<div className="w-9 h-9 rounded-sm bg-[var(--color-blue-50)] text-[var(--color-blue-800)] grid place-items-center flex-shrink-0">
 												<svg
 													width="16"
 													height="16"
@@ -120,11 +120,11 @@ export default function ProtocoalePage() {
 												</svg>
 											</div>
 											<div>
-												<div className="font-semibold text-[#0e1f33]">
+												<div className="font-semibold text-[var(--color-blue-900)]">
 													{t.name}
 												</div>
 												{t.compositionYear && (
-													<div className="text-[11px] text-[#6b7d92]">
+													<div className="text-[11px] text-[var(--color-slate-500)]">
 														din {t.compositionYear}
 														{t.revisionYear &&
 															t.revisionYear !==
@@ -135,17 +135,17 @@ export default function ProtocoalePage() {
 											</div>
 										</div>
 									</td>
-									<td className="px-5 py-3 text-[#6b7d92] text-xs">
+									<td className="px-5 py-3 text-[var(--color-slate-500)] text-xs">
 										{t.level ?? "—"}
 									</td>
-									<td className="px-5 py-3 text-[#34495e] text-xs">
+									<td className="px-5 py-3 text-[var(--color-ink-700)] text-xs">
 										{algorithmLabels[t.scoringAlgorithm] ??
 											t.scoringAlgorithm}
 									</td>
-									<td className="px-5 py-3 text-[#34495e] font-semibold">
+									<td className="px-5 py-3 text-[var(--color-ink-700)] font-semibold">
 										{t.elementCount}
 									</td>
-									<td className="px-5 py-3 text-[#34495e] font-semibold">
+									<td className="px-5 py-3 text-[var(--color-ink-700)] font-semibold">
 										{t.categoryCount}
 									</td>
 									<td className="px-5 py-3">
@@ -163,7 +163,7 @@ export default function ProtocoalePage() {
 										<div className="flex items-center justify-end">
 											<Link
 												href={`/protocoale/${t.id}`}
-												className="w-8 h-8 rounded-[6px] hover:bg-[#f1f7fc] text-[#6b7d92] hover:text-[#205280] grid place-items-center transition"
+												className="w-8 h-8 rounded-[6px] hover:bg-[var(--color-blue-50)] text-[var(--color-slate-500)] hover:text-[var(--color-blue-800)] grid place-items-center transition"
 												title="Vizualizează"
 											>
 												👁

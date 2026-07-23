@@ -31,9 +31,9 @@ export default function RideCalculator() {
 
 	return (
 		<div className="grid grid-cols-2 gap-4">
-			<div className="bg-white rounded-[10px] border border-[#e2e8f0] p-5 flex flex-col gap-4">
+			<div className="bg-surface rounded-md border border-[var(--color-border)] p-5 flex flex-col gap-4">
 				<div className="flex flex-col gap-1.5">
-					<label className="text-xs font-medium text-[#6b7d92]">
+					<label className="text-xs font-medium text-[var(--color-slate-500)]">
 						Obstacole doborâte
 					</label>
 					<input
@@ -41,12 +41,12 @@ export default function RideCalculator() {
 						min={0}
 						value={knockdowns}
 						onChange={(e) => setKnockdowns(e.target.value)}
-						className="border border-[#e2e8f0] rounded-lg px-3 py-2 text-sm outline-none focus:border-[#2a6aa6]"
+						className="border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm outline-none focus:border-[var(--color-blue-600)]"
 					/>
 				</div>
 
 				<div className="flex flex-col gap-1.5">
-					<label className="text-xs font-medium text-[#6b7d92]">
+					<label className="text-xs font-medium text-[var(--color-slate-500)]">
 						Refuzuri
 					</label>
 					<input
@@ -54,12 +54,12 @@ export default function RideCalculator() {
 						min={0}
 						value={refusals}
 						onChange={(e) => setRefusals(e.target.value)}
-						className="border border-[#e2e8f0] rounded-lg px-3 py-2 text-sm outline-none focus:border-[#2a6aa6]"
+						className="border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm outline-none focus:border-[var(--color-blue-600)]"
 					/>
 				</div>
 
 				<div className="flex flex-col gap-1.5">
-					<label className="text-xs font-medium text-[#6b7d92]">
+					<label className="text-xs font-medium text-[var(--color-slate-500)]">
 						Secunde peste timpul admis
 					</label>
 					<input
@@ -67,11 +67,11 @@ export default function RideCalculator() {
 						min={0}
 						value={timeFaultSeconds}
 						onChange={(e) => setTimeFaultSeconds(e.target.value)}
-						className="border border-[#e2e8f0] rounded-lg px-3 py-2 text-sm outline-none focus:border-[#2a6aa6]"
+						className="border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm outline-none focus:border-[var(--color-blue-600)]"
 					/>
 				</div>
 
-				<p className="text-xs text-[#8896b3]">
+				<p className="text-xs text-[var(--color-slate-500)]">
 					Bază: {BASE_SCORE} puncte pentru parcurs curat în timp. Se
 					scad {POINTS_PER_KNOCKDOWN} pct/obstacol dobo­rât,{" "}
 					{POINTS_PER_REFUSAL} pct/refuz,{" "}

@@ -10,11 +10,13 @@ export default function PageHeader({
 	actions,
 }: PageHeaderProps) {
 	return (
-		<div className="flex items-start justify-between mb-6">
+		<div className="flex items-start justify-between mb-7 pb-5 border-b border-[var(--color-border-soft)]">
 			<div>
-				<h1 className="text-[#0f1729] text-2xl font-bold">{title}</h1>
+				<h1 className="text-[var(--color-ink-800)] text-[26px] font-bold tracking-[-0.01em]">
+					{title}
+				</h1>
 				{subtitle && (
-					<p className="text-[#8896b3] text-sm mt-1 max-w-xl">
+					<p className="text-[var(--color-slate-500)] text-sm mt-1.5 max-w-xl leading-relaxed">
 						{subtitle}
 					</p>
 				)}

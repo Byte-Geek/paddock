@@ -3,7 +3,12 @@ interface LoadingStateProps {
 }
 
 export default function LoadingState({
-	className = "text-[#6b7d92]",
+	className = "text-[var(--color-slate-500)]",
 }: LoadingStateProps) {
-	return <div className={`text-sm ${className}`}>Se încarcă...</div>;
+	return (
+		<div className={`text-sm flex items-center gap-2 ${className}`}>
+			<span className="w-3.5 h-3.5 rounded-full border-2 border-current border-t-transparent animate-spin" />
+			Se încarcă...
+		</div>
+	);
 }

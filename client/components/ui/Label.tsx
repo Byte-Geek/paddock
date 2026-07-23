@@ -6,7 +6,7 @@ type LabelProps = LabelHTMLAttributes<HTMLLabelElement>;
 export default function Label({ className, children, ...props }: LabelProps) {
 	return (
 		<label
-			className={cn("text-xs font-medium text-[#6b7d92]", className || undefined)}
+			className={cn("text-xs font-medium text-[var(--color-slate-500)]", className || undefined)}
 			{...props}
 		>
 			{children}

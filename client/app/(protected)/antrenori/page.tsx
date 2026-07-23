@@ -12,6 +12,8 @@ import { getErrorMessage } from "@/lib/error";
 import { useCanManage } from "@/lib/hooks/useCanManage";
 import { formatFullName } from "@/lib/utils";
 import LoadingState from "@/components/ui/LoadingState";
+import EmptyState from "@/components/ui/EmptyState";
+import DataStrip from "@/components/ui/DataStrip";
 
 export default function AntrenoriPage() {
 	const canManage = useCanManage();
@@ -60,6 +62,21 @@ export default function AntrenoriPage() {
 		return haystack.includes(q.toLowerCase());
 	});
 
+	const coveredGroups = new Set(
+		coaches.flatMap((c) => c.groups.map((g) => g.id)),
+	).size;
+	const withoutGroup = coaches.filter((c) => c.groups.length === 0).length;
+
+	const summary = [
+		{ key: "coaches", label: "Antrenori", value: coaches.length },
+		{ key: "groups", label: "Grupe acoperite", value: coveredGroups },
+		{
+			key: "no-group",
+			label: "Fără grupă asignată",
+			value: withoutGroup,
+		},
+	];
+
 	return (
 		<div>
 			<PageHeader
@@ -69,13 +86,17 @@ export default function AntrenoriPage() {
 					canManage && (
 						<button
 							onClick={() => setAdding(true)}
-							className="bg-[#4a7adb] hover:bg-[#3a6acb] text-white text-sm font-semibold px-4 py-2 rounded-lg transition"
+							className="bg-[var(--color-blue-600)] hover:bg-[var(--color-blue-800)] text-white text-sm font-semibold px-4 py-2 rounded-lg transition"
 						>
 							+ Adaugă antrenor
 						</button>
 					)
 				}
 			/>
+
+			{!loading && coaches.length > 0 && (
+				<DataStrip items={summary} className="mb-6" />
+			)}
 
 			<div className="flex items-center gap-3 flex-wrap mb-6">
 				<SearchInput
@@ -84,7 +105,7 @@ export default function AntrenoriPage() {
 					placeholder="Caută antrenor sau email…"
 					className="flex-1 max-w-sm"
 				/>
-				<span className="text-[#b0bcd4] text-sm ml-auto">
+				<span className="text-[var(--color-slate-400)] text-sm ml-auto">
 					{list.length} rezultate
 				</span>
 			</div>
@@ -96,11 +117,9 @@ export default function AntrenoriPage() {
 			)}
 
 			{loading ? (
-				<LoadingState className="text-[#8896b3]" />
+				<LoadingState className="text-[var(--color-slate-500)]" />
 			) : list.length === 0 ? (
-				<div className="rounded-xl border border-[#e8ecf5] bg-white p-6 text-sm text-[#8896b3]">
-					Niciun antrenor găsit.
-				</div>
+				<EmptyState>Niciun antrenor găsit.</EmptyState>
 			) : (
 				<div className="grid grid-cols-3 gap-4">
 					{list.map((c) => (

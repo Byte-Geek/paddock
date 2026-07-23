@@ -29,11 +29,11 @@ export default function CoachProfileView() {
 	}, []);
 
 	if (loading) {
-		return <LoadingState className="text-[#8896b3]" />;
+		return <LoadingState className="text-[var(--color-slate-500)]" />;
 	}
 	if (!stats) {
 		return (
-			<div className="rounded-xl border border-[#e8ecf5] bg-white p-6 text-sm text-[#8896b3]">
+			<div className="rounded-md border border-[var(--color-border-soft)] bg-surface p-6 text-sm text-[var(--color-slate-500)]">
 				Nu s-au putut încărca statisticile.
 			</div>
 		);
@@ -43,7 +43,7 @@ export default function CoachProfileView() {
 		<div className="flex flex-col gap-6">
 			{stats.ownParticipation && (
 				<div>
-					<h3 className="font-semibold text-[#0f1729] mb-3">
+					<h3 className="font-semibold text-[var(--color-ink-800)] mb-3">
 						Rezultatele mele ca sportiv
 					</h3>
 					<div className="flex flex-col gap-4">
@@ -56,31 +56,31 @@ export default function CoachProfileView() {
 			)}
 
 			<div>
-				<h3 className="font-semibold text-[#0f1729] mb-3">
+				<h3 className="font-semibold text-[var(--color-ink-800)] mb-3">
 					Statistici generale — grupele mele
 				</h3>
 				<div className="grid grid-cols-3 gap-4 mb-4">
-					<div className="bg-white rounded-xl border border-[#e8ecf5] p-4 text-center">
-						<div className="text-xl font-bold text-[#0f1729]">
+					<div className="bg-surface rounded-md border border-[var(--color-border-soft)] p-4 text-center">
+						<div className="text-xl font-bold text-[var(--color-ink-800)]">
 							{stats.groups.length}
 						</div>
-						<div className="text-[11px] text-[#8896b3] uppercase tracking-wide">
+						<div className="text-[11px] text-[var(--color-slate-500)] uppercase tracking-wide">
 							Grupe
 						</div>
 					</div>
-					<div className="bg-white rounded-xl border border-[#e8ecf5] p-4 text-center">
-						<div className="text-xl font-bold text-[#0f1729]">
+					<div className="bg-surface rounded-md border border-[var(--color-border-soft)] p-4 text-center">
+						<div className="text-xl font-bold text-[var(--color-ink-800)]">
 							{stats.overall.totalAthletes}
 						</div>
-						<div className="text-[11px] text-[#8896b3] uppercase tracking-wide">
+						<div className="text-[11px] text-[var(--color-slate-500)] uppercase tracking-wide">
 							Sportivi
 						</div>
 					</div>
-					<div className="bg-white rounded-xl border border-[#e8ecf5] p-4 text-center">
-						<div className="text-xl font-bold text-[#0f1729]">
+					<div className="bg-surface rounded-md border border-[var(--color-border-soft)] p-4 text-center">
+						<div className="text-xl font-bold text-[var(--color-ink-800)]">
 							{stats.overall.totalParticipations}
 						</div>
-						<div className="text-[11px] text-[#8896b3] uppercase tracking-wide">
+						<div className="text-[11px] text-[var(--color-slate-500)] uppercase tracking-wide">
 							Participări
 						</div>
 					</div>
@@ -92,17 +92,17 @@ export default function CoachProfileView() {
 			</div>
 
 			<div>
-				<h3 className="font-semibold text-[#0f1729] mb-3">
+				<h3 className="font-semibold text-[var(--color-ink-800)] mb-3">
 					Statistici pe grupe
 				</h3>
 				{stats.groups.length === 0 ? (
-					<div className="rounded-xl border border-[#e8ecf5] bg-white p-6 text-sm text-[#8896b3]">
+					<div className="rounded-md border border-[var(--color-border-soft)] bg-surface p-6 text-sm text-[var(--color-slate-500)]">
 						Nu ai nicio grupă asociată.
 					</div>
 				) : (
-					<div className="bg-white rounded-xl border border-[#e8ecf5] overflow-hidden">
+					<div className="bg-surface rounded-md border border-[var(--color-border-soft)] overflow-hidden">
 						<table className="w-full text-sm">
-							<thead className="bg-[#f4f6fb]">
+							<thead className="bg-[var(--color-silver-bg)]">
 								<tr>
 									{[
 										"Grupă",
@@ -114,7 +114,7 @@ export default function CoachProfileView() {
 									].map((h) => (
 										<th
 											key={h}
-											className="text-left px-5 py-3 text-xs font-semibold text-[#8896b3] uppercase tracking-wide"
+											className="text-left px-5 py-3 text-xs font-semibold text-[var(--color-slate-500)] uppercase tracking-wide"
 										>
 											{h}
 										</th>
@@ -125,24 +125,24 @@ export default function CoachProfileView() {
 								{stats.groups.map((g, i) => (
 									<tr
 										key={g.id}
-										className={`border-t border-[#e8ecf5] ${i % 2 === 0 ? "bg-white" : "bg-[#fafbfd]"}`}
+										className={`border-t border-[var(--color-border-soft)] ${i % 2 === 0 ? "bg-surface" : "bg-[var(--color-surface-subtle)]"}`}
 									>
-										<td className="px-5 py-3 font-semibold text-[#0f1729]">
+										<td className="px-5 py-3 font-semibold text-[var(--color-ink-800)]">
 											{g.name}
 										</td>
-										<td className="px-5 py-3 text-[#8896b3]">
+										<td className="px-5 py-3 text-[var(--color-slate-500)]">
 											{g.athleteCount}
 										</td>
-										<td className="px-5 py-3 text-[#0f1729]">
+										<td className="px-5 py-3 text-[var(--color-ink-800)]">
 											{g.medals.gold}
 										</td>
-										<td className="px-5 py-3 text-[#0f1729]">
+										<td className="px-5 py-3 text-[var(--color-ink-800)]">
 											{g.medals.silver}
 										</td>
-										<td className="px-5 py-3 text-[#0f1729]">
+										<td className="px-5 py-3 text-[var(--color-ink-800)]">
 											{g.medals.bronze}
 										</td>
-										<td className="px-5 py-3 text-[#0f1729]">
+										<td className="px-5 py-3 text-[var(--color-ink-800)]">
 											{g.medals.total}
 										</td>
 									</tr>

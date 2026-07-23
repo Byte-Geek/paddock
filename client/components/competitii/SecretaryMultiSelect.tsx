@@ -56,13 +56,13 @@ export default function SecretaryMultiSelect({
 	return (
 		<div ref={containerRef} className="relative">
 			<div
-				className="flex flex-wrap items-center gap-1.5 border border-[#e2e8f0] rounded-lg px-2 py-1.5 min-h-[38px] focus-within:border-[#2a6aa6] cursor-text"
+				className="flex flex-wrap items-center gap-1.5 border border-[var(--color-border)] rounded-lg px-2 py-1.5 min-h-[38px] focus-within:border-[var(--color-blue-600)] cursor-text"
 				onClick={() => setOpen(true)}
 			>
 				{selected.map((s) => (
 					<span
 						key={s.id}
-						className="flex items-center gap-1 bg-[#eaf1f8] text-[#2a6aa6] text-xs font-medium px-2 py-1 rounded-md"
+						className="flex items-center gap-1 bg-[var(--color-blue-50)] text-[var(--color-blue-600)] text-xs font-medium px-2 py-1 rounded-md"
 					>
 						{label(s)}
 						<button
@@ -71,7 +71,7 @@ export default function SecretaryMultiSelect({
 								e.stopPropagation();
 								removeSecretary(s.id);
 							}}
-							className="text-[#2a6aa6] hover:text-[#1a3f5c]"
+							className="text-[var(--color-blue-600)] hover:text-[var(--color-blue-800)]"
 						>
 							×
 						</button>
@@ -92,9 +92,9 @@ export default function SecretaryMultiSelect({
 			</div>
 
 			{open && (
-				<div className="absolute z-10 mt-1 w-full max-h-48 overflow-y-auto border border-[#e2e8f0] rounded-lg bg-white shadow-lg">
+				<div className="absolute z-10 mt-1 w-full max-h-48 overflow-y-auto border border-[var(--color-border)] rounded-lg bg-surface shadow-lg">
 					{filtered.length === 0 ? (
-						<p className="px-3 py-2 text-xs text-[#8896b3]">
+						<p className="px-3 py-2 text-xs text-[var(--color-slate-500)]">
 							{options.length === 0
 								? "Niciun utilizator moderator disponibil."
 								: "Niciun rezultat."}
@@ -105,7 +105,7 @@ export default function SecretaryMultiSelect({
 								type="button"
 								key={o.id}
 								onClick={() => addSecretary(o.id)}
-								className="w-full text-left px-3 py-2 text-sm text-[#0e1f33] hover:bg-[#f4f7fb] transition"
+								className="w-full text-left px-3 py-2 text-sm text-[var(--color-blue-900)] hover:bg-[var(--color-surface-subtle)] transition"
 							>
 								{label(o)}
 							</button>

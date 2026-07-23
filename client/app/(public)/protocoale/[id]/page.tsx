@@ -120,7 +120,7 @@ export default function ProtocolViewPage() {
 			<div className="flex items-center justify-between print:hidden">
 				<button
 					onClick={() => router.push("/protocoale")}
-					className="text-sm text-[#2a6aa6] hover:underline"
+					className="text-sm text-[var(--color-blue-600)] hover:underline"
 				>
 					← Înapoi la protocoale
 				</button>
@@ -139,13 +139,13 @@ export default function ProtocolViewPage() {
 							<>
 								<Link
 									href={`/protocoale/${template.id}/edit`}
-									className="text-sm text-[#2a6aa6] border border-[#b5d7f1] px-3 py-1.5 rounded-[8px] hover:bg-[#f1f7fc] transition"
+									className="text-sm text-[var(--color-blue-600)] border border-[var(--color-blue-300)] px-3 py-1.5 rounded-sm hover:bg-[var(--color-blue-50)] transition"
 								>
 									✏️ Editează
 								</Link>
 								<button
 									onClick={handleDelete}
-									className="text-sm text-red-600 border border-red-200 px-3 py-1.5 rounded-[8px] hover:bg-red-50 transition"
+									className="text-sm text-red-600 border border-red-200 px-3 py-1.5 rounded-sm hover:bg-red-50 transition"
 								>
 									🗑️ Șterge
 								</button>
@@ -155,17 +155,17 @@ export default function ProtocolViewPage() {
 			</div>
 
 			{/* Original PDF — exact copy, kept alongside the structured data above */}
-			<div className="bg-white rounded-[10px] border border-[#e2e8f0] p-4 flex items-center justify-between print:hidden">
+			<div className="bg-surface rounded-md border border-[var(--color-border)] p-4 flex items-center justify-between print:hidden">
 				<div className="text-sm">
-					<div className="font-semibold text-[#0e1f33]">
+					<div className="font-semibold text-[var(--color-blue-900)]">
 						Document PDF original
 					</div>
 					{template.pdfUrl ? (
-						<div className="text-[#6b7d92] text-xs mt-0.5">
+						<div className="text-[var(--color-slate-500)] text-xs mt-0.5">
 							{template.pdfFileName}
 						</div>
 					) : (
-						<div className="text-[#8896b3] text-xs mt-0.5">
+						<div className="text-[var(--color-slate-500)] text-xs mt-0.5">
 							Niciun fișier încărcat încă.
 						</div>
 					)}
@@ -176,7 +176,7 @@ export default function ProtocolViewPage() {
 							href={fileUrl(template.pdfUrl)}
 							target="_blank"
 							rel="noopener noreferrer"
-							className="text-sm text-[#2a6aa6] border border-[#b5d7f1] px-3 py-1.5 rounded-[8px] hover:bg-[#f1f7fc] transition"
+							className="text-sm text-[var(--color-blue-600)] border border-[var(--color-blue-300)] px-3 py-1.5 rounded-sm hover:bg-[var(--color-blue-50)] transition"
 						>
 							📄 Deschide PDF
 						</a>
@@ -193,7 +193,7 @@ export default function ProtocolViewPage() {
 							<button
 								onClick={() => fileInputRef.current?.click()}
 								disabled={uploading}
-								className="text-sm text-[#6b7d92] border border-[#e2e8f0] px-3 py-1.5 rounded-[8px] hover:bg-[#f1f7fc] transition disabled:opacity-50"
+								className="text-sm text-[var(--color-slate-500)] border border-[var(--color-border)] px-3 py-1.5 rounded-sm hover:bg-[var(--color-blue-50)] transition disabled:opacity-50"
 							>
 								{uploading
 									? "Se încarcă..."
@@ -207,7 +207,7 @@ export default function ProtocolViewPage() {
 			</div>
 
 			<div
-				className="bg-white border border-black mx-auto w-full max-w-[900px] text-[11px] leading-tight text-black"
+				className="bg-surface border border-black mx-auto w-full max-w-[900px] text-[11px] leading-tight text-black"
 				style={{ fontFamily: "Arial, Helvetica, sans-serif" }}
 			>
 				
@@ -242,7 +242,7 @@ export default function ProtocolViewPage() {
 						))}
 					</colgroup>
 					<thead>
-						<tr className="bg-[#f0f0f0]">
+						<tr className="bg-[var(--color-border)]">
 							<th
 								className="border border-black p-0.5 text-[9px] font-bold"
 								rowSpan={2}
@@ -298,7 +298,7 @@ export default function ProtocolViewPage() {
 								Оценивается / Замечания
 							</th>
 						</tr>
-						<tr className="bg-[#f0f0f0]">
+						<tr className="bg-[var(--color-border)]">
 							<th className="border border-black p-0.5 text-[9px] font-bold">
 								Оценивается
 							</th>
@@ -312,7 +312,7 @@ export default function ProtocolViewPage() {
 							<tr>
 								<td
 									colSpan={10}
-									className="border border-black p-3 text-center text-[#8896b3]"
+									className="border border-black p-3 text-center text-[var(--color-slate-500)]"
 								>
 									Niciun element definit încă.
 								</td>
@@ -358,11 +358,8 @@ export default function ProtocolViewPage() {
 					</tbody>
 				</table>
 
-				{/* Signature line — matches the bottom of the paper form */}
 				{template.elements.length > 0 && (
 					<div className="p-3 flex justify-between text-[11px]">
-						<BlankLine label="Organizatori" width="w-56" />
-						<BlankLine label="Semnătura arbitrului" width="w-56" />
 					</div>
 				)}
 			</div>

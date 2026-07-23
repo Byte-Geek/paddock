@@ -39,11 +39,11 @@ export default function Navbar({ onToggleSidebar }: NavbarProps) {
 	};
 
 	return (
-		<header className="h-[60px] bg-[#143654] text-white flex items-center px-5 gap-3.5 z-30 flex-shrink-0 shadow-[0_1px_0_rgba(0,0,0,0.08)]">
+		<header className="h-[64px] bg-[var(--color-blue-900)] text-white flex items-center px-5 gap-3.5 z-30 flex-shrink-0 shadow-[0_1px_0_rgba(0,0,0,0.08),0_8px_24px_-16px_rgba(14,39,64,0.4)]">
 			{/* Toggle */}
 			<button
 				onClick={onToggleSidebar}
-				className="w-[38px] h-[38px] grid place-items-center border border-white/10 rounded-[6px] hover:bg-white/8 transition flex-shrink-0"
+				className="w-[38px] h-[38px] grid place-items-center border border-white/10 rounded-[6px] hover:bg-surface/8 transition flex-shrink-0"
 			>
 				<svg
 					width="18"
@@ -62,7 +62,7 @@ export default function Navbar({ onToggleSidebar }: NavbarProps) {
 			{/* Brand */}
 			<button onClick={() => router.push("/")}>
 				<div className="flex items-center gap-3 font-bold text-[18px] tracking-[-0.01em]">
-					<div className="w-[34px] h-[34px] rounded-[9px] bg-gradient-to-br from-[#6cb0e6] to-white grid place-items-center text-[#143654] shadow-[inset_0_-1px_0_rgba(0,0,0,0.08),0_2px_8px_rgba(0,0,0,0.15)]">
+					<div className="w-[34px] h-[34px] rounded-[9px] bg-gradient-to-br from-[var(--color-blue-300)] to-white grid place-items-center text-[var(--color-ink-900)] shadow-[inset_0_-1px_0_rgba(0,0,0,0.08),0_2px_8px_rgba(0,0,0,0.15)]">
 						<svg
 							width="20"
 							height="20"
@@ -103,7 +103,7 @@ export default function Navbar({ onToggleSidebar }: NavbarProps) {
 			{/* Search - only for authenticated users */}
 			{token && (
 				<div
-					className="flex items-center gap-2 bg-white/6 border border-white/8 rounded-full px-3 py-[7px] w-[320px] text-white/75 hover:bg-white/10 transition cursor-text"
+					className="flex items-center gap-2 bg-surface/6 border border-white/8 rounded-full px-3 py-[7px] w-[320px] text-white/75 hover:bg-surface/10 transition cursor-text"
 					onClick={(e) =>
 						(
 							e.currentTarget.querySelector(
@@ -127,7 +127,7 @@ export default function Navbar({ onToggleSidebar }: NavbarProps) {
 						placeholder="Caută sportivi, competiții, grupe…"
 						className="bg-transparent border-0 outline-none text-white text-[13px] flex-1 min-w-0 placeholder:text-white/45"
 					/>
-					<kbd className="font-mono text-[10px] px-1.5 py-[1px] rounded bg-white/10 text-white/70 border border-white/8">
+					<kbd className="font-mono text-[10px] px-1.5 py-[1px] rounded bg-surface/10 text-white/70 border border-white/8">
 						⌘K
 					</kbd>
 				</div>
@@ -135,7 +135,7 @@ export default function Navbar({ onToggleSidebar }: NavbarProps) {
 
 			{/* Bell - only for authenticated users */}
 			{token && (
-				<button className="w-[38px] h-[38px] grid place-items-center text-white/85 rounded-[6px] hover:bg-white/8 relative transition">
+				<button className="w-[38px] h-[38px] grid place-items-center text-white/85 rounded-[6px] hover:bg-surface/8 relative transition">
 					<svg
 						width="18"
 						height="18"
@@ -147,7 +147,7 @@ export default function Navbar({ onToggleSidebar }: NavbarProps) {
 						<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
 						<path d="M13.73 21a2 2 0 0 1-3.46 0" />
 					</svg>
-					<span className="absolute top-2 right-[9px] w-[7px] h-[7px] bg-[#ff7a59] rounded-full shadow-[0_0_0_2px_#143654]" />
+					<span className="absolute top-2 right-[9px] w-[7px] h-[7px] bg-[#ff7a59] rounded-full shadow-[0_0_0_2px_var(--color-blue-900)]" />
 				</button>
 			)}
 
@@ -157,9 +157,9 @@ export default function Navbar({ onToggleSidebar }: NavbarProps) {
 				<div ref={menuRef} className="relative">
 					<button
 						onClick={() => setMenuOpen((o) => !o)}
-						className="flex items-center gap-2.5 bg-transparent border-0 text-white px-2.5 py-1 pr-[10px] pl-1 rounded-full hover:bg-white/8 transition"
+						className="flex items-center gap-2.5 bg-transparent border-0 text-white px-2.5 py-1 pr-[10px] pl-1 rounded-full hover:bg-surface/8 transition"
 					>
-						<div className="w-9 h-9 rounded-full bg-gradient-to-br from-white to-[#b5d7f1] text-[#143654] grid place-items-center font-bold text-[14px]">
+						<div className="w-9 h-9 rounded-full bg-gradient-to-br from-white to-[var(--color-blue-300)] text-[var(--color-ink-900)] grid place-items-center font-bold text-[14px]">
 							{initials(user?.firstName || "")}
 						</div>
 						<div className="text-left">
@@ -184,20 +184,20 @@ export default function Navbar({ onToggleSidebar }: NavbarProps) {
 					</button>
 
 					{menuOpen && (
-						<div className="absolute right-0 top-[calc(100%+6px)] w-[280px] bg-white rounded-[14px] shadow-[0_20px_40px_-16px_rgba(14,39,64,0.22),0_4px_8px_rgba(14,39,64,0.06)] border border-[#e2e8f0] overflow-hidden z-50 animate-[menu-in_0.14s_ease-out]">
+						<div className="absolute right-0 top-[calc(100%+6px)] w-[280px] bg-surface rounded-lg shadow-[0_20px_40px_-16px_rgba(14,39,64,0.22),0_4px_8px_rgba(14,39,64,0.06)] border border-[var(--color-border)] overflow-hidden z-50 animate-[menu-in_0.14s_ease-out]">
 							{/* Head */}
-							<div className="p-4 border-b border-[#eef2f7] grid grid-cols-[44px_1fr] gap-3 items-center">
-								<div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#b5d7f1] to-[#e0eef9] text-[#143654] grid place-items-center font-bold text-base">
+							<div className="p-4 border-b border-[var(--color-border-soft)] grid grid-cols-[44px_1fr] gap-3 items-center">
+								<div className="w-11 h-11 rounded-full bg-gradient-to-br from-[var(--color-blue-300)] to-[var(--color-blue-100)] text-[var(--color-ink-900)] grid place-items-center font-bold text-base">
 									{initials(user?.firstName || "")}
 								</div>
 								<div>
-									<div className="font-bold text-[14px] text-[#0e1f33]">
+									<div className="font-bold text-[14px] text-[var(--color-blue-900)]">
 										{user ? `${user.firstName} ${user.lastName}` : ""}
 									</div>
-									<div className="text-[12px] text-[#6b7d92]">
+									<div className="text-[12px] text-[var(--color-slate-500)]">
 										{user?.email}
 									</div>
-									<span className="mt-1 inline-block text-[10px] font-bold tracking-[0.1em] text-[#205280] bg-[#e0eef9] px-[7px] py-[2px] rounded uppercase">
+									<span className="mt-1 inline-block text-[10px] font-bold tracking-[0.1em] text-[var(--color-blue-800)] bg-[var(--color-blue-100)] px-[7px] py-[2px] rounded uppercase">
 										{user?.role ? roleLabels[user.role] : ""}
 									</span>
 								</div>
@@ -247,20 +247,20 @@ export default function Navbar({ onToggleSidebar }: NavbarProps) {
 											setMenuOpen(false);
 											router.push(item.href);
 										}}
-										className="w-full flex items-center gap-2.5 px-2.5 py-[9px] rounded-[6px] text-[13px] text-[#0e1f33] hover:bg-[#f1f7fc] hover:text-[#205280] transition text-left"
+										className="w-full flex items-center gap-2.5 px-2.5 py-[9px] rounded-[6px] text-[13px] text-[var(--color-blue-900)] hover:bg-[var(--color-blue-50)] hover:text-[var(--color-blue-800)] transition text-left"
 									>
 										{item.icon} {item.label}
 									</button>
 								))}
 
-								<div className="h-px bg-[#eef2f7] my-1" />
+								<div className="h-px bg-[var(--color-border-soft)] my-1" />
 
 								<button
 									onClick={() => {
 										setMenuOpen(false);
 										handleLogout();
 									}}
-									className="w-full flex items-center gap-2.5 px-2.5 py-[9px] rounded-[6px] text-[13px] text-[#dc2626] hover:bg-[#fef2f2] transition text-left"
+									className="w-full flex items-center gap-2.5 px-2.5 py-[9px] rounded-[6px] text-[13px] text-[var(--color-danger)] hover:bg-[var(--color-danger-bg)] transition text-left"
 								>
 									<svg
 										width="16"
@@ -284,7 +284,7 @@ export default function Navbar({ onToggleSidebar }: NavbarProps) {
 				/* Login button for guest users */
 				// <button
 				// 	onClick={handleLogin}
-				// 	className="bg-[#4a7adb] hover:bg-[#3a6acb] text-white font-semibold rounded-lg px-6 py-2 text-sm transition"
+				// 	className="bg-[var(--color-blue-600)] hover:bg-[var(--color-blue-800)] text-white font-semibold rounded-lg px-6 py-2 text-sm transition"
 				// >
 				// 	Autentificare
 				// </button>

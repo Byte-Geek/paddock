@@ -34,8 +34,8 @@ export default function CalculatorPage() {
 				{tab === "laserrun" && <LaserRunCalculator />}
 
 				{/* Info */}
-				<div className="mt-4 bg-white rounded-[10px] border border-[#e2e8f0] p-4 flex gap-3">
-					<div className="w-8 h-8 rounded-[8px] bg-[#e0eef9] text-[#205280] grid place-items-center flex-shrink-0">
+				<div className="mt-4 bg-surface rounded-md border border-[var(--color-border)] p-4 flex gap-3">
+					<div className="w-8 h-8 rounded-sm bg-[var(--color-blue-100)] text-[var(--color-blue-800)] grid place-items-center flex-shrink-0">
 						<svg
 							width="16"
 							height="16"
@@ -48,8 +48,8 @@ export default function CalculatorPage() {
 							<polyline points="14 2 14 8 20 8" />
 						</svg>
 					</div>
-					<p className="text-[13px] text-[#6b7d92] leading-relaxed">
-						<b className="text-[#0e1f33]">Despre Calculator PMD.</b>{" "}
+					<p className="text-[13px] text-[var(--color-slate-500)] leading-relaxed">
+						<b className="text-[var(--color-blue-900)]">Despre Calculator PMD.</b>{" "}
 						Folosit pentru estimarea rapidă a punctajului oficial
 						UIPM în fiecare din probele pentatlonului modern.
 						Formulele aplicate sunt cele standard ale Federației

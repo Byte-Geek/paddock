@@ -13,22 +13,22 @@ export default function ParticipationHistoryTable({
 }) {
 	if (history.length === 0) {
 		return (
-			<div className="rounded-xl border border-[#e8ecf5] bg-white p-6 text-sm text-[#8896b3]">
+			<div className="rounded-md border border-[var(--color-border-soft)] bg-surface p-6 text-sm text-[var(--color-slate-500)]">
 				Nicio participare înregistrată încă.
 			</div>
 		);
 	}
 
 	return (
-		<div className="bg-white rounded-xl border border-[#e8ecf5] overflow-hidden">
+		<div className="bg-surface rounded-md border border-[var(--color-border-soft)] overflow-hidden">
 			<table className="w-full text-sm">
-				<thead className="bg-[#f4f6fb]">
+				<thead className="bg-[var(--color-silver-bg)]">
 					<tr>
 						{["Loc", "Competiție", "Categorie", "Cal", "Punctaj", "Data"].map(
 							(h) => (
 								<th
 									key={h}
-									className="text-left px-5 py-3 text-xs font-semibold text-[#8896b3] uppercase tracking-wide"
+									className="text-left px-5 py-3 text-xs font-semibold text-[var(--color-slate-500)] uppercase tracking-wide"
 								>
 									{h}
 								</th>
@@ -40,30 +40,30 @@ export default function ParticipationHistoryTable({
 					{history.map((h, i) => (
 						<tr
 							key={h.id}
-							className={`border-t border-[#e8ecf5] ${i % 2 === 0 ? "bg-white" : "bg-[#fafbfd]"}`}
+							className={`border-t border-[var(--color-border-soft)] ${i % 2 === 0 ? "bg-surface" : "bg-[var(--color-surface-subtle)]"}`}
 						>
 							<td className="px-5 py-3">
 								{h.rank ? (
-									<span className="font-semibold text-[#0f1729]">
+									<span className="font-semibold text-[var(--color-ink-800)]">
 										{medalIcons[h.rank] ?? ""} {h.rank}
 									</span>
 								) : (
-									<span className="text-[#b0bcd4]">—</span>
+									<span className="text-[var(--color-slate-400)]">—</span>
 								)}
 							</td>
-							<td className="px-5 py-3 font-semibold text-[#0f1729]">
+							<td className="px-5 py-3 font-semibold text-[var(--color-ink-800)]">
 								{h.eventName}
 							</td>
-							<td className="px-5 py-3 text-[#8896b3] text-xs">
+							<td className="px-5 py-3 text-[var(--color-slate-500)] text-xs">
 								{h.categoryName}
 							</td>
-							<td className="px-5 py-3 text-[#8896b3] text-xs">
+							<td className="px-5 py-3 text-[var(--color-slate-500)] text-xs">
 								{h.horseName ?? "—"}
 							</td>
-							<td className="px-5 py-3 text-[#0f1729]">
+							<td className="px-5 py-3 text-[var(--color-ink-800)]">
 								{h.finalScore ?? "—"}
 							</td>
-							<td className="px-5 py-3 text-[#8896b3] text-xs">
+							<td className="px-5 py-3 text-[var(--color-slate-500)] text-xs">
 								{h.eventDate
 									? new Date(h.eventDate).toLocaleDateString(
 											"ro-RO",

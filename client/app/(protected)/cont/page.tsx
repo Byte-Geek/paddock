@@ -44,40 +44,40 @@ export default function ContPage() {
 	return (
 		<div className="flex flex-col gap-6">
 			<div>
-				<h1 className="text-[#0f1729] text-2xl font-bold">
+				<h1 className="text-[var(--color-ink-800)] text-2xl font-bold">
 					Contul meu
 				</h1>
-				<p className="text-[#8896b3] text-sm mt-1">
+				<p className="text-[var(--color-slate-500)] text-sm mt-1">
 					Datele tale de cont
 				</p>
 			</div>
 
 			<div className="grid grid-cols-[1fr_2fr] gap-5">
 				{/* Avatar card */}
-				<div className="bg-white rounded-xl border border-[#e8ecf5] p-6 flex flex-col items-center text-center gap-4">
-					<div className="w-24 h-24 rounded-full bg-[#4a7adb] text-white flex items-center justify-center text-3xl font-bold">
+				<div className="bg-surface rounded-md border border-[var(--color-border-soft)] p-6 flex flex-col items-center text-center gap-4">
+					<div className="w-24 h-24 rounded-full bg-[var(--color-blue-600)] text-white flex items-center justify-center text-3xl font-bold">
 						{initials(fullName || "?")}
 					</div>
 					<div>
-						<div className="font-bold text-[#0f1729] text-lg">
+						<div className="font-bold text-[var(--color-ink-800)] text-lg">
 							{fullName || user?.email}
 						</div>
-						<div className="text-[#8896b3] text-sm mt-0.5">
+						<div className="text-[var(--color-slate-500)] text-sm mt-0.5">
 							{user?.email}
 						</div>
-						<span className="inline-block mt-2 bg-[#4a7adb] text-white text-xs px-3 py-1 rounded-full font-medium">
+						<span className="inline-block mt-2 bg-[var(--color-blue-600)] text-white text-xs px-3 py-1 rounded-full font-medium">
 							{user?.role
 								? (roleLabels[user.role] ?? user.role)
 								: ""}
 						</span>
 					</div>
 					{user?.createdAt && (
-						<div className="w-full border-t border-[#e8ecf5] pt-4 flex flex-col gap-2 text-sm text-left">
+						<div className="w-full border-t border-[var(--color-border-soft)] pt-4 flex flex-col gap-2 text-sm text-left">
 							<div className="flex justify-between">
-								<span className="text-[#8896b3]">
+								<span className="text-[var(--color-slate-500)]">
 									Cont creat
 								</span>
-								<span className="font-semibold text-[#0f1729]">
+								<span className="font-semibold text-[var(--color-ink-800)]">
 									{new Date(
 										user.createdAt,
 									).toLocaleDateString("ro-RO")}
@@ -88,42 +88,42 @@ export default function ContPage() {
 				</div>
 
 				{/* Edit card */}
-				<div className="bg-white rounded-xl border border-[#e8ecf5]">
-					<div className="px-6 py-4 border-b border-[#e8ecf5]">
-						<h3 className="font-semibold text-[#0f1729]">
+				<div className="bg-surface rounded-md border border-[var(--color-border-soft)]">
+					<div className="px-6 py-4 border-b border-[var(--color-border-soft)]">
+						<h3 className="font-semibold text-[var(--color-ink-800)]">
 							Date personale
 						</h3>
 					</div>
 					<div className="p-6 grid grid-cols-2 gap-4">
 						<div className="flex flex-col gap-1.5">
-							<label className="text-xs font-medium text-[#8896b3]">
+							<label className="text-xs font-medium text-[var(--color-slate-500)]">
 								Prenume
 							</label>
 							<input
 								value={firstName}
 								onChange={(e) => setFirstName(e.target.value)}
-								className="border border-[#e8ecf5] rounded-lg px-3 py-2.5 text-sm text-[#0f1729] focus:outline-none focus:border-[#4a7adb] transition"
+								className="border border-[var(--color-border-soft)] rounded-lg px-3 py-2.5 text-sm text-[var(--color-ink-800)] focus:outline-none focus:border-[var(--color-blue-600)] transition"
 							/>
 						</div>
 						<div className="flex flex-col gap-1.5">
-							<label className="text-xs font-medium text-[#8896b3]">
+							<label className="text-xs font-medium text-[var(--color-slate-500)]">
 								Nume
 							</label>
 							<input
 								value={lastName}
 								onChange={(e) => setLastName(e.target.value)}
-								className="border border-[#e8ecf5] rounded-lg px-3 py-2.5 text-sm text-[#0f1729] focus:outline-none focus:border-[#4a7adb] transition"
+								className="border border-[var(--color-border-soft)] rounded-lg px-3 py-2.5 text-sm text-[var(--color-ink-800)] focus:outline-none focus:border-[var(--color-blue-600)] transition"
 							/>
 						</div>
 						<div className="col-span-2 flex flex-col gap-1.5">
-							<label className="text-xs font-medium text-[#8896b3]">
+							<label className="text-xs font-medium text-[var(--color-slate-500)]">
 								Email
 							</label>
 							<input
 								type="email"
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
-								className="border border-[#e8ecf5] rounded-lg px-3 py-2.5 text-sm text-[#0f1729] focus:outline-none focus:border-[#4a7adb] transition"
+								className="border border-[var(--color-border-soft)] rounded-lg px-3 py-2.5 text-sm text-[var(--color-ink-800)] focus:outline-none focus:border-[var(--color-blue-600)] transition"
 							/>
 						</div>
 
@@ -137,7 +137,7 @@ export default function ContPage() {
 							<button
 								onClick={handleSave}
 								disabled={saving}
-								className="bg-[#4a7adb] hover:bg-[#3a6acb] disabled:opacity-50 text-white text-sm font-semibold px-4 py-2 rounded-lg transition"
+								className="bg-[var(--color-blue-600)] hover:bg-[var(--color-blue-800)] disabled:opacity-50 text-white text-sm font-semibold px-4 py-2 rounded-lg transition"
 							>
 								{saving
 									? "Se salvează..."

@@ -7,7 +7,7 @@ export default function Select({ className, children, ...props }: SelectProps) {
 	return (
 		<select
 			className={cn(
-				"border border-[#e2e8f0] rounded-lg px-3 py-2 text-sm outline-none focus:border-[#2a6aa6]",
+				"border border-[var(--color-border)] rounded-md px-3 py-2 text-sm outline-none transition focus:border-[var(--color-blue-600)] focus:ring-4 focus:ring-[var(--color-blue-600)]/10",
 				className || undefined,
 			)}
 			{...props}

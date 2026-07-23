@@ -42,7 +42,7 @@ export default function DonutChart({ data }: { data: DonutData[] }) {
 					textAnchor="middle"
 					fontSize="36"
 					fontWeight="800"
-					fill="#0e1f33"
+					fill="var(--color-blue-900)"
 				>
 					{total}
 				</text>
@@ -51,7 +51,7 @@ export default function DonutChart({ data }: { data: DonutData[] }) {
 					y="225"
 					textAnchor="middle"
 					fontSize="14"
-					fill="#94a3b8"
+					fill="var(--color-silver)"
 				>
 					total
 				</text>
@@ -66,8 +66,8 @@ export default function DonutChart({ data }: { data: DonutData[] }) {
 							className="w-2.5 h-2.5 rounded-[3px] flex-shrink-0"
 							style={{ background: s.color }}
 						/>
-						<span className="text-[#6b7d92]">{s.label}</span>
-						<span className="font-bold text-[#0e1f33] ml-1">
+						<span className="text-[var(--color-slate-500)]">{s.label}</span>
+						<span className="font-bold text-[var(--color-blue-900)] ml-1">
 							{s.value}
 						</span>
 					</div>

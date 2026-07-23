@@ -11,6 +11,8 @@ import { Group } from "@/types";
 import { getErrorMessage } from "@/lib/error";
 import { useCanManage } from "@/lib/hooks/useCanManage";
 import LoadingState from "@/components/ui/LoadingState";
+import EmptyState from "@/components/ui/EmptyState";
+import DataStrip from "@/components/ui/DataStrip";
 
 export default function GrupePage() {
 	const canManage = useCanManage();
@@ -54,6 +56,26 @@ export default function GrupePage() {
 		? groups.filter((g) => g.name.toLowerCase().includes(q.toLowerCase()))
 		: groups;
 
+	const totalAthletes = groups.reduce((sum, g) => sum + g.athleteCount, 0);
+	const avgSize = groups.length
+		? Math.round((totalAthletes / groups.length) * 10) / 10
+		: 0;
+	const largest = groups.reduce(
+		(max, g) => (g.athleteCount > max ? g.athleteCount : max),
+		0,
+	);
+
+	const summary = [
+		{ key: "groups", label: "Grupe", value: groups.length },
+		{
+			key: "athletes",
+			label: "Sportivi în grupe",
+			value: totalAthletes,
+		},
+		{ key: "avg", label: "Medie / grupă", value: avgSize },
+		{ key: "max", label: "Cea mai numeroasă", value: largest },
+	];
+
 	return (
 		<div>
 			<PageHeader
@@ -63,13 +85,17 @@ export default function GrupePage() {
 					canManage && (
 						<button
 							onClick={() => setAdding(true)}
-							className="bg-[#4a7adb] hover:bg-[#3a6acb] text-white text-sm font-semibold px-4 py-2 rounded-lg transition"
+							className="bg-[var(--color-blue-600)] hover:bg-[var(--color-blue-800)] text-white text-sm font-semibold px-4 py-2 rounded-lg transition"
 						>
 							+ Adaugă grupă
 						</button>
 					)
 				}
 			/>
+
+			{!loading && groups.length > 0 && (
+				<DataStrip items={summary} className="mb-6" />
+			)}
 
 			<div className="mb-6">
 				<SearchInput
@@ -87,11 +113,9 @@ export default function GrupePage() {
 			)}
 
 			{loading ? (
-				<LoadingState className="text-[#8896b3]" />
+				<LoadingState className="text-[var(--color-slate-500)]" />
 			) : list.length === 0 ? (
-				<div className="rounded-xl border border-[#e8ecf5] bg-white p-6 text-sm text-[#8896b3]">
-					Nicio grupă găsită.
-				</div>
+				<EmptyState>Nicio grupă găsită.</EmptyState>
 			) : (
 				<div className="grid grid-cols-2 gap-4">
 					{list.map((g) => (

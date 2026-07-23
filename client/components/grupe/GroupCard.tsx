@@ -23,15 +23,15 @@ export default function GroupCard({
 	return (
 		<div
 			onClick={onDetails}
-			className="bg-white rounded-xl border border-[#e8ecf5] p-5 flex flex-col gap-3 cursor-pointer hover:shadow-[0_4px_16px_-4px_rgba(14,39,64,0.08)] transition"
+			className="bg-surface rounded-md border border-[var(--color-border-soft)] p-5 flex flex-col gap-3 cursor-pointer hover:shadow-[var(--shadow-panel-hover)] hover:-translate-y-0.5 transition-all duration-300"
 		>
 			<div className="flex items-start gap-3">
 				<div className="flex-1 min-w-0">
-					<div className="font-bold text-[#0f1729] text-sm truncate">
+					<div className="font-bold text-[var(--color-ink-800)] text-sm truncate">
 						{group.name}
 					</div>
 					{group.description && (
-						<div className="text-xs text-[#8896b3] mt-0.5 line-clamp-2">
+						<div className="text-xs text-[var(--color-slate-500)] mt-0.5 line-clamp-2">
 							{group.description}
 						</div>
 					)}
@@ -40,14 +40,14 @@ export default function GroupCard({
 					className="flex items-center gap-2 flex-shrink-0"
 					onClick={(e) => e.stopPropagation()}
 				>
-					<div className="bg-[#4a7adb] text-white text-xs font-bold px-2.5 py-1 rounded-full">
+					<div className="bg-[var(--color-blue-600)] text-white text-xs font-bold px-2.5 py-1 rounded-full">
 						{group.athleteCount}
 					</div>
 					{onEdit && (
 						<button
 							onClick={onEdit}
 							title="Editează"
-							className="p-1.5 rounded-lg hover:bg-[#f4f6fb] text-[#8896b3] hover:text-[#0f1729] transition text-xs"
+							className="p-1.5 rounded-lg hover:bg-[var(--color-silver-bg)] text-[var(--color-slate-500)] hover:text-[var(--color-ink-800)] transition text-xs"
 						>
 							✏️
 						</button>
@@ -56,7 +56,7 @@ export default function GroupCard({
 						<button
 							onClick={onDelete}
 							title="Șterge"
-							className="p-1.5 rounded-lg hover:bg-red-50 text-[#8896b3] hover:text-red-500 transition text-xs"
+							className="p-1.5 rounded-lg hover:bg-red-50 text-[var(--color-slate-500)] hover:text-red-500 transition text-xs"
 						>
 							🗑️
 						</button>
@@ -64,16 +64,16 @@ export default function GroupCard({
 				</div>
 			</div>
 
-			<div className="flex items-center justify-between pt-3 border-t border-[#e8ecf5]">
+			<div className="flex items-center justify-between pt-3 border-t border-[var(--color-border-soft)]">
 				<div className="flex items-center gap-2">
-					<div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#b5d7f1] to-[#e0eef9] text-[#143654] grid place-items-center font-bold text-[10px] flex-shrink-0">
+					<div className="w-7 h-7 rounded-full bg-gradient-to-br from-[var(--color-blue-300)] to-[var(--color-blue-100)] text-[var(--color-ink-900)] grid place-items-center font-bold text-[10px] flex-shrink-0">
 						{initials(coachName)}
 					</div>
-					<span className="text-xs text-[#8896b3]">
+					<span className="text-xs text-[var(--color-slate-500)]">
 						{coachName}
 					</span>
 				</div>
-				<span className="text-xs text-[#4a7adb] flex items-center gap-1">
+				<span className="text-xs text-[var(--color-blue-600)] flex items-center gap-1">
 					👁 Detalii
 				</span>
 			</div>

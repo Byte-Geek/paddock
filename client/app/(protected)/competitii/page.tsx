@@ -10,6 +10,7 @@ import { CompetitionEvent } from "@/types";
 import { useCanManage } from "@/lib/hooks/useCanManage";
 import LoadingState from "@/components/ui/LoadingState";
 import EmptyState from "@/components/ui/EmptyState";
+import DataStrip from "@/components/ui/DataStrip";
 
 export default function CompetitiiPage() {
 	const canManage = useCanManage();
@@ -42,6 +43,33 @@ export default function CompetitiiPage() {
 	const past = competitions.filter(isPast);
 	const list = tab === "upcoming" ? upcoming : past;
 
+	const summary = [
+		{
+			key: "open",
+			label: "Înscrieri deschise",
+			value: competitions.filter((c) => c.status === "PUBLISHED").length,
+			dot: "bg-[var(--color-blue-600)]",
+		},
+		{
+			key: "ongoing",
+			label: "În desfășurare",
+			value: competitions.filter((c) => c.status === "ONGOING").length,
+			dot: "bg-amber-400",
+		},
+		{
+			key: "done",
+			label: "Finalizate",
+			value: competitions.filter((c) => c.status === "COMPLETED").length,
+			dot: "bg-emerald-500",
+		},
+		{
+			key: "athletes",
+			label: "Total sportivi înscriși",
+			value: competitions.reduce((sum, c) => sum + c.participantCount, 0),
+			dot: "bg-[var(--color-slate-300)]",
+		},
+	];
+
 	return (
 		<div>
 			<PageHeader
@@ -51,13 +79,17 @@ export default function CompetitiiPage() {
 					canManage && (
 						<button
 							onClick={() => setCreating(true)}
-							className="bg-[#2a6aa6] hover:bg-[#205280] text-white text-sm font-semibold px-4 py-2 rounded-[10px] transition"
+							className="bg-[var(--color-blue-600)] hover:bg-[var(--color-blue-800)] text-white text-sm font-semibold px-4 py-2 rounded-md transition"
 						>
 							+ Creează competiție
 						</button>
 					)
 				}
 			/>
+
+			{!loading && competitions.length > 0 && (
+				<DataStrip items={summary} className="mb-6" />
+			)}
 
 			<TabBar
 				tabs={[

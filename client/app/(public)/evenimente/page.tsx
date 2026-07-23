@@ -80,13 +80,13 @@ export default function EvenimentePage() {
 						return (
 							<div
 								key={e.id}
-								className="bg-white rounded-[10px] border border-[#e2e8f0] p-5 grid grid-cols-[80px_1fr] gap-5 items-center hover:shadow-[0_4px_16px_-4px_rgba(14,39,64,0.08)] transition"
+								className="bg-surface rounded-md border border-[var(--color-border)] p-5 grid grid-cols-[80px_1fr] gap-5 items-center hover:shadow-[var(--shadow-panel-hover)] hover:-translate-y-0.5 transition-all duration-300"
 							>
-								<div className="text-center bg-gradient-to-b from-[#1a4368] to-[#143654] text-white px-1 py-2.5 rounded-[10px]">
+								<div className="text-center bg-gradient-to-b from-[var(--color-blue-800)] to-[var(--color-ink-900)] text-white px-1 py-2.5 rounded-md">
 									<div className="text-[10px] font-bold opacity-70 tracking-[0.08em] uppercase">
 										{date ? MONTHS[date.getMonth()] : "—"}
 									</div>
-									<div className="text-[26px] font-bold leading-none">
+									<div className="font-mono text-[26px] font-bold leading-none tabular-nums">
 										{date ? date.getDate() : "—"}
 									</div>
 									<div className="text-[10px] opacity-50 mt-[2px]">
@@ -105,16 +105,16 @@ export default function EvenimentePage() {
 											{statusLabels[e.status] ?? e.status}
 										</Badge>
 									</div>
-									<div className="font-bold text-[16px] text-[#0e1f33]">
+									<div className="font-bold text-[16px] text-[var(--color-blue-900)]">
 										{e.name}
 									</div>
 									{e.description && (
-										<div className="text-[13px] text-[#6b7d92] mt-1">
+										<div className="text-[13px] text-[var(--color-slate-500)] mt-1">
 											{e.description}
 										</div>
 									)}
 									{e.location && (
-										<div className="text-[12px] text-[#8896b3] mt-1">
+										<div className="text-[12px] text-[var(--color-slate-500)] mt-1">
 											{e.location}
 										</div>
 									)}

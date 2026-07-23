@@ -16,7 +16,7 @@ export default function ScoreDisplay({ score, label }: ScoreDisplayProps) {
 	const diff = score - 250;
 
 	return (
-		<div className="bg-gradient-to-br from-[#143654] to-[#0e2740] rounded-[14px] p-6 text-white flex flex-col justify-between min-h-[220px]">
+		<div className="bg-gradient-to-br from-[var(--color-ink-900)] to-[var(--color-ink-900)] rounded-lg p-6 text-white flex flex-col justify-between min-h-[220px]">
 			<div>
 				<div className="text-[11px] uppercase tracking-[0.1em] text-white/55 font-semibold mb-2">
 					{label}

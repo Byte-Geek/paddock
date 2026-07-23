@@ -78,7 +78,7 @@ export default function SportiviPage() {
 					canManage && (
 						<button
 							onClick={() => setAdding(true)}
-							className="bg-[#4a7adb] hover:bg-[#3a6acb] text-white text-sm font-semibold px-4 py-2 rounded-lg transition"
+							className="bg-[var(--color-blue-600)] hover:bg-[var(--color-blue-800)] text-white text-sm font-semibold px-4 py-2 rounded-lg transition"
 						>
 							+ Adaugă sportiv
 						</button>
@@ -107,7 +107,7 @@ export default function SportiviPage() {
 			)}
 
 			{loading ? (
-				<LoadingState className="text-[#8896b3]" />
+				<LoadingState className="text-[var(--color-slate-500)]" />
 			) : view === "table" ? (
 				<AthleteTable
 					athletes={list}

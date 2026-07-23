@@ -29,11 +29,11 @@ export default function LoginPage() {
 	};
 
 	return (
-		<div className="min-h-screen bg-[#0f1729] flex items-center justify-center p-4">
+		<div className="min-h-screen bg-[var(--color-ink-900)] flex items-center justify-center p-4">
 			<div className="w-full max-w-md">
 				{/** logo */}
 				<div className="text-center mb-8">
-					<div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#1a2744] border border-[#2a3a5c] mb-4">
+					<div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[var(--color-ink-900)] border border-[var(--color-ink-700)] mb-4">
 						<svg
 							width="32"
 							height="32"
@@ -56,17 +56,17 @@ export default function LoginPage() {
 						</svg>
 					</div>
 					<h1 className="text-white text-2xl font-bold">Paddock</h1>
-					{/* <p className="text-[#8896b3] text-sm mt-1">
+					{/* <p className="text-[var(--color-slate-500)] text-sm mt-1">
 						Școala Sportivă Republicană
 					</p> */}
 				</div>
 
 				{/* Card */}
-				<div className="bg-[#1a2744] border border-[#2a3a5c] rounded-2xl p-8">
+				<div className="bg-[var(--color-ink-900)] border border-[var(--color-ink-700)] rounded-2xl p-8">
 					<h2 className="text-white text-xl font-semibold mb-1">
 						Bun venit
 					</h2>
-					<p className="text-[#8896b3] text-sm mb-6">
+					<p className="text-[var(--color-slate-500)] text-sm mb-6">
 						Autentifică-te pentru a continua
 					</p>
 
@@ -75,7 +75,7 @@ export default function LoginPage() {
 						className="flex flex-col gap-4"
 					>
 						<div className="flex flex-col gap-1.5">
-							<label className="text-[#8896b3] text-sm font-medium">
+							<label className="text-[var(--color-slate-500)] text-sm font-medium">
 								Email
 							</label>
 							<input
@@ -84,12 +84,12 @@ export default function LoginPage() {
 								onChange={(e) => setEmail(e.target.value)}
 								placeholder="exemplu@paddock.md"
 								required
-								className="bg-[#0f1729] border border-[#2a3a5c] rounded-lg px-4 py-2.5 text-white text-sm placeholder:text-[#4a5a7c] focus:outline-none focus:border-[#4a7adb] transition"
+								className="bg-[var(--color-ink-900)] border border-[var(--color-ink-700)] rounded-lg px-4 py-2.5 text-white text-sm placeholder:text-[var(--color-slate-500)] focus:outline-none focus:border-[var(--color-blue-600)] transition"
 							/>
 						</div>
 
 						<div className="flex flex-col gap-1.5">
-							<label className="text-[#8896b3] text-sm font-medium">
+							<label className="text-[var(--color-slate-500)] text-sm font-medium">
 								Parolă
 							</label>
 							<input
@@ -98,7 +98,7 @@ export default function LoginPage() {
 								onChange={(e) => setPassword(e.target.value)}
 								placeholder="••••••••"
 								required
-								className="bg-[#0f1729] border border-[#2a3a5c] rounded-lg px-4 py-2.5 text-white text-sm placeholder:text-[#4a5a7c] focus:outline-none focus:border-[#4a7adb] transition"
+								className="bg-[var(--color-ink-900)] border border-[var(--color-ink-700)] rounded-lg px-4 py-2.5 text-white text-sm placeholder:text-[var(--color-slate-500)] focus:outline-none focus:border-[var(--color-blue-600)] transition"
 							/>
 						</div>
 
@@ -111,7 +111,7 @@ export default function LoginPage() {
 						<button
 							type="submit"
 							disabled={loading}
-							className="bg-[#4a7adb] hover:bg-[#3a6acb] disabled:opacity-50 text-white font-semibold rounded-lg px-4 py-2.5 text-sm transition mt-2"
+							className="bg-[var(--color-blue-600)] hover:bg-[var(--color-blue-800)] disabled:opacity-50 text-white font-semibold rounded-lg px-4 py-2.5 text-sm transition mt-2"
 						>
 							{loading ? "Se autentifică..." : "Autentifică-te"}
 						</button>

@@ -3,7 +3,7 @@
 export default function DashboardPage() {
 	return (
 		<div className="flex flex-col gap-6">
-			<div className="rounded-xl border border-[#e8ecf5] bg-white p-6 text-sm text-[#8896b3]">
+			<div className="rounded-md border border-[var(--color-border-soft)] bg-surface p-6 text-sm text-[var(--color-slate-500)]">
 				Pagina de dashboard este în lucru.
 			</div>
 		</div>

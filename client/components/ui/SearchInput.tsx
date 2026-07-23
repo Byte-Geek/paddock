@@ -13,7 +13,7 @@ export default function SearchInput({
 }: SearchInputProps) {
 	return (
 		<div
-			className={`flex items-center gap-2 bg-white border border-[#e8ecf5] rounded-lg px-3 py-2 text-[#8896b3] ${className ?? ""}`}
+			className={`flex items-center gap-2 bg-surface border border-[var(--color-border-soft)] rounded-md px-3 py-2 text-[var(--color-slate-500)] transition focus-within:border-[var(--color-blue-600)] focus-within:ring-4 focus-within:ring-[var(--color-blue-600)]/10 ${className ?? ""}`}
 		>
 			<svg
 				width="15"
@@ -31,7 +31,7 @@ export default function SearchInput({
 				value={value}
 				onChange={(e) => onChange(e.target.value)}
 				placeholder={placeholder}
-				className="bg-transparent border-0 outline-none text-[#0f1729] text-sm flex-1 min-w-0 placeholder:text-[#b0bcd4]"
+				className="bg-transparent border-0 outline-none text-[var(--color-ink-800)] text-sm flex-1 min-w-0 placeholder:text-[var(--color-slate-400)]"
 			/>
 		</div>
 	);

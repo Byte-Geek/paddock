@@ -121,7 +121,7 @@ export default function CompetitionFormModal({
 						</div>
 
 						<div className="flex flex-col gap-1">
-							<label className="text-xs font-medium text-[#6b7d92]">
+							<label className="text-xs font-medium text-[var(--color-slate-500)]">
 								Descriere
 							</label>
 							<textarea
@@ -130,7 +130,7 @@ export default function CompetitionFormModal({
 									setDescription(e.target.value)
 								}
 								rows={3}
-								className="border border-[#e2e8f0] rounded-lg px-3 py-2 text-sm outline-none focus:border-[#2a6aa6] resize-none"
+								className="border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm outline-none focus:border-[var(--color-blue-600)] resize-none"
 							/>
 						</div>
 
@@ -193,14 +193,14 @@ export default function CompetitionFormModal({
 					<button
 						type="button"
 						onClick={onClose}
-						className="px-4 py-2 text-sm text-[#6b7d92] hover:text-[#0e1f33] transition"
+						className="px-4 py-2 text-sm text-[var(--color-slate-500)] hover:text-[var(--color-blue-900)] transition"
 					>
 						Anulează
 					</button>
 					<button
 						type="submit"
 						disabled={saving}
-						className="bg-[#2a6aa6] hover:bg-[#205280] disabled:opacity-50 text-white text-sm font-semibold px-4 py-2 rounded-lg transition"
+						className="bg-[var(--color-blue-600)] hover:bg-[var(--color-blue-800)] disabled:opacity-50 text-white text-sm font-semibold px-4 py-2 rounded-lg transition"
 					>
 						{saving ? "Se salvează..." : "Salvează"}
 					</button>

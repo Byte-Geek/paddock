@@ -15,12 +15,12 @@ interface BadgeProps {
 }
 
 const variants: Record<BadgeVariant, string> = {
-	default: "bg-[#f4f6fb] text-[#4a7adb]",
-	success: "bg-green-100 text-green-700",
-	warning: "bg-amber-100 text-amber-700",
-	danger: "bg-red-100 text-red-700",
-	gray: "bg-[#f4f6fb] text-[#8896b3]",
-	blue: "bg-[#4a7adb] text-white",
+	default: "bg-blue-50 text-blue-800",
+	success: "bg-success-bg text-success",
+	warning: "bg-warning-bg text-warning",
+	danger: "bg-danger-bg text-danger",
+	gray: "bg-silver-bg text-slate-500",
+	blue: "bg-blue-600 text-white",
 };
 
 export default function Badge({
@@ -31,7 +31,7 @@ export default function Badge({
 	return (
 		<span
 			className={cn(
-				"inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full font-medium",
+				"inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-md font-semibold tracking-[0.01em]",
 				variants[variant],
 				className,
 			)}

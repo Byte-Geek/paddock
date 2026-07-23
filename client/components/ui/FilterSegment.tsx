@@ -17,15 +17,15 @@ export default function FilterSegment({
 	onChange,
 }: FilterSegmentProps) {
 	return (
-		<div className="flex bg-white border border-[#e8ecf5] rounded-lg overflow-hidden">
+		<div className="flex bg-surface border border-[var(--color-border-soft)] rounded-lg overflow-hidden">
 			{options.map((opt) => (
 				<button
 					key={opt.key}
 					onClick={() => onChange(opt.key)}
 					className={`px-4 py-2 text-sm font-medium transition ${
 						active === opt.key
-							? "bg-[#4a7adb] text-white"
-							: "text-[#8896b3] hover:text-[#0f1729]"
+							? "bg-[var(--color-blue-600)] text-white"
+							: "text-[var(--color-slate-500)] hover:text-[var(--color-ink-800)]"
 					}`}
 				>
 					{opt.label}

@@ -63,7 +63,7 @@ export default function StatisticiPage() {
 			/>
 
 			{loading ? (
-				<LoadingState className="text-[#8896b3]" />
+				<LoadingState className="text-[var(--color-slate-500)]" />
 			) : (
 				<>
 					{/* Medal stats */}
@@ -79,18 +79,18 @@ export default function StatisticiPage() {
 
 					{/* Charts row 1 */}
 					<div className="grid grid-cols-[2fr_1fr] gap-4 mb-4">
-						<div className="bg-white rounded-[10px] border border-[#e2e8f0]">
-							<div className="flex items-center justify-between px-5 py-4 border-b border-[#eef2f7]">
-								<h3 className="font-semibold text-[#0e1f33]">
+						<div className="bg-surface rounded-md border border-[var(--color-border)]">
+							<div className="flex items-center justify-between px-5 py-4 border-b border-[var(--color-border-soft)]">
+								<h3 className="font-semibold text-[var(--color-blue-900)]">
 									Evenimente pe lună
 								</h3>
-								<div className="flex items-center gap-4 text-xs text-[#6b7d92]">
+								<div className="flex items-center gap-4 text-xs text-[var(--color-slate-500)]">
 									<span className="flex items-center gap-1.5">
-										<span className="w-3 h-0.5 bg-[#2a6aa6] inline-block rounded" />{" "}
+										<span className="w-3 h-0.5 bg-[var(--color-blue-600)] inline-block rounded" />{" "}
 										{currentYear}
 									</span>
 									<span className="flex items-center gap-1.5">
-										<span className="w-3 h-0.5 bg-[#6cb0e6] inline-block rounded border-dashed border-b" />{" "}
+										<span className="w-3 h-0.5 bg-[var(--color-blue-300)] inline-block rounded border-dashed border-b" />{" "}
 										{currentYear - 1}
 									</span>
 								</div>
@@ -106,9 +106,9 @@ export default function StatisticiPage() {
 							</div>
 						</div>
 
-						<div className="bg-white rounded-[10px] border border-[#e2e8f0]">
-							<div className="px-5 py-4 border-b border-[#eef2f7]">
-								<h3 className="font-semibold text-[#0e1f33]">
+						<div className="bg-surface rounded-md border border-[var(--color-border)]">
+							<div className="px-5 py-4 border-b border-[var(--color-border-soft)]">
+								<h3 className="font-semibold text-[var(--color-blue-900)]">
 									Distribuție medalii
 								</h3>
 							</div>
@@ -118,17 +118,17 @@ export default function StatisticiPage() {
 										{
 											label: "Aur",
 											value: medals?.gold ?? 0,
-											color: "#f59e0b",
+											color: "var(--color-gold)",
 										},
 										{
 											label: "Argint",
 											value: medals?.silver ?? 0,
-											color: "#94a3b8",
+											color: "var(--color-silver)",
 										},
 										{
 											label: "Bronz",
 											value: medals?.bronze ?? 0,
-											color: "#c2410c",
+											color: "var(--color-bronze)",
 										},
 									]}
 								/>
@@ -138,15 +138,15 @@ export default function StatisticiPage() {
 
 					{/* Charts row 2 */}
 					<div className="grid grid-cols-2 gap-4">
-						<div className="bg-white rounded-[10px] border border-[#e2e8f0]">
-							<div className="px-5 py-4 border-b border-[#eef2f7]">
-								<h3 className="font-semibold text-[#0e1f33]">
+						<div className="bg-surface rounded-md border border-[var(--color-border)]">
+							<div className="px-5 py-4 border-b border-[var(--color-border-soft)]">
+								<h3 className="font-semibold text-[var(--color-blue-900)]">
 									Sportivi per grupă
 								</h3>
 							</div>
 							<div className="p-5">
 								{athletesPerGroup.length === 0 ? (
-									<div className="text-sm text-[#8896b3]">
+									<div className="text-sm text-[var(--color-slate-500)]">
 										Nicio grupă cu sportivi.
 									</div>
 								) : (
@@ -154,22 +154,22 @@ export default function StatisticiPage() {
 										data={athletesPerGroup.map((g) => ({
 											label: g.name,
 											value: g.value,
-											color: "#2a6aa6",
+											color: "var(--color-blue-600)",
 										}))}
 									/>
 								)}
 							</div>
 						</div>
 
-						<div className="bg-white rounded-[10px] border border-[#e2e8f0]">
-							<div className="px-5 py-4 border-b border-[#eef2f7]">
-								<h3 className="font-semibold text-[#0e1f33]">
+						<div className="bg-surface rounded-md border border-[var(--color-border)]">
+							<div className="px-5 py-4 border-b border-[var(--color-border-soft)]">
+								<h3 className="font-semibold text-[var(--color-blue-900)]">
 									Top antrenori · medalii de aur
 								</h3>
 							</div>
 							<div className="py-2">
 								{topCoaches.length === 0 && (
-									<div className="px-5 py-6 text-sm text-[#8896b3]">
+									<div className="px-5 py-6 text-sm text-[var(--color-slate-500)]">
 										Nicio medalie înregistrată încă.
 									</div>
 								)}
@@ -189,7 +189,7 @@ export default function StatisticiPage() {
 											key={c.id}
 											className="flex items-center gap-3 px-5 py-2.5"
 										>
-											<div className="w-7 h-7 rounded-full bg-[#e0eef9] text-[#205280] grid place-items-center text-xs font-bold flex-shrink-0">
+											<div className="w-7 h-7 rounded-full bg-[var(--color-blue-100)] text-[var(--color-blue-800)] grid place-items-center text-xs font-bold flex-shrink-0">
 												{name
 													.split(" ")
 													.map((n) => n[0])
@@ -198,19 +198,19 @@ export default function StatisticiPage() {
 													.toUpperCase()}
 											</div>
 											<div className="flex-1 min-w-0">
-												<div className="text-[13px] font-semibold text-[#0e1f33] truncate">
+												<div className="text-[13px] font-semibold text-[var(--color-blue-900)] truncate">
 													{name}
 												</div>
-												<div className="mt-1.5 h-1.5 bg-[#e0eef9] rounded-full overflow-hidden">
+												<div className="mt-1.5 h-1.5 bg-[var(--color-blue-100)] rounded-full overflow-hidden">
 													<div
-														className="h-full bg-[#2a6aa6] rounded-full transition-all"
+														className="h-full bg-[var(--color-blue-600)] rounded-full transition-all"
 														style={{
 															width: `${w}%`,
 														}}
 													/>
 												</div>
 											</div>
-											<div className="font-bold text-[13px] text-[#0e1f33]">
+											<div className="font-bold text-[13px] text-[var(--color-blue-900)]">
 												{c.medals}
 											</div>
 										</div>

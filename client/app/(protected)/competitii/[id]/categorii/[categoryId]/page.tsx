@@ -264,16 +264,16 @@ export default function CategoryScoringPage() {
 		<div className="flex flex-col gap-5">
 			<button
 				onClick={() => router.push(`/competitii/${params.id}`)}
-				className="text-sm text-[#2a6aa6] hover:underline self-start"
+				className="text-sm text-[var(--color-blue-600)] hover:underline self-start"
 			>
 				← Înapoi la eveniment
 			</button>
 
 			<div>
-				<h1 className="text-2xl font-bold text-[#0e1f33]">
+				<h1 className="text-2xl font-bold text-[var(--color-blue-900)]">
 					{category.name}
 				</h1>
-				<p className="text-sm text-[#6b7d92] mt-1">
+				<p className="text-sm text-[var(--color-slate-500)] mt-1">
 					Protocol: {category.protocolTemplateName}
 				</p>
 			</div>
@@ -287,15 +287,15 @@ export default function CategoryScoringPage() {
 			{stage === "DRAFT" && canManage && (
 				<>
 					{/* Category data */}
-					<div className="bg-white rounded-[10px] border border-[#e2e8f0] p-4">
+					<div className="bg-surface rounded-md border border-[var(--color-border)] p-4">
 						<div className="flex items-center justify-between mb-2">
-							<h3 className="font-semibold text-[#0e1f33] text-sm">
+							<h3 className="font-semibold text-[var(--color-blue-900)] text-sm">
 								Date categorie
 							</h3>
 							{!editingCategory && (
 								<button
 									onClick={() => setEditingCategory(true)}
-									className="text-xs text-[#2a6aa6] hover:underline"
+									className="text-xs text-[var(--color-blue-600)] hover:underline"
 								>
 									Editează
 								</button>
@@ -307,7 +307,7 @@ export default function CategoryScoringPage() {
 								className="flex flex-wrap gap-2 items-end"
 							>
 								<div className="flex flex-col gap-1">
-									<label className="text-xs font-medium text-[#6b7d92]">
+									<label className="text-xs font-medium text-[var(--color-slate-500)]">
 										Nume categorie
 									</label>
 									<input
@@ -316,11 +316,11 @@ export default function CategoryScoringPage() {
 											setName(e.target.value)
 										}
 										required
-										className="border border-[#e2e8f0] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[#2a6aa6]"
+										className="border border-[var(--color-border)] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[var(--color-blue-600)]"
 									/>
 								</div>
 								<div className="flex flex-col gap-1">
-									<label className="text-xs font-medium text-[#6b7d92]">
+									<label className="text-xs font-medium text-[var(--color-slate-500)]">
 										Protocol
 									</label>
 									<select
@@ -329,7 +329,7 @@ export default function CategoryScoringPage() {
 											setTemplateId(e.target.value)
 										}
 										required
-										className="border border-[#e2e8f0] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[#2a6aa6]"
+										className="border border-[var(--color-border)] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[var(--color-blue-600)]"
 									>
 										{templates.map((t) => (
 											<option key={t.id} value={t.id}>
@@ -348,14 +348,14 @@ export default function CategoryScoringPage() {
 											category.protocolTemplateId,
 										);
 									}}
-									className="px-3 py-1.5 text-xs text-[#6b7d92] hover:text-[#0e1f33] transition"
+									className="px-3 py-1.5 text-xs text-[var(--color-slate-500)] hover:text-[var(--color-blue-900)] transition"
 								>
 									Anulează
 								</button>
 								<button
 									type="submit"
 									disabled={savingCategory}
-									className="bg-[#2a6aa6] hover:bg-[#205280] disabled:opacity-50 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition"
+									className="bg-[var(--color-blue-600)] hover:bg-[var(--color-blue-800)] disabled:opacity-50 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition"
 								>
 									{savingCategory
 										? "Se salvează..."
@@ -363,7 +363,7 @@ export default function CategoryScoringPage() {
 								</button>
 							</form>
 						) : (
-							<p className="text-sm text-[#0e1f33]">
+							<p className="text-sm text-[var(--color-blue-900)]">
 								{category.name} —{" "}
 								{category.protocolTemplateName}
 							</p>
@@ -371,14 +371,14 @@ export default function CategoryScoringPage() {
 					</div>
 
 					{/* Referees */}
-					<div className="bg-white rounded-[10px] border border-[#e2e8f0] p-4">
+					<div className="bg-surface rounded-md border border-[var(--color-border)] p-4">
 						<div className="flex items-center justify-between mb-2">
-							<h3 className="font-semibold text-[#0e1f33] text-sm">
+							<h3 className="font-semibold text-[var(--color-blue-900)] text-sm">
 								Arbitri
 							</h3>
 							<button
 								onClick={() => setAddingReferee((v) => !v)}
-								className="text-xs text-[#2a6aa6] hover:underline"
+								className="text-xs text-[var(--color-blue-600)] hover:underline"
 							>
 								+ Adaugă arbitru
 							</button>
@@ -395,7 +395,7 @@ export default function CategoryScoringPage() {
 									}
 									placeholder="Prenume"
 									required
-									className="border border-[#e2e8f0] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[#2a6aa6]"
+									className="border border-[var(--color-border)] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[var(--color-blue-600)]"
 								/>
 								<input
 									value={refLastName}
@@ -404,7 +404,7 @@ export default function CategoryScoringPage() {
 									}
 									placeholder="Nume"
 									required
-									className="border border-[#e2e8f0] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[#2a6aa6]"
+									className="border border-[var(--color-border)] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[var(--color-blue-600)]"
 								/>
 								<input
 									value={refLetterCode}
@@ -416,18 +416,18 @@ export default function CategoryScoringPage() {
 									placeholder="Literă (C, H...)"
 									required
 									maxLength={2}
-									className="border border-[#e2e8f0] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[#2a6aa6] w-32"
+									className="border border-[var(--color-border)] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[var(--color-blue-600)] w-32"
 								/>
 								<button
 									type="submit"
-									className="bg-[#2a6aa6] hover:bg-[#205280] text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition"
+									className="bg-[var(--color-blue-600)] hover:bg-[var(--color-blue-800)] text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition"
 								>
 									Salvează
 								</button>
 							</form>
 						)}
 						{category.referees.length === 0 ? (
-							<p className="text-xs text-[#8896b3]">
+							<p className="text-xs text-[var(--color-slate-500)]">
 								Niciun arbitru adăugat încă.
 							</p>
 						) : (
@@ -435,7 +435,7 @@ export default function CategoryScoringPage() {
 								{category.referees.map((r) => (
 									<span
 										key={r.id}
-										className="flex items-center gap-1.5 text-xs bg-[#f1f7fc] text-[#205280] px-2 py-1 rounded-md"
+										className="flex items-center gap-1.5 text-xs bg-[var(--color-blue-50)] text-[var(--color-blue-800)] px-2 py-1 rounded-md"
 									>
 										{r.letterCode} — {r.firstName}{" "}
 										{r.lastName}
@@ -443,7 +443,7 @@ export default function CategoryScoringPage() {
 											onClick={() =>
 												handleRemoveReferee(r.id)
 											}
-											className="text-[#205280] hover:text-red-600"
+											className="text-[var(--color-blue-800)] hover:text-red-600"
 											title="Elimină arbitrul"
 										>
 											×
@@ -457,9 +457,9 @@ export default function CategoryScoringPage() {
 			)}
 
 			{stage === "PUBLISHED" && (
-				<div className="bg-white rounded-[10px] border border-[#e2e8f0] p-4">
+				<div className="bg-surface rounded-md border border-[var(--color-border)] p-4">
 					<div className="flex items-center justify-between mb-2">
-						<h3 className="font-semibold text-[#0e1f33] text-sm">
+						<h3 className="font-semibold text-[var(--color-blue-900)] text-sm">
 							Participanți
 						</h3>
 						{canManage && (
@@ -467,7 +467,7 @@ export default function CategoryScoringPage() {
 								onClick={() =>
 									setAddingParticipation((v) => !v)
 								}
-								className="text-xs text-[#2a6aa6] hover:underline"
+								className="text-xs text-[var(--color-blue-600)] hover:underline"
 							>
 								+ Înscrie sportiv
 							</button>
@@ -484,7 +484,7 @@ export default function CategoryScoringPage() {
 									setSelectedAthleteId(e.target.value)
 								}
 								required
-								className="border border-[#e2e8f0] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[#2a6aa6]"
+								className="border border-[var(--color-border)] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[var(--color-blue-600)]"
 							>
 								<option value="">Alege sportiv</option>
 								{athletes.map((a) => (
@@ -497,18 +497,18 @@ export default function CategoryScoringPage() {
 								value={horseName}
 								onChange={(e) => setHorseName(e.target.value)}
 								placeholder="Nume cal (opțional)"
-								className="border border-[#e2e8f0] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[#2a6aa6]"
+								className="border border-[var(--color-border)] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[var(--color-blue-600)]"
 							/>
 							<button
 								type="submit"
-								className="bg-[#2a6aa6] hover:bg-[#205280] text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition"
+								className="bg-[var(--color-blue-600)] hover:bg-[var(--color-blue-800)] text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition"
 							>
 								Salvează
 							</button>
 						</form>
 					)}
 					{category.participations.length === 0 ? (
-						<p className="text-xs text-[#8896b3]">
+						<p className="text-xs text-[var(--color-slate-500)]">
 							Niciun sportiv înscris încă.
 						</p>
 					) : (
@@ -516,7 +516,7 @@ export default function CategoryScoringPage() {
 							{category.participations.map((p) => (
 								<span
 									key={p.id}
-									className="text-xs bg-[#f1f7fc] text-[#205280] px-2 py-1 rounded-md"
+									className="text-xs bg-[var(--color-blue-50)] text-[var(--color-blue-800)] px-2 py-1 rounded-md"
 								>
 									{p.athleteName}
 									{p.horseName ? ` · ${p.horseName}` : ""}
@@ -528,8 +528,8 @@ export default function CategoryScoringPage() {
 			)}
 
 			{stage === "ONGOING" && (
-				<div className="bg-white rounded-[10px] border border-[#e2e8f0] p-4 flex flex-col gap-4">
-					<h3 className="font-semibold text-[#0e1f33] text-sm">
+				<div className="bg-surface rounded-md border border-[var(--color-border)] p-4 flex flex-col gap-4">
+					<h3 className="font-semibold text-[var(--color-blue-900)] text-sm">
 						Notare
 					</h3>
 
@@ -539,7 +539,7 @@ export default function CategoryScoringPage() {
 							onChange={(e) =>
 								setParticipationId(e.target.value)
 							}
-							className="border border-[#e2e8f0] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[#2a6aa6]"
+							className="border border-[var(--color-border)] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[var(--color-blue-600)]"
 						>
 							<option value="">Alege participant</option>
 							{category.participations.map((p) => (
@@ -552,7 +552,7 @@ export default function CategoryScoringPage() {
 						<select
 							value={refereeId}
 							onChange={(e) => setRefereeId(e.target.value)}
-							className="border border-[#e2e8f0] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[#2a6aa6]"
+							className="border border-[var(--color-border)] rounded-lg px-2.5 py-1.5 text-sm outline-none focus:border-[var(--color-blue-600)]"
 						>
 							<option value="">Alege arbitru</option>
 							{category.referees.map((r) => (
@@ -564,19 +564,19 @@ export default function CategoryScoringPage() {
 					</div>
 
 					{!participationId || !refereeId ? (
-						<p className="text-xs text-[#8896b3]">
+						<p className="text-xs text-[var(--color-slate-500)]">
 							Alege un participant și un arbitru pentru a începe
 							notarea.
 						</p>
 					) : loadingEvaluation ? (
-						<div className="text-sm text-[#6b7d92]">
+						<div className="text-sm text-[var(--color-slate-500)]">
 							Se încarcă evaluarea...
 						</div>
 					) : (
 						<>
 							<div className="overflow-x-auto">
 								<table className="w-full text-sm border-collapse">
-									<thead className="bg-[#f4f6fb]">
+									<thead className="bg-[var(--color-silver-bg)]">
 										<tr>
 											{[
 												"№",
@@ -589,7 +589,7 @@ export default function CategoryScoringPage() {
 											].map((h) => (
 												<th
 													key={h}
-													className="text-left px-2 py-1.5 text-xs font-semibold text-[#6b7d92] border border-[#e2e8f0]"
+													className="text-left px-2 py-1.5 text-xs font-semibold text-[var(--color-slate-500)] border border-[var(--color-border)]"
 												>
 													{h}
 												</th>
@@ -599,19 +599,19 @@ export default function CategoryScoringPage() {
 									<tbody>
 										{category.elements.map((el) => (
 											<tr key={el.id}>
-												<td className="border border-[#e2e8f0] px-2 py-1.5 text-center font-semibold">
+												<td className="border border-[var(--color-border)] px-2 py-1.5 text-center font-semibold">
 													{el.order}
 												</td>
-												<td className="border border-[#e2e8f0] px-2 py-1.5">
+												<td className="border border-[var(--color-border)] px-2 py-1.5">
 													{el.letters
 														? `${el.letters} — `
 														: ""}
 													{el.name}
 												</td>
-												<td className="border border-[#e2e8f0] px-2 py-1.5 text-center">
+												<td className="border border-[var(--color-border)] px-2 py-1.5 text-center">
 													{el.maxScore}
 												</td>
-												<td className="border border-[#e2e8f0] p-0 w-20">
+												<td className="border border-[var(--color-border)] p-0 w-20">
 													<input
 														type="number"
 														step="0.5"
@@ -627,10 +627,10 @@ export default function CategoryScoringPage() {
 																e.target.value,
 															)
 														}
-														className="w-full px-2 py-1.5 text-sm outline-none focus:bg-[#f1f7fc] disabled:bg-[#f8f9fb] disabled:text-[#6b7d92]"
+														className="w-full px-2 py-1.5 text-sm outline-none focus:bg-[var(--color-blue-50)] disabled:bg-[var(--color-surface-subtle)] disabled:text-[var(--color-slate-500)]"
 													/>
 												</td>
-												<td className="border border-[#e2e8f0] p-0 w-20">
+												<td className="border border-[var(--color-border)] p-0 w-20">
 													<input
 														type="number"
 														step="0.5"
@@ -646,15 +646,15 @@ export default function CategoryScoringPage() {
 																e.target.value,
 															)
 														}
-														className="w-full px-2 py-1.5 text-sm outline-none focus:bg-[#f1f7fc] disabled:bg-[#f8f9fb] disabled:text-[#6b7d92]"
+														className="w-full px-2 py-1.5 text-sm outline-none focus:bg-[var(--color-blue-50)] disabled:bg-[var(--color-surface-subtle)] disabled:text-[var(--color-slate-500)]"
 													/>
 												</td>
-												<td className="border border-[#e2e8f0] px-2 py-1.5 text-center">
+												<td className="border border-[var(--color-border)] px-2 py-1.5 text-center">
 													{Number(el.coefficient) === 2
 														? "2"
 														: ""}
 												</td>
-												<td className="border border-[#e2e8f0] p-0">
+												<td className="border border-[var(--color-border)] p-0">
 													<input
 														disabled={!canScore}
 														value={
@@ -668,7 +668,7 @@ export default function CategoryScoringPage() {
 																e.target.value,
 															)
 														}
-														className="w-full px-2 py-1.5 text-sm outline-none focus:bg-[#f1f7fc] disabled:bg-[#f8f9fb] disabled:text-[#6b7d92]"
+														className="w-full px-2 py-1.5 text-sm outline-none focus:bg-[var(--color-blue-50)] disabled:bg-[var(--color-surface-subtle)] disabled:text-[var(--color-slate-500)]"
 													/>
 												</td>
 											</tr>
@@ -678,11 +678,11 @@ export default function CategoryScoringPage() {
 							</div>
 
 							{evaluation && (
-								<div className="text-sm text-[#0e1f33]">
+								<div className="text-sm text-[var(--color-blue-900)]">
 									Scor total:{" "}
 									<b>{evaluation.finalScore ?? "—"}</b>
 									{evaluation.percentage && (
-										<span className="text-[#6b7d92]">
+										<span className="text-[var(--color-slate-500)]">
 											{" "}
 											({Number(evaluation.percentage).toFixed(2)}
 											%)
@@ -696,14 +696,14 @@ export default function CategoryScoringPage() {
 									<button
 										onClick={() => handleSave(false)}
 										disabled={saving}
-										className="border border-[#b5d7f1] text-[#2a6aa6] disabled:opacity-50 text-sm font-semibold px-4 py-2 rounded-lg hover:bg-[#f1f7fc] transition"
+										className="border border-[var(--color-blue-300)] text-[var(--color-blue-600)] disabled:opacity-50 text-sm font-semibold px-4 py-2 rounded-lg hover:bg-[var(--color-blue-50)] transition"
 									>
 										{saving ? "Se salvează..." : "Salvează"}
 									</button>
 									<button
 										onClick={() => handleSave(true)}
 										disabled={saving}
-										className="bg-[#2a6aa6] hover:bg-[#205280] disabled:opacity-50 text-white text-sm font-semibold px-4 py-2 rounded-lg transition"
+										className="bg-[var(--color-blue-600)] hover:bg-[var(--color-blue-800)] disabled:opacity-50 text-white text-sm font-semibold px-4 py-2 rounded-lg transition"
 									>
 										Finalizează
 									</button>
@@ -715,18 +715,18 @@ export default function CategoryScoringPage() {
 			)}
 
 			{stage === "COMPLETED" && (
-				<div className="bg-white rounded-[10px] border border-[#e2e8f0] p-4">
-					<h3 className="font-semibold text-[#0e1f33] text-sm mb-3">
+				<div className="bg-surface rounded-md border border-[var(--color-border)] p-4">
+					<h3 className="font-semibold text-[var(--color-blue-900)] text-sm mb-3">
 						Rezultate
 					</h3>
 					{category.participations.length === 0 ? (
-						<p className="text-xs text-[#8896b3]">
+						<p className="text-xs text-[var(--color-slate-500)]">
 							Niciun rezultat disponibil.
 						</p>
 					) : (
 						<div className="overflow-x-auto">
 							<table className="w-full text-sm border-collapse">
-								<thead className="bg-[#f4f6fb]">
+								<thead className="bg-[var(--color-silver-bg)]">
 									<tr>
 										{[
 											"Loc",
@@ -737,7 +737,7 @@ export default function CategoryScoringPage() {
 										].map((h) => (
 											<th
 												key={h}
-												className="text-left px-2 py-1.5 text-xs font-semibold text-[#6b7d92] border border-[#e2e8f0]"
+												className="text-left px-2 py-1.5 text-xs font-semibold text-[var(--color-slate-500)] border border-[var(--color-border)]"
 											>
 												{h}
 											</th>
@@ -753,19 +753,19 @@ export default function CategoryScoringPage() {
 										})
 										.map((p) => (
 											<tr key={p.id}>
-												<td className="border border-[#e2e8f0] px-2 py-1.5 text-center font-semibold">
+												<td className="border border-[var(--color-border)] px-2 py-1.5 text-center font-semibold">
 													{p.rank ?? "—"}
 												</td>
-												<td className="border border-[#e2e8f0] px-2 py-1.5">
+												<td className="border border-[var(--color-border)] px-2 py-1.5">
 													{p.athleteName}
 												</td>
-												<td className="border border-[#e2e8f0] px-2 py-1.5">
+												<td className="border border-[var(--color-border)] px-2 py-1.5">
 													{p.horseName ?? "—"}
 												</td>
-												<td className="border border-[#e2e8f0] px-2 py-1.5 text-center">
+												<td className="border border-[var(--color-border)] px-2 py-1.5 text-center">
 													{p.finalScore ?? "—"}
 												</td>
-												<td className="border border-[#e2e8f0] px-2 py-1.5 text-center">
+												<td className="border border-[var(--color-border)] px-2 py-1.5 text-center">
 													{p.status}
 												</td>
 											</tr>

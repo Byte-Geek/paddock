@@ -14,15 +14,21 @@ export default function StatCard({
 	icon,
 }: StatCardProps) {
 	return (
-		<div className="bg-white rounded-xl p-5 border border-[#e8ecf5]">
-			{icon && <div className="mb-2">{icon}</div>}
-			<div className="text-[#8896b3] text-xs font-medium mb-1">
+		<div className="group bg-surface rounded-xl p-5 border border-border-soft shadow-[var(--shadow-panel)] transition-all duration-300 ease-out hover:shadow-[var(--shadow-panel-hover)] hover:-translate-y-0.5">
+			{icon && (
+				<div className="mb-3 w-9 h-9 rounded-md bg-blue-50 text-blue-800 grid place-items-center transition-colors duration-300 group-hover:bg-blue-100">
+					{icon}
+				</div>
+			)}
+			<div className="text-slate-500 text-xs font-semibold tracking-[0.01em] mb-1">
 				{label}
 			</div>
-			<div className="text-[#0f1729] text-2xl font-bold">{value}</div>
+			<div className="text-ink-800 text-[27px] font-mono font-bold tracking-[-0.015em] tabular-nums">
+				{value}
+			</div>
 			{delta && (
 				<div
-					className={`text-xs mt-1 font-medium ${deltaPositive ? "text-green-500" : "text-[#8896b3]"}`}
+					className={`text-xs mt-1.5 font-semibold ${deltaPositive ? "text-success" : "text-slate-500"}`}
 				>
 					{delta}
 				</div>

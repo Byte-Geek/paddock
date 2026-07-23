@@ -239,7 +239,7 @@ export default function Sidebar({ collapsed }: SidebarProps) {
 
 	return (
 		<aside
-			className={`h-full bg-[#0e2740] text-white flex flex-col overflow-hidden transition-all duration-300 ${collapsed ? "w-[70px]" : "w-[222px]"}`}
+			className={`h-full bg-[var(--color-ink-900)] border-r border-white/[0.06] text-white flex flex-col overflow-hidden transition-all duration-300 ${collapsed ? "w-[70px]" : "w-[222px]"}`}
 		>
 			{/* Scroll area */}
 			<div className="flex-1 overflow-y-auto px-3 py-[18px] scrollbar-thin">
@@ -247,7 +247,7 @@ export default function Sidebar({ collapsed }: SidebarProps) {
 					<div key={i}>
 						{collapsed ? (
 							i > 0 && (
-								<div className="h-px bg-white/10 my-2 mx-1.5" />
+								<div className="h-px bg-surface/10 my-2 mx-1.5" />
 							)
 						) : (
 							<div
@@ -263,18 +263,15 @@ export default function Sidebar({ collapsed }: SidebarProps) {
 									key={item.href}
 									href={item.href}
 									title={collapsed ? item.label : undefined}
-									className={`w-full flex items-center gap-3 px-3 py-[10px] rounded-[10px] text-[14px] font-medium transition relative mb-0.5
-                  ${collapsed ? "justify-center px-0" : ""}
+									className={`w-full flex items-center gap-3 pl-[13px] pr-3 py-[9px] text-[13.5px] transition relative mb-0.5 border-l-2
+                  ${collapsed ? "justify-center px-0 border-l-0" : ""}
                   ${
 						active
-							? "bg-gradient-to-r from-[#1a4368] to-[#205280] text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]"
-							: "text-white/78 hover:bg-white/6 hover:text-white"
+							? "border-l-[var(--color-blue-300)] bg-[var(--color-blue-300)]/[0.12] text-white font-semibold"
+							: "border-l-transparent text-white/70 hover:bg-surface/[0.05] hover:text-white"
 					}`}
 								>
-									{active && (
-										<span className="absolute left-[-12px] top-2 bottom-2 w-[3px] bg-[#6cb0e6] rounded-r-[3px]" />
-									)}
-									<span className="w-5 h-5 flex-shrink-0 grid place-items-center">
+									<span className="w-[18px] h-[18px] flex-shrink-0 grid place-items-center opacity-85">
 										{item.icon}
 									</span>
 									{!collapsed && (
@@ -285,7 +282,7 @@ export default function Sidebar({ collapsed }: SidebarProps) {
 									{!collapsed &&
 										"badge" in item &&
 										item.badge && (
-											<span className="bg-[#6cb0e6] text-[#0e2740] text-[10px] font-bold px-1.5 py-[1px] rounded-full">
+											<span className="bg-[var(--color-blue-300)] text-[var(--color-ink-900)] text-[10px] font-bold px-1.5 py-[1px] rounded-full">
 												{item.badge}
 											</span>
 										)}
@@ -297,45 +294,54 @@ export default function Sidebar({ collapsed }: SidebarProps) {
 			</div>
 
 			{/* Footer */}
-			<div className="px-3 py-3 border-t border-white/6">
+			<div className="border-t border-white/6">
 				{token ? (
-					<button
-						onClick={handleLogout}
-						className="w-full bg-[#dc2626] text-white border-0 px-3 py-[8px] rounded-[10px] text-[12px] font-semibold flex items-center justify-center gap-1.5 hover:bg-[#b91c1c] transition"
+					<div
+						className={`grid px-3 transition-[grid-template-rows] duration-200 ease-out ${collapsed ? "grid-rows-[0fr]" : "grid-rows-[1fr]"}`}
 					>
-						<svg
-							width="14"
-							height="14"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							strokeWidth="2"
-						>
-							<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-							<polyline points="16 17 21 12 16 7" />
-							<line x1="21" y1="12" x2="9" y2="12" />
-						</svg>
-						{!collapsed && "Deconectare"}
-					</button>
+						<div className="overflow-hidden">
+							<button
+								onClick={handleLogout}
+								className={`w-full bg-[var(--color-danger)] text-white border-0 px-3 py-[8px] rounded-md text-[12px] font-semibold flex items-center justify-center gap-1.5 my-3 hover:bg-[var(--color-danger)]/90 transition-opacity duration-200 ease-out ${collapsed ? "opacity-0" : "opacity-100"}`}
+							>
+								<svg
+									width="14"
+									height="14"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									strokeWidth="2"
+									className="flex-shrink-0"
+								>
+									<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+									<polyline points="16 17 21 12 16 7" />
+									<line x1="21" y1="12" x2="9" y2="12" />
+								</svg>
+								Deconectare
+							</button>
+						</div>
+					</div>
 				) : (
-					<button
-						onClick={handleLogin}
-						className="w-full bg-[#4a7adb] text-white border-0 px-3 py-[8px] rounded-[10px] text-[12px] font-semibold flex items-center justify-center gap-1.5 hover:bg-[#3a6acb] transition"
-					>
-						<svg
-							width="14"
-							height="14"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							strokeWidth="2"
+					<div className="px-3 py-3">
+						<button
+							onClick={handleLogin}
+							className="w-full bg-[var(--color-blue-600)] text-white border-0 px-3 py-[8px] rounded-md text-[12px] font-semibold flex items-center justify-center gap-1.5 hover:bg-[var(--color-blue-800)] transition"
 						>
-							<path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
-							<polyline points="10 17 15 12 10 7" />
-							<line x1="15" y1="12" x2="3" y2="12" />
-						</svg>
-						{!collapsed && "Autentificare"}
-					</button>
+							<svg
+								width="14"
+								height="14"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								strokeWidth="2"
+							>
+								<path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+								<polyline points="10 17 15 12 10 7" />
+								<line x1="15" y1="12" x2="3" y2="12" />
+							</svg>
+							{!collapsed && "Autentificare"}
+						</button>
+					</div>
 				)}
 			</div>
 		</aside>

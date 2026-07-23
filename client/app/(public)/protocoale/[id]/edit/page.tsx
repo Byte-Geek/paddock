@@ -161,7 +161,7 @@ export default function ProtocolEditPage() {
 				</div>
 				<button
 					onClick={() => router.push(`/protocoale/${params.id}`)}
-					className="text-sm text-[#2a6aa6] hover:underline self-start"
+					className="text-sm text-[var(--color-blue-600)] hover:underline self-start"
 				>
 					← Înapoi la vizualizare
 				</button>
@@ -173,33 +173,33 @@ export default function ProtocolEditPage() {
 		<div className="flex flex-col gap-5">
 			<button
 				onClick={() => router.push(`/protocoale/${params.id}`)}
-				className="text-sm text-[#2a6aa6] hover:underline self-start"
+				className="text-sm text-[var(--color-blue-600)] hover:underline self-start"
 			>
 				← Înapoi la vizualizare
 			</button>
 
-			<div className="bg-white rounded-[10px] border border-[#e2e8f0] overflow-hidden">
+			<div className="bg-surface rounded-md border border-[var(--color-border)] overflow-hidden">
 				{/* Header — styled like the official protocol sheet */}
-				<div className="p-6 border-b-2 border-[#0e1f33]">
+				<div className="p-6 border-b-2 border-[var(--color-blue-900)]">
 					{editingField === "name" ? (
 						<input
 							autoFocus
 							value={name}
 							onChange={(e) => setName(e.target.value)}
 							onBlur={() => setEditingField(null)}
-							className="text-xl font-bold text-[#0e1f33] border border-[#2a6aa6] rounded px-2 py-1 outline-none w-full"
+							className="text-xl font-bold text-[var(--color-blue-900)] border border-[var(--color-blue-600)] rounded px-2 py-1 outline-none w-full"
 						/>
 					) : (
 						<h1
 							onClick={() => setEditingField("name")}
-							className="text-xl font-bold text-[#0e1f33] cursor-text hover:bg-[#f1f7fc] rounded px-1 -mx-1"
+							className="text-xl font-bold text-[var(--color-blue-900)] cursor-text hover:bg-[var(--color-blue-50)] rounded px-1 -mx-1"
 							title="Click pentru a modifica"
 						>
 							{name || "(fără nume)"}
 						</h1>
 					)}
 
-					<div className="flex flex-wrap gap-x-6 gap-y-1 mt-2 text-sm text-[#34495e]">
+					<div className="flex flex-wrap gap-x-6 gap-y-1 mt-2 text-sm text-[var(--color-ink-700)]">
 						<span className="flex items-center gap-1">
 							Nivel:
 							{editingField === "level" ? (
@@ -208,12 +208,12 @@ export default function ProtocolEditPage() {
 									value={level}
 									onChange={(e) => setLevel(e.target.value)}
 									onBlur={() => setEditingField(null)}
-									className="border border-[#2a6aa6] rounded px-1.5 py-0.5 outline-none text-sm"
+									className="border border-[var(--color-blue-600)] rounded px-1.5 py-0.5 outline-none text-sm"
 								/>
 							) : (
 								<span
 									onClick={() => setEditingField("level")}
-									className="cursor-text hover:bg-[#f1f7fc] rounded px-1"
+									className="cursor-text hover:bg-[var(--color-blue-50)] rounded px-1"
 								>
 									{level || "—"}
 								</span>
@@ -231,14 +231,14 @@ export default function ProtocolEditPage() {
 										setCompositionYear(e.target.value)
 									}
 									onBlur={() => setEditingField(null)}
-									className="border border-[#2a6aa6] rounded px-1.5 py-0.5 outline-none text-sm w-20"
+									className="border border-[var(--color-blue-600)] rounded px-1.5 py-0.5 outline-none text-sm w-20"
 								/>
 							) : (
 								<span
 									onClick={() =>
 										setEditingField("compositionYear")
 									}
-									className="cursor-text hover:bg-[#f1f7fc] rounded px-1"
+									className="cursor-text hover:bg-[var(--color-blue-50)] rounded px-1"
 								>
 									{compositionYear || "—"}
 								</span>
@@ -256,14 +256,14 @@ export default function ProtocolEditPage() {
 										setRevisionYear(e.target.value)
 									}
 									onBlur={() => setEditingField(null)}
-									className="border border-[#2a6aa6] rounded px-1.5 py-0.5 outline-none text-sm w-20"
+									className="border border-[var(--color-blue-600)] rounded px-1.5 py-0.5 outline-none text-sm w-20"
 								/>
 							) : (
 								<span
 									onClick={() =>
 										setEditingField("revisionYear")
 									}
-									className="cursor-text hover:bg-[#f1f7fc] rounded px-1"
+									className="cursor-text hover:bg-[var(--color-blue-50)] rounded px-1"
 								>
 									{revisionYear || "—"}
 								</span>
@@ -281,14 +281,14 @@ export default function ProtocolEditPage() {
 										setEstimatedMinutes(e.target.value)
 									}
 									onBlur={() => setEditingField(null)}
-									className="border border-[#2a6aa6] rounded px-1.5 py-0.5 outline-none text-sm w-20"
+									className="border border-[var(--color-blue-600)] rounded px-1.5 py-0.5 outline-none text-sm w-20"
 								/>
 							) : (
 								<span
 									onClick={() =>
 										setEditingField("estimatedMinutes")
 									}
-									className="cursor-text hover:bg-[#f1f7fc] rounded px-1"
+									className="cursor-text hover:bg-[var(--color-blue-50)] rounded px-1"
 								>
 									{estimatedMinutes || "—"}
 								</span>
@@ -300,7 +300,7 @@ export default function ProtocolEditPage() {
 				{/* Elements table */}
 				<div className="overflow-x-auto">
 					<table className="w-full text-sm border-collapse">
-						<thead className="bg-[#f4f6fb]">
+						<thead className="bg-[var(--color-silver-bg)]">
 							<tr>
 								{[
 									"№",
@@ -313,7 +313,7 @@ export default function ProtocolEditPage() {
 								].map((h) => (
 									<th
 										key={h}
-										className="text-left px-3 py-2 text-xs font-semibold text-[#6b7d92] uppercase tracking-wide border border-[#e2e8f0]"
+										className="text-left px-3 py-2 text-xs font-semibold text-[var(--color-slate-500)] uppercase tracking-wide border border-[var(--color-border)]"
 									>
 										{h}
 									</th>
@@ -323,29 +323,29 @@ export default function ProtocolEditPage() {
 						<tbody>
 							{rows.map((row, i) => (
 								<tr key={i}>
-									<td className="border border-[#e2e8f0] px-3 py-2 text-center font-semibold text-[#0e1f33] w-10 align-top">
+									<td className="border border-[var(--color-border)] px-3 py-2 text-center font-semibold text-[var(--color-blue-900)] w-10 align-top">
 										{i + 1}
 									</td>
-									<td className="border border-[#e2e8f0] p-0 w-20 align-top">
+									<td className="border border-[var(--color-border)] p-0 w-20 align-top">
 										<AutoGrowTextarea
 											value={row.letters}
 											onChange={(value) =>
 												updateRow(i, "letters", value)
 											}
-											className="w-full px-2 py-2 text-sm outline-none focus:bg-[#f1f7fc]"
+											className="w-full px-2 py-2 text-sm outline-none focus:bg-[var(--color-blue-50)]"
 										/>
 									</td>
-									<td className="border border-[#e2e8f0] p-0 align-top">
+									<td className="border border-[var(--color-border)] p-0 align-top">
 										<AutoGrowTextarea
 											value={row.name}
 											onChange={(value) =>
 												updateRow(i, "name", value)
 											}
 											placeholder="Denumire element"
-											className="w-full px-2 py-2 text-sm outline-none focus:bg-[#f1f7fc]"
+											className="w-full px-2 py-2 text-sm outline-none focus:bg-[var(--color-blue-50)]"
 										/>
 									</td>
-									<td className="border border-[#e2e8f0] p-0 w-20 align-top">
+									<td className="border border-[var(--color-border)] p-0 w-20 align-top">
 										<input
 											type="number"
 											value={row.maxScore}
@@ -356,10 +356,10 @@ export default function ProtocolEditPage() {
 													e.target.value,
 												)
 											}
-											className="w-full px-2 py-2 text-sm outline-none focus:bg-[#f1f7fc]"
+											className="w-full px-2 py-2 text-sm outline-none focus:bg-[var(--color-blue-50)]"
 										/>
 									</td>
-									<td className="border border-[#e2e8f0] p-0 w-20 align-top">
+									<td className="border border-[var(--color-border)] p-0 w-20 align-top">
 										<select
 											value={row.coefficient}
 											onChange={(e) =>
@@ -369,13 +369,13 @@ export default function ProtocolEditPage() {
 													e.target.value,
 												)
 											}
-											className="w-full px-2 py-2 text-sm outline-none focus:bg-[#f1f7fc] bg-transparent"
+											className="w-full px-2 py-2 text-sm outline-none focus:bg-[var(--color-blue-50)] bg-transparent"
 										>
 											<option value="1">1</option>
 											<option value="2">2</option>
 										</select>
 									</td>
-									<td className="border border-[#e2e8f0] p-0 align-top">
+									<td className="border border-[var(--color-border)] p-0 align-top">
 										<AutoGrowTextarea
 											value={row.judgingCriteria}
 											onChange={(value) =>
@@ -385,14 +385,14 @@ export default function ProtocolEditPage() {
 													value,
 												)
 											}
-											className="w-full px-2 py-2 text-sm outline-none focus:bg-[#f1f7fc]"
+											className="w-full px-2 py-2 text-sm outline-none focus:bg-[var(--color-blue-50)]"
 										/>
 									</td>
-									<td className="border border-[#e2e8f0] text-center w-10 align-top">
+									<td className="border border-[var(--color-border)] text-center w-10 align-top">
 										<button
 											onClick={() => removeRow(i)}
 											title="Șterge rândul"
-											className="text-[#b0bcd4] hover:text-red-500 transition"
+											className="text-[var(--color-slate-400)] hover:text-red-500 transition"
 										>
 											✕
 										</button>
@@ -406,7 +406,7 @@ export default function ProtocolEditPage() {
 				<div className="p-4">
 					<button
 						onClick={addRow}
-						className="text-sm text-[#2a6aa6] border border-[#b5d7f1] px-3 py-1.5 rounded-[8px] hover:bg-[#f1f7fc] transition"
+						className="text-sm text-[var(--color-blue-600)] border border-[var(--color-blue-300)] px-3 py-1.5 rounded-sm hover:bg-[var(--color-blue-50)] transition"
 					>
 						+ Adaugă rând
 					</button>
@@ -423,7 +423,7 @@ export default function ProtocolEditPage() {
 				<button
 					onClick={handleSave}
 					disabled={saving}
-					className="bg-[#2a6aa6] hover:bg-[#205280] disabled:opacity-50 text-white text-sm font-semibold px-6 py-2.5 rounded-[10px] transition"
+					className="bg-[var(--color-blue-600)] hover:bg-[var(--color-blue-800)] disabled:opacity-50 text-white text-sm font-semibold px-6 py-2.5 rounded-md transition"
 				>
 					{saving ? "Se salvează..." : "Salvează protocolul"}
 				</button>

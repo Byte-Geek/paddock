@@ -31,11 +31,11 @@ export default function ModeratorProfileView() {
 	}, []);
 
 	if (loading) {
-		return <LoadingState className="text-[#8896b3]" />;
+		return <LoadingState className="text-[var(--color-slate-500)]" />;
 	}
 	if (!stats) {
 		return (
-			<div className="rounded-xl border border-[#e8ecf5] bg-white p-6 text-sm text-[#8896b3]">
+			<div className="rounded-md border border-[var(--color-border-soft)] bg-surface p-6 text-sm text-[var(--color-slate-500)]">
 				Nu s-au putut încărca statisticile.
 			</div>
 		);
@@ -50,7 +50,7 @@ export default function ModeratorProfileView() {
 				<StatCard label="Evenimente" value={stats.events} />
 			</div>
 
-			<div className="rounded-xl border border-dashed border-[#b5d7f1] bg-[#f1f7fc] p-5 text-sm text-[#205280]">
+			<div className="rounded-md border border-dashed border-[var(--color-blue-300)] bg-[var(--color-blue-50)] p-5 text-sm text-[var(--color-blue-800)]">
 				{stats.note}
 			</div>
 		</div>

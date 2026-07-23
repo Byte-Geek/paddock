@@ -29,11 +29,11 @@ export default function AthleteProfileView() {
 	}, []);
 
 	if (loading) {
-		return <LoadingState className="text-[#8896b3]" />;
+		return <LoadingState className="text-[var(--color-slate-500)]" />;
 	}
 	if (!stats) {
 		return (
-			<div className="rounded-xl border border-[#e8ecf5] bg-white p-6 text-sm text-[#8896b3]">
+			<div className="rounded-md border border-[var(--color-border-soft)] bg-surface p-6 text-sm text-[var(--color-slate-500)]">
 				Nu s-au putut încărca statisticile.
 			</div>
 		);
@@ -44,7 +44,7 @@ export default function AthleteProfileView() {
 			<MedalsSummary medals={stats.medals} />
 
 			<div>
-				<h3 className="font-semibold text-[#0f1729] mb-3">
+				<h3 className="font-semibold text-[var(--color-ink-800)] mb-3">
 					Istoricul participărilor
 				</h3>
 				<ParticipationHistoryTable history={stats.history} />

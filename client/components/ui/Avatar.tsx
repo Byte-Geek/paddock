@@ -17,7 +17,7 @@ export default function Avatar({ name, size = "md", className }: AvatarProps) {
 	return (
 		<div
 			className={cn(
-				"rounded-full bg-[#4a7adb] text-white flex items-center justify-center font-bold flex-shrink-0",
+				"rounded-full bg-[var(--color-blue-600)] text-white flex items-center justify-center font-bold flex-shrink-0",
 				sizes[size],
 				className,
 			)}

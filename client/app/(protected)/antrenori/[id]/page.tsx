@@ -47,7 +47,7 @@ export default function CoachDetailPage() {
 	}, [params.id]);
 
 	if (loading) {
-		return <LoadingState className="text-[#8896b3]" />;
+		return <LoadingState className="text-[var(--color-slate-500)]" />;
 	}
 	if (error || !coach) {
 		return (
@@ -67,29 +67,29 @@ export default function CoachDetailPage() {
 		<div className="flex flex-col gap-5">
 			<button
 				onClick={() => router.push("/antrenori")}
-				className="text-sm text-[#4a7adb] hover:underline self-start"
+				className="text-sm text-[var(--color-blue-600)] hover:underline self-start"
 			>
 				← Înapoi la antrenori
 			</button>
 
-			<div className="bg-white rounded-xl border border-[#e8ecf5] p-5 flex items-center gap-4">
-				<div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#b5d7f1] to-[#e0eef9] text-[#143654] grid place-items-center font-bold text-lg flex-shrink-0">
+			<div className="bg-surface rounded-md border border-[var(--color-border-soft)] p-5 flex items-center gap-4">
+				<div className="w-14 h-14 rounded-full bg-gradient-to-br from-[var(--color-blue-300)] to-[var(--color-blue-100)] text-[var(--color-ink-900)] grid place-items-center font-bold text-lg flex-shrink-0">
 					{initials(fullName)}
 				</div>
 				<div className="min-w-0">
-					<div className="font-bold text-lg text-[#0f1729] truncate">
+					<div className="font-bold text-lg text-[var(--color-ink-800)] truncate">
 						{fullName}
 					</div>
-					<div className="text-sm text-[#8896b3] truncate">
+					<div className="text-sm text-[var(--color-slate-500)] truncate">
 						{coach.email}
 					</div>
 				</div>
 			</div>
 
-			<h2 className="font-semibold text-[#0f1729]">Grupe</h2>
+			<h2 className="font-semibold text-[var(--color-ink-800)]">Grupe</h2>
 
 			{groups.length === 0 ? (
-				<div className="rounded-xl border border-[#e8ecf5] bg-white p-6 text-sm text-[#8896b3]">
+				<div className="rounded-md border border-[var(--color-border-soft)] bg-surface p-6 text-sm text-[var(--color-slate-500)]">
 					Nicio grupă asociată.
 				</div>
 			) : (

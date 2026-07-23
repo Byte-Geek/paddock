@@ -365,6 +365,23 @@ export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedDecimalFilter<$PrismaModel>
 }
 
+export type EnumDisciplineNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.Discipline | Prisma.EnumDisciplineFieldRefInput<$PrismaModel> | null
+  in?: $Enums.Discipline[] | Prisma.ListEnumDisciplineFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.Discipline[] | Prisma.ListEnumDisciplineFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumDisciplineNullableFilter<$PrismaModel> | $Enums.Discipline | null
+}
+
+export type EnumDisciplineNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.Discipline | Prisma.EnumDisciplineFieldRefInput<$PrismaModel> | null
+  in?: $Enums.Discipline[] | Prisma.ListEnumDisciplineFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.Discipline[] | Prisma.ListEnumDisciplineFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumDisciplineNullableWithAggregatesFilter<$PrismaModel> | $Enums.Discipline | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDisciplineNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDisciplineNullableFilter<$PrismaModel>
+}
+
 export type DecimalNullableFilter<$PrismaModel = never> = {
   equals?: runtime.Decimal | runtime.DecimalJsLike | number | string | Prisma.DecimalFieldRefInput<$PrismaModel> | null
   in?: runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[] | Prisma.ListDecimalFieldRefInput<$PrismaModel> | null
@@ -761,6 +778,23 @@ export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedDecimalFilter<$PrismaModel>
   _min?: Prisma.NestedDecimalFilter<$PrismaModel>
   _max?: Prisma.NestedDecimalFilter<$PrismaModel>
+}
+
+export type NestedEnumDisciplineNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.Discipline | Prisma.EnumDisciplineFieldRefInput<$PrismaModel> | null
+  in?: $Enums.Discipline[] | Prisma.ListEnumDisciplineFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.Discipline[] | Prisma.ListEnumDisciplineFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumDisciplineNullableFilter<$PrismaModel> | $Enums.Discipline | null
+}
+
+export type NestedEnumDisciplineNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.Discipline | Prisma.EnumDisciplineFieldRefInput<$PrismaModel> | null
+  in?: $Enums.Discipline[] | Prisma.ListEnumDisciplineFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.Discipline[] | Prisma.ListEnumDisciplineFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumDisciplineNullableWithAggregatesFilter<$PrismaModel> | $Enums.Discipline | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDisciplineNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDisciplineNullableFilter<$PrismaModel>
 }
 
 export type NestedDecimalNullableFilter<$PrismaModel = never> = {

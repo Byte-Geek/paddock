@@ -29,6 +29,7 @@ export type CategoryMinAggregateOutputType = {
   eventId: string | null
   protocolTemplateId: string | null
   name: string | null
+  discipline: $Enums.Discipline | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -38,6 +39,7 @@ export type CategoryMaxAggregateOutputType = {
   eventId: string | null
   protocolTemplateId: string | null
   name: string | null
+  discipline: $Enums.Discipline | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -47,6 +49,7 @@ export type CategoryCountAggregateOutputType = {
   eventId: number
   protocolTemplateId: number
   name: number
+  discipline: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -58,6 +61,7 @@ export type CategoryMinAggregateInputType = {
   eventId?: true
   protocolTemplateId?: true
   name?: true
+  discipline?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -67,6 +71,7 @@ export type CategoryMaxAggregateInputType = {
   eventId?: true
   protocolTemplateId?: true
   name?: true
+  discipline?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -76,6 +81,7 @@ export type CategoryCountAggregateInputType = {
   eventId?: true
   protocolTemplateId?: true
   name?: true
+  discipline?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -158,6 +164,7 @@ export type CategoryGroupByOutputType = {
   eventId: string
   protocolTemplateId: string
   name: string
+  discipline: $Enums.Discipline | null
   createdAt: Date
   updatedAt: Date
   _count: CategoryCountAggregateOutputType | null
@@ -188,6 +195,7 @@ export type CategoryWhereInput = {
   eventId?: Prisma.StringFilter<"Category"> | string
   protocolTemplateId?: Prisma.StringFilter<"Category"> | string
   name?: Prisma.StringFilter<"Category"> | string
+  discipline?: Prisma.EnumDisciplineNullableFilter<"Category"> | $Enums.Discipline | null
   createdAt?: Prisma.DateTimeFilter<"Category"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Category"> | Date | string
   event?: Prisma.XOR<Prisma.EventScalarRelationFilter, Prisma.EventWhereInput>
@@ -201,6 +209,7 @@ export type CategoryOrderByWithRelationInput = {
   eventId?: Prisma.SortOrder
   protocolTemplateId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  discipline?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   event?: Prisma.EventOrderByWithRelationInput
@@ -217,6 +226,7 @@ export type CategoryWhereUniqueInput = Prisma.AtLeast<{
   eventId?: Prisma.StringFilter<"Category"> | string
   protocolTemplateId?: Prisma.StringFilter<"Category"> | string
   name?: Prisma.StringFilter<"Category"> | string
+  discipline?: Prisma.EnumDisciplineNullableFilter<"Category"> | $Enums.Discipline | null
   createdAt?: Prisma.DateTimeFilter<"Category"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Category"> | Date | string
   event?: Prisma.XOR<Prisma.EventScalarRelationFilter, Prisma.EventWhereInput>
@@ -230,6 +240,7 @@ export type CategoryOrderByWithAggregationInput = {
   eventId?: Prisma.SortOrder
   protocolTemplateId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  discipline?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.CategoryCountOrderByAggregateInput
@@ -245,6 +256,7 @@ export type CategoryScalarWhereWithAggregatesInput = {
   eventId?: Prisma.StringWithAggregatesFilter<"Category"> | string
   protocolTemplateId?: Prisma.StringWithAggregatesFilter<"Category"> | string
   name?: Prisma.StringWithAggregatesFilter<"Category"> | string
+  discipline?: Prisma.EnumDisciplineNullableWithAggregatesFilter<"Category"> | $Enums.Discipline | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Category"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Category"> | Date | string
 }
@@ -252,6 +264,7 @@ export type CategoryScalarWhereWithAggregatesInput = {
 export type CategoryCreateInput = {
   id?: string
   name: string
+  discipline?: $Enums.Discipline | null
   createdAt?: Date | string
   updatedAt?: Date | string
   event: Prisma.EventCreateNestedOneWithoutCategoriesInput
@@ -265,6 +278,7 @@ export type CategoryUncheckedCreateInput = {
   eventId: string
   protocolTemplateId: string
   name: string
+  discipline?: $Enums.Discipline | null
   createdAt?: Date | string
   updatedAt?: Date | string
   referees?: Prisma.CategoryRefereeUncheckedCreateNestedManyWithoutCategoryInput
@@ -274,6 +288,7 @@ export type CategoryUncheckedCreateInput = {
 export type CategoryUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  discipline?: Prisma.NullableEnumDisciplineFieldUpdateOperationsInput | $Enums.Discipline | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   event?: Prisma.EventUpdateOneRequiredWithoutCategoriesNestedInput
@@ -287,6 +302,7 @@ export type CategoryUncheckedUpdateInput = {
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
   protocolTemplateId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  discipline?: Prisma.NullableEnumDisciplineFieldUpdateOperationsInput | $Enums.Discipline | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referees?: Prisma.CategoryRefereeUncheckedUpdateManyWithoutCategoryNestedInput
@@ -298,6 +314,7 @@ export type CategoryCreateManyInput = {
   eventId: string
   protocolTemplateId: string
   name: string
+  discipline?: $Enums.Discipline | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -305,6 +322,7 @@ export type CategoryCreateManyInput = {
 export type CategoryUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  discipline?: Prisma.NullableEnumDisciplineFieldUpdateOperationsInput | $Enums.Discipline | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -314,6 +332,7 @@ export type CategoryUncheckedUpdateManyInput = {
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
   protocolTemplateId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  discipline?: Prisma.NullableEnumDisciplineFieldUpdateOperationsInput | $Enums.Discipline | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -333,6 +352,7 @@ export type CategoryCountOrderByAggregateInput = {
   eventId?: Prisma.SortOrder
   protocolTemplateId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  discipline?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -342,6 +362,7 @@ export type CategoryMaxOrderByAggregateInput = {
   eventId?: Prisma.SortOrder
   protocolTemplateId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  discipline?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -351,6 +372,7 @@ export type CategoryMinOrderByAggregateInput = {
   eventId?: Prisma.SortOrder
   protocolTemplateId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  discipline?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -444,6 +466,10 @@ export type CategoryUncheckedUpdateManyWithoutProtocolTemplateNestedInput = {
   deleteMany?: Prisma.CategoryScalarWhereInput | Prisma.CategoryScalarWhereInput[]
 }
 
+export type NullableEnumDisciplineFieldUpdateOperationsInput = {
+  set?: $Enums.Discipline | null
+}
+
 export type CategoryCreateNestedOneWithoutRefereesInput = {
   create?: Prisma.XOR<Prisma.CategoryCreateWithoutRefereesInput, Prisma.CategoryUncheckedCreateWithoutRefereesInput>
   connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutRefereesInput
@@ -475,6 +501,7 @@ export type CategoryUpdateOneRequiredWithoutParticipationsNestedInput = {
 export type CategoryCreateWithoutEventInput = {
   id?: string
   name: string
+  discipline?: $Enums.Discipline | null
   createdAt?: Date | string
   updatedAt?: Date | string
   protocolTemplate: Prisma.ProtocolTemplateCreateNestedOneWithoutCategoriesInput
@@ -486,6 +513,7 @@ export type CategoryUncheckedCreateWithoutEventInput = {
   id?: string
   protocolTemplateId: string
   name: string
+  discipline?: $Enums.Discipline | null
   createdAt?: Date | string
   updatedAt?: Date | string
   referees?: Prisma.CategoryRefereeUncheckedCreateNestedManyWithoutCategoryInput
@@ -526,6 +554,7 @@ export type CategoryScalarWhereInput = {
   eventId?: Prisma.StringFilter<"Category"> | string
   protocolTemplateId?: Prisma.StringFilter<"Category"> | string
   name?: Prisma.StringFilter<"Category"> | string
+  discipline?: Prisma.EnumDisciplineNullableFilter<"Category"> | $Enums.Discipline | null
   createdAt?: Prisma.DateTimeFilter<"Category"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Category"> | Date | string
 }
@@ -533,6 +562,7 @@ export type CategoryScalarWhereInput = {
 export type CategoryCreateWithoutProtocolTemplateInput = {
   id?: string
   name: string
+  discipline?: $Enums.Discipline | null
   createdAt?: Date | string
   updatedAt?: Date | string
   event: Prisma.EventCreateNestedOneWithoutCategoriesInput
@@ -544,6 +574,7 @@ export type CategoryUncheckedCreateWithoutProtocolTemplateInput = {
   id?: string
   eventId: string
   name: string
+  discipline?: $Enums.Discipline | null
   createdAt?: Date | string
   updatedAt?: Date | string
   referees?: Prisma.CategoryRefereeUncheckedCreateNestedManyWithoutCategoryInput
@@ -579,6 +610,7 @@ export type CategoryUpdateManyWithWhereWithoutProtocolTemplateInput = {
 export type CategoryCreateWithoutRefereesInput = {
   id?: string
   name: string
+  discipline?: $Enums.Discipline | null
   createdAt?: Date | string
   updatedAt?: Date | string
   event: Prisma.EventCreateNestedOneWithoutCategoriesInput
@@ -591,6 +623,7 @@ export type CategoryUncheckedCreateWithoutRefereesInput = {
   eventId: string
   protocolTemplateId: string
   name: string
+  discipline?: $Enums.Discipline | null
   createdAt?: Date | string
   updatedAt?: Date | string
   participations?: Prisma.ParticipationUncheckedCreateNestedManyWithoutCategoryInput
@@ -615,6 +648,7 @@ export type CategoryUpdateToOneWithWhereWithoutRefereesInput = {
 export type CategoryUpdateWithoutRefereesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  discipline?: Prisma.NullableEnumDisciplineFieldUpdateOperationsInput | $Enums.Discipline | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   event?: Prisma.EventUpdateOneRequiredWithoutCategoriesNestedInput
@@ -627,6 +661,7 @@ export type CategoryUncheckedUpdateWithoutRefereesInput = {
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
   protocolTemplateId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  discipline?: Prisma.NullableEnumDisciplineFieldUpdateOperationsInput | $Enums.Discipline | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   participations?: Prisma.ParticipationUncheckedUpdateManyWithoutCategoryNestedInput
@@ -635,6 +670,7 @@ export type CategoryUncheckedUpdateWithoutRefereesInput = {
 export type CategoryCreateWithoutParticipationsInput = {
   id?: string
   name: string
+  discipline?: $Enums.Discipline | null
   createdAt?: Date | string
   updatedAt?: Date | string
   event: Prisma.EventCreateNestedOneWithoutCategoriesInput
@@ -647,6 +683,7 @@ export type CategoryUncheckedCreateWithoutParticipationsInput = {
   eventId: string
   protocolTemplateId: string
   name: string
+  discipline?: $Enums.Discipline | null
   createdAt?: Date | string
   updatedAt?: Date | string
   referees?: Prisma.CategoryRefereeUncheckedCreateNestedManyWithoutCategoryInput
@@ -671,6 +708,7 @@ export type CategoryUpdateToOneWithWhereWithoutParticipationsInput = {
 export type CategoryUpdateWithoutParticipationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  discipline?: Prisma.NullableEnumDisciplineFieldUpdateOperationsInput | $Enums.Discipline | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   event?: Prisma.EventUpdateOneRequiredWithoutCategoriesNestedInput
@@ -683,6 +721,7 @@ export type CategoryUncheckedUpdateWithoutParticipationsInput = {
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
   protocolTemplateId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  discipline?: Prisma.NullableEnumDisciplineFieldUpdateOperationsInput | $Enums.Discipline | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referees?: Prisma.CategoryRefereeUncheckedUpdateManyWithoutCategoryNestedInput
@@ -692,6 +731,7 @@ export type CategoryCreateManyEventInput = {
   id?: string
   protocolTemplateId: string
   name: string
+  discipline?: $Enums.Discipline | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -699,6 +739,7 @@ export type CategoryCreateManyEventInput = {
 export type CategoryUpdateWithoutEventInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  discipline?: Prisma.NullableEnumDisciplineFieldUpdateOperationsInput | $Enums.Discipline | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   protocolTemplate?: Prisma.ProtocolTemplateUpdateOneRequiredWithoutCategoriesNestedInput
@@ -710,6 +751,7 @@ export type CategoryUncheckedUpdateWithoutEventInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   protocolTemplateId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  discipline?: Prisma.NullableEnumDisciplineFieldUpdateOperationsInput | $Enums.Discipline | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referees?: Prisma.CategoryRefereeUncheckedUpdateManyWithoutCategoryNestedInput
@@ -720,6 +762,7 @@ export type CategoryUncheckedUpdateManyWithoutEventInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   protocolTemplateId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  discipline?: Prisma.NullableEnumDisciplineFieldUpdateOperationsInput | $Enums.Discipline | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -728,6 +771,7 @@ export type CategoryCreateManyProtocolTemplateInput = {
   id?: string
   eventId: string
   name: string
+  discipline?: $Enums.Discipline | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -735,6 +779,7 @@ export type CategoryCreateManyProtocolTemplateInput = {
 export type CategoryUpdateWithoutProtocolTemplateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  discipline?: Prisma.NullableEnumDisciplineFieldUpdateOperationsInput | $Enums.Discipline | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   event?: Prisma.EventUpdateOneRequiredWithoutCategoriesNestedInput
@@ -746,6 +791,7 @@ export type CategoryUncheckedUpdateWithoutProtocolTemplateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  discipline?: Prisma.NullableEnumDisciplineFieldUpdateOperationsInput | $Enums.Discipline | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   referees?: Prisma.CategoryRefereeUncheckedUpdateManyWithoutCategoryNestedInput
@@ -756,6 +802,7 @@ export type CategoryUncheckedUpdateManyWithoutProtocolTemplateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  discipline?: Prisma.NullableEnumDisciplineFieldUpdateOperationsInput | $Enums.Discipline | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -805,6 +852,7 @@ export type CategorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   eventId?: boolean
   protocolTemplateId?: boolean
   name?: boolean
+  discipline?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
@@ -819,6 +867,7 @@ export type CategorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   eventId?: boolean
   protocolTemplateId?: boolean
   name?: boolean
+  discipline?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
@@ -830,6 +879,7 @@ export type CategorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   eventId?: boolean
   protocolTemplateId?: boolean
   name?: boolean
+  discipline?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
@@ -841,11 +891,12 @@ export type CategorySelectScalar = {
   eventId?: boolean
   protocolTemplateId?: boolean
   name?: boolean
+  discipline?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "eventId" | "protocolTemplateId" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["category"]>
+export type CategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "eventId" | "protocolTemplateId" | "name" | "discipline" | "createdAt" | "updatedAt", ExtArgs["result"]["category"]>
 export type CategoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
   protocolTemplate?: boolean | Prisma.ProtocolTemplateDefaultArgs<ExtArgs>
@@ -875,6 +926,7 @@ export type $CategoryPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     eventId: string
     protocolTemplateId: string
     name: string
+    discipline: $Enums.Discipline | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["category"]>
@@ -1308,6 +1360,7 @@ export interface CategoryFieldRefs {
   readonly eventId: Prisma.FieldRef<"Category", 'String'>
   readonly protocolTemplateId: Prisma.FieldRef<"Category", 'String'>
   readonly name: Prisma.FieldRef<"Category", 'String'>
+  readonly discipline: Prisma.FieldRef<"Category", 'Discipline'>
   readonly createdAt: Prisma.FieldRef<"Category", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Category", 'DateTime'>
 }

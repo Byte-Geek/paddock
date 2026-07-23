@@ -66,6 +66,14 @@ export const ElementType = {
 export type ElementType = (typeof ElementType)[keyof typeof ElementType]
 
 
+export const Discipline = {
+  DRESSAGE: 'DRESSAGE',
+  SHOW_JUMPING: 'SHOW_JUMPING'
+} as const
+
+export type Discipline = (typeof Discipline)[keyof typeof Discipline]
+
+
 export const ErrorType = {
   COURSE_ERROR: 'COURSE_ERROR',
   TECHNICAL_ERROR: 'TECHNICAL_ERROR'

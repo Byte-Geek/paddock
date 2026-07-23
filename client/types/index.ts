@@ -192,9 +192,32 @@ export interface ParticipationHistoryEntry {
 	status: string;
 }
 
+export interface AthleteRank {
+	position: number;
+	totalAthletes: number;
+}
+
+export interface NextEvent {
+	eventName: string;
+	categoryName: string;
+	location: string | null;
+	startDate: string;
+}
+
+export type Discipline = "DRESSAGE" | "SHOW_JUMPING";
+
+export interface DisciplineProgress {
+	discipline: Discipline;
+	avgPercentage: number | null;
+	count: number;
+}
+
 export interface AthleteProfileStats {
 	medals: PersonalMedals;
 	history: ParticipationHistoryEntry[];
+	rank: AthleteRank | null;
+	nextEvent: NextEvent | null;
+	disciplineProgress: DisciplineProgress[];
 }
 
 export interface CoachGroupStats {
@@ -202,6 +225,21 @@ export interface CoachGroupStats {
 	name: string;
 	athleteCount: number;
 	medals: PersonalMedals;
+}
+
+export interface AthleteAttention {
+	id: string;
+	name: string;
+	groupName: string;
+	reason: "NO_RECENT_RESULTS" | "INCOMPLETE_PROTOCOL";
+}
+
+export interface CoachUpcomingEvent {
+	id: string;
+	eventName: string;
+	startDate: string | null;
+	location: string | null;
+	athleteCount: number;
 }
 
 export interface CoachProfileStats {
@@ -212,6 +250,19 @@ export interface CoachProfileStats {
 		totalParticipations: number;
 		medals: PersonalMedals;
 	};
+	athletesNeedingAttention: AthleteAttention[];
+	upcomingEvents: CoachUpcomingEvent[];
+}
+
+export interface RecentActivityItem {
+	type: "ATHLETE" | "COACH" | "EVENT";
+	label: string;
+	createdAt: string;
+}
+
+export interface PendingItem {
+	type: "DRAFT_EVENT" | "UNFINISHED_EVALUATION";
+	label: string;
 }
 
 export interface ModeratorProfileStats {
@@ -220,6 +271,12 @@ export interface ModeratorProfileStats {
 	groups: number;
 	events: number;
 	note: string;
+	recentActivity: RecentActivityItem[];
+	pending: {
+		draftEvents: number;
+		unfinishedEvaluations: number;
+		items: PendingItem[];
+	};
 }
 
 export interface Referee {

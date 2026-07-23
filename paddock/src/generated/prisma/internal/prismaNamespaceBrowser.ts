@@ -209,6 +209,7 @@ export const CategoryScalarFieldEnum = {
   eventId: 'eventId',
   protocolTemplateId: 'protocolTemplateId',
   name: 'name',
+  discipline: 'discipline',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

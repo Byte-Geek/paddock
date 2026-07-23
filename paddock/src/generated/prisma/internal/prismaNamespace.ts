@@ -1692,6 +1692,7 @@ export const CategoryScalarFieldEnum = {
   eventId: 'eventId',
   protocolTemplateId: 'protocolTemplateId',
   name: 'name',
+  discipline: 'discipline',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1959,6 +1960,20 @@ export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
  * Reference to a field of type 'Decimal[]'
  */
 export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Discipline'
+ */
+export type EnumDisciplineFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Discipline'>
+    
+
+
+/**
+ * Reference to a field of type 'Discipline[]'
+ */
+export type ListEnumDisciplineFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Discipline[]'>
     
 
 

@@ -47,6 +47,11 @@ enum ElementType {
   COLLECTIVE
 }
 
+enum Discipline {
+  DRESSAGE
+  SHOW_JUMPING
+}
+
 enum ErrorType {
   COURSE_ERROR
   TECHNICAL_ERROR
@@ -229,7 +234,8 @@ model Category {
   event            Event            @relation(fields: [eventId], references: [id], onDelete: Cascade)
   protocolTemplate ProtocolTemplate @relation(fields: [protocolTemplateId], references: [id], onDelete: Restrict)
 
-  name String
+  name       String
+  discipline Discipline?
 
   referees       CategoryReferee[]
   participations Participation[]

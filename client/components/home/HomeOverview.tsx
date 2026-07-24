@@ -158,7 +158,7 @@ export default function HomeOverview() {
     liveEvent?.categories.filter(
       (c) =>
         c.participations.length > 0 &&
-        c.participations.every((p) => p.status === "COMPLETED"),
+        c.participations.every((p) => p.finalScore !== null),
     ).length ?? 0;
   const totalCategories = liveEvent?.categories.length ?? 0;
   const progressPct =

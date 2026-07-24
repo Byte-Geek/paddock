@@ -2,14 +2,21 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import DataStrip from "@/components/ui/DataStrip";
+import Badge from "@/components/ui/Badge";
 import EmptyState from "@/components/ui/EmptyState";
 import LoadingState from "@/components/ui/LoadingState";
 import Panel from "@/components/ui/Panel";
 import api from "@/lib/axios";
 import { formatFullName, initials, MONTHS } from "@/lib/utils";
 import { useAuthStore } from "@/store/auth.store";
-import type { HomeSummary, Medals, TopCoach, UpcomingEvent } from "@/types";
+import type {
+  CompetitionEvent,
+  CompetitionEventDetail,
+  HomeSummary,
+  Medals,
+  TopCoach,
+  UpcomingEvent,
+} from "@/types";
 
 const currentYear = new Date().getFullYear();
 
@@ -78,22 +85,34 @@ export default function HomeOverview() {
   const [events, setEvents] = useState<UpcomingEvent[]>([]);
   const [medals, setMedals] = useState<Medals | null>(null);
   const [topCoaches, setTopCoaches] = useState<TopCoach[]>([]);
+  const [liveEvent, setLiveEvent] = useState<CompetitionEventDetail | null>(
+    null,
+  );
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadHome = async () => {
       try {
-        const [summaryRes, eventsRes, medalsRes, coachesRes] =
+        const [summaryRes, eventsRes, medalsRes, coachesRes, allEventsRes] =
           await Promise.all([
             api.get<HomeSummary>("/home/summary"),
             api.get<UpcomingEvent[]>("/home/upcoming-events"),
             api.get<Medals>("/stats/medals"),
             api.get<TopCoach[]>("/stats/top-coaches"),
+            api.get<CompetitionEvent[]>("/events"),
           ]);
         setSummary(summaryRes.data);
         setEvents(eventsRes.data);
         setMedals(medalsRes.data);
         setTopCoaches(coachesRes.data);
+
+        const ongoing = allEventsRes.data.find((e) => e.status === "ONGOING");
+        if (ongoing) {
+          const { data } = await api.get<CompetitionEventDetail>(
+            `/events/${ongoing.id}`,
+          );
+          setLiveEvent(data);
+        }
       } catch (error) {
         console.error("Failed to load home data", error);
       } finally {
@@ -135,6 +154,18 @@ export default function HomeOverview() {
     },
   ] as const;
 
+  const evaluatedCategories =
+    liveEvent?.categories.filter(
+      (c) =>
+        c.participations.length > 0 &&
+        c.participations.every((p) => p.status === "COMPLETED"),
+    ).length ?? 0;
+  const totalCategories = liveEvent?.categories.length ?? 0;
+  const progressPct =
+    totalCategories > 0
+      ? Math.round((evaluatedCategories / totalCategories) * 100)
+      : 0;
+
   return (
     <div className="flex flex-col gap-5">
       <div className="pb-6 border-b border-border-soft motion-safe:animate-[fade-in_0.4s_ease-out]">
@@ -151,15 +182,100 @@ export default function HomeOverview() {
         </p>
       </div>
 
-      <DataStrip
-        items={stats.map((s) => ({
-          key: s.key,
-          label: s.label,
-          value: s.value,
-          delta: s.delta,
-          icon: statIcons[s.key],
-        }))}
-      />
+      {liveEvent && (
+        <Panel className="border-blue-100">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 mb-2">
+                <Badge variant="warning" className="animate-pulse">
+                  ● ÎN DESFĂȘURARE
+                </Badge>
+              </div>
+              <div className="font-bold text-[18px] text-ink-800 truncate">
+                {liveEvent.name}
+              </div>
+              <div className="text-[12.5px] text-slate-500 mt-1">
+                {[liveEvent.location, `${totalCategories} categorii`]
+                  .filter(Boolean)
+                  .join(" · ")}
+              </div>
+
+              {totalCategories > 0 && (
+                <div className="mt-3 max-w-xs">
+                  <div className="flex items-center justify-between text-[11px] text-slate-500 mb-1">
+                    <span>Progres scoring</span>
+                    <span className="font-mono font-bold text-ink-800">
+                      {evaluatedCategories} / {totalCategories} · {progressPct}%
+                    </span>
+                  </div>
+                  <div className="h-1.5 rounded-full bg-border-soft overflow-hidden">
+                    <div
+                      className="h-full bg-blue-600 rounded-full transition-all duration-500"
+                      style={{ width: `${progressPct}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <Link
+              href="/evenimente"
+              className="flex-shrink-0 bg-blue-600 hover:bg-blue-800 text-white font-semibold rounded-lg px-4 py-2.5 text-[13px] transition-colors duration-200 text-center"
+            >
+              Afișaj rezultate live
+            </Link>
+          </div>
+        </Panel>
+      )}
+
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {stats.map((s, i) => {
+          const isLast = i === stats.length - 1;
+          return (
+            <div
+              key={s.key}
+              className={
+                isLast
+                  ? "rounded-lg p-4 bg-blue-600 text-white shadow-[var(--shadow-panel)]"
+                  : "rounded-lg p-4 bg-surface border border-border shadow-[var(--shadow-panel)] transition-shadow duration-300 hover:shadow-[var(--shadow-panel-hover)]"
+              }
+            >
+              <div
+                className={
+                  isLast
+                    ? "flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.1em] text-blue-100"
+                    : "flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.1em] text-blue-600"
+                }
+              >
+                <span className={isLast ? "text-blue-100" : "text-blue-600"}>
+                  {statIcons[s.key]}
+                </span>
+                {s.label}
+              </div>
+              <div
+                className={
+                  isLast
+                    ? "font-mono text-[36px] font-bold leading-none tracking-[-0.02em] tabular-nums mt-2.5"
+                    : "font-mono text-[36px] font-bold leading-none tracking-[-0.02em] tabular-nums mt-2.5 text-ink-800"
+                }
+              >
+                {s.value}
+              </div>
+              {s.delta && (
+                <div
+                  className={
+                    isLast
+                      ? "text-[11px] font-semibold text-blue-100 mt-2"
+                      : "text-[11px] font-semibold text-blue-600 mt-2"
+                  }
+                >
+                  {s.delta}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1.7fr_1fr] gap-4 items-start">
         <Panel

@@ -89,6 +89,12 @@ export interface TopCoach {
 	medals: number;
 }
 
+export interface Overview {
+	competitionsCompleted: number;
+	competitionsTotal: number;
+	averageScorePercentage: number | null;
+}
+
 export interface AthletesPerGroup {
 	name: string;
 	value: number;

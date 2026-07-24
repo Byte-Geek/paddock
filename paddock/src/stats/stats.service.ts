@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma.service'
 import { MedalsDto } from './dto/medals.dto'
 import { EventsTimelinePointDto } from './dto/events-timeline.dto'
 import { TopCoachDto } from './dto/top-coach.dto'
+import { OverviewDto } from './dto/overview.dto'
 import { userNameSelect } from '../common/prisma-selects/user-name.select'
 
 const MONTHS_RO = [
@@ -116,6 +117,27 @@ export class StatsService {
         return Array.from(medalsByCoach.values())
             .sort((a, b) => b.medals - a.medals)
             .slice(0, 5)
+    }
+
+    async getOverview(): Promise<OverviewDto> {
+        const [competitionsCompleted, competitionsTotal, avgAgg] =
+            await Promise.all([
+                this.prisma.event.count({ where: { status: 'COMPLETED' } }),
+                this.prisma.event.count({
+                    where: { status: { in: ['PUBLISHED', 'ONGOING', 'COMPLETED'] } },
+                }),
+                this.prisma.evaluation.aggregate({
+                    where: { finalized: true },
+                    _avg: { percentage: true },
+                }),
+            ])
+
+        const avg = avgAgg._avg.percentage
+        return {
+            competitionsCompleted,
+            competitionsTotal,
+            averageScorePercentage: avg ? Math.round(Number(avg) * 10) / 10 : null,
+        }
     }
 
     async getAthletesPerGroup(): Promise<{ name: string; value: number }[]> {

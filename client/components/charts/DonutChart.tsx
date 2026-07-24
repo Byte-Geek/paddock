@@ -9,12 +9,13 @@ export default function DonutChart({ data }: { data: DonutData[] }) {
 		r = 50,
 		C = 200;
 	const total = data.reduce((s, d) => s + d.value, 0) || 1;
+	const gap = total > 0 ? Math.PI * 2 * 0.012 : 0;
 	let cum = 0;
 
 	const segs = data.map((d) => {
-		const start = (cum / total) * Math.PI * 2 - Math.PI / 2;
+		const start = (cum / total) * Math.PI * 2 - Math.PI / 2 + gap / 2;
 		cum += d.value;
-		const end = (cum / total) * Math.PI * 2 - Math.PI / 2;
+		const end = (cum / total) * Math.PI * 2 - Math.PI / 2 - gap / 2;
 		const large = end - start > Math.PI ? 1 : 0;
 		const x1 = C + R * Math.cos(start),
 			y1 = C + R * Math.sin(start);
@@ -48,12 +49,13 @@ export default function DonutChart({ data }: { data: DonutData[] }) {
 				</text>
 				<text
 					x="200"
-					y="225"
+					y="222"
 					textAnchor="middle"
-					fontSize="14"
+					fontSize="13"
+					letterSpacing="2"
 					fill="var(--color-silver)"
 				>
-					total
+					MEDALII
 				</text>
 			</svg>
 			<div className="flex flex-col gap-2">

@@ -24,4 +24,9 @@ export class StatsController {
     async getAthletesPerGroup() {
         return this.statsService.getAthletesPerGroup()
     }
+
+    @Get('overview')
+    async getOverview() {
+        return this.statsService.getOverview()
+    }
 }
